@@ -9,7 +9,7 @@ struct point {
   float y;
 };
 
-int points_equal(struct point * lhs, struct point * rhs);
+int points_equal(struct point const * lhs, struct point const * rhs);
 
 struct segment {
   struct point * start;

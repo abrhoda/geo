@@ -1,15 +1,21 @@
 #include "geo.h"
 #include <math.h>
 
-static float orient(struct point * start, struct point * end, struct point * point);
+/* point may not be the best type name but its easiest */
+static float dot_product(struct point const * vec_ab, struct point const * vec_ac);
+static float cross_product(struct point const * vec_ab, struct point const * vec_ac);
 
-/*
- * Checks that if 2 points x and y values are within EPSILON tolerance, returning
- * 1 if both are and 0 otherwise.
- *
- */
-int points_equal(struct point * lhs, struct point * rhs) {
-  return (fabs((double) lhs->x - rhs->x) < EPSILON && fabs((double) lhs->y - rhs->y) < EPSILON);
+/* TODO start and end belong to the same segment so just pass segment instead of the points */
+static float orient(struct point const * start, struct point const * end, struct point const * point);
+static int in_disk(struct segment const * segment, struct point const * point);
+
+
+static float dot_product(struct point const * const vec_ab, struct point const * const vec_ac) {
+  return ((vec_ab->x*vec_ac->x) + (vec_ab->y*vec_ac->y));
+}
+
+static float cross_product(struct point const * const vec_ab, struct point const * const vec_ac) {
+  return (vec_ab->x*vec_ac->y) - (vec_ab->y*vec_ac->x);
 }
 
 /*
@@ -23,7 +29,7 @@ int points_equal(struct point * lhs, struct point * rhs) {
  *  This is because the actual float that is returned isn't used. Simplifying the float
  *  to an enum (int) makes the math much easier later.
  */
-static float orient(struct point * start, struct point * end, struct point * point) {
+static float orient(struct point const * const start, struct point const * const end, struct point const * const point) {
   struct point vec_ab;
   struct point vec_ac;
 
@@ -31,9 +37,32 @@ static float orient(struct point * start, struct point * end, struct point * poi
   vec_ab.y = end->y-start->y;
   vec_ac.x = point->x-start->x;
   vec_ac.y = point->y-start->y;
-
-  return (vec_ab.x*vec_ac.y) - (vec_ab.y*vec_ac.x);
+  return cross_product(&vec_ab, &vec_ac);
 }
+
+static int in_disk(struct segment const * const segment, struct point const * const point) {
+  float dot = 0.0F;
+  struct point vec_ap;
+  struct point vec_bp;
+  vec_ap.x = (segment->start->x - point->x);
+  vec_ap.y = (segment->start->y - point->y);
+
+  vec_bp.x = (segment->end->x - point->x);
+  vec_bp.y = (segment->end->y - point->y);
+  dot = dot_product(&vec_ap, &vec_bp);
+
+}
+
+/*
+ * Checks that if 2 points x and y values are within EPSILON tolerance, returning
+ * 1 if both are and 0 otherwise.
+ *
+ */
+int points_equal(struct point const * const lhs, struct point const * const rhs) {
+  return (fabs((double) lhs->x - rhs->x) < EPSILON && fabs((double) lhs->y - rhs->y) < EPSILON);
+}
+
+
 
 /*
  * Checks the if segment1's start and end points are on opposite sides of segment2 and
