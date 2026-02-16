@@ -5,10 +5,9 @@
 static float dot_product(struct point const * vec_ab, struct point const * vec_ac);
 static float cross_product(struct point const * vec_ab, struct point const * vec_ac);
 
-/* TODO start and end belong to the same segment so just pass segment instead of the points */
-static float orient(struct point const * start, struct point const * end, struct point const * point);
-static int in_disk(struct segment const * segment, struct point const * point);
-
+static enum orientation orient(struct segment const * segment, struct point const * point);
+static int is_in_disk(struct segment const * segment, struct point const * point);
+static int is_on_segment(struct segment const * segment, struct point const * point);
 
 static float dot_product(struct point const * const vec_ab, struct point const * const vec_ac) {
   return ((vec_ab->x*vec_ac->x) + (vec_ab->y*vec_ac->y));
@@ -19,28 +18,36 @@ static float cross_product(struct point const * const vec_ab, struct point const
 }
 
 /*
- * Creates vector AB and AC and finds the cross product. Returns the cross product.
- *
- * FIXME orient should not return the cross product. Orient should return a enum of:
- *  - LEFT
- *  - RIGHT
- *  - COLINEAR
- *
- *  This is because the actual float that is returned isn't used. Simplifying the float
- *  to an enum (int) makes the math much easier later.
+ * Creates vector AB and AC and finds the cross product. Returns the orientation
+ * found from the cross product.
  */
-static float orient(struct point const * const start, struct point const * const end, struct point const * const point) {
+static enum orientation orient(struct segment const * const segment, struct point const * const point) {
   struct point vec_ab;
   struct point vec_ac;
+  float cross = 0.0F;
 
-  vec_ab.x = end->x-start->x;
-  vec_ab.y = end->y-start->y;
-  vec_ac.x = point->x-start->x;
-  vec_ac.y = point->y-start->y;
-  return cross_product(&vec_ab, &vec_ac);
+  vec_ab.x = segment->end->x-segment->start->x;
+  vec_ab.y = segment->end->y-segment->start->y;
+  vec_ac.x = point->x-segment->start->x;
+  vec_ac.y = point->y-segment->start->y;
+  cross = cross_product(&vec_ab, &vec_ac);
+  if (fabs((double) cross) < EPSILON) {
+    return COLINEAR;
+  }
+  if (cross < 0) {
+    return RIGHT;
+  }
+  return LEFT;
 }
 
-static int in_disk(struct segment const * const segment, struct point const * const point) {
+/*
+ * Checks if `point` lies on a disk whose diameter is `segment`.
+ *
+ * - dot > 0 -> false because cos(theta) between the 2 vectors is less than pi/2 (90 degrees)
+ * - dot == 0 -> true because cos (theta) = pi/2 (90 degrees) and point is _on disk edge_
+ * - dot < 0 -> true becuse cos(theta) is greater than pi/2 (90 degrees)
+ */
+static int is_in_disk(struct segment const * const segment, struct point const * const point) {
   float dot = 0.0F;
   struct point vec_ap;
   struct point vec_bp;
@@ -50,7 +57,16 @@ static int in_disk(struct segment const * const segment, struct point const * co
   vec_bp.x = (segment->end->x - point->x);
   vec_bp.y = (segment->end->y - point->y);
   dot = dot_product(&vec_ap, &vec_bp);
+  return (dot < 0 || fabs((double) dot) < EPSILON);
+}
 
+/*
+ * Checks if `point` is on `segment`. This is useful to determine proper intersections
+ * vs intersections where one of the endpoint of a segment is exactly on the other.
+ *
+ */
+static int is_on_segment(struct segment const * segment, struct point const * point) {
+  return orient(segment, point) == COLINEAR && is_in_disk(segment, point);
 }
 
 /*
@@ -62,25 +78,39 @@ int points_equal(struct point const * const lhs, struct point const * const rhs)
   return (fabs((double) lhs->x - rhs->x) < EPSILON && fabs((double) lhs->y - rhs->y) < EPSILON);
 }
 
-
-
 /*
  * Checks the if segment1's start and end points are on opposite sides of segment2 and
  * if segment2's start and end points are on opposite sides of segment1.
  *
- * FIXME: This doesn't properly handle when any of the orientation values are 0 because
- * the orientation is derived from the cross product so it will jabe rounding errors
+ * the note on "properly intersect" means that the lines:
+ * 1. do intersect.
+ * 2. are not colinear.
+ * 3. don't have endpoints of either one of the segments lay on the other (meaning they don't
+ *    intersect at either one's endpoints
  *
  * FIXME: this does not properly handle when the intersecting point of segment1 on segment2 is
  * either start or end points.
  */
-int segments_intersect(struct segment * segment1, struct segment * segment2) {
-   float orientation_a = orient(segment2->start, segment2->end, segment1->start);
-   float orientation_b = orient(segment2->start, segment2->end, segment1->end);
-   float orientation_c = orient(segment1->start, segment1->end, segment2->start);
-   float orientation_d = orient(segment1->start, segment1->end, segment2->end);
+int segments_intersect(struct segment const * const segment1, struct segment const * const segment2) {
+  int count = 0;
+  enum orientation orientation_a = orient(segment2, segment1->start);
+  enum orientation orientation_b = orient(segment2, segment1->end);
+  enum orientation orientation_c = orient(segment1, segment2->start);
+  enum orientation orientation_d = orient(segment1, segment2->end);
 
-   return (orientation_a*orientation_b < 0) && (orientation_c*orientation_d < 0);
+  /* properly intersect */
+  if ((orientation_a*orientation_b < 0) && (orientation_c*orientation_d < 0)) {
+    return 1;
+  }
+
+  /* check if endpoints are where the intersection happens */
+  if (orientation_a == COLINEAR && is_in_disk(segment2, segment1->start)) {
+    count++;
+  }
+
+  if 
+
+  return 0;
 }
 
 /*
@@ -145,7 +175,7 @@ int geometry_is_simple(struct geometry const * const geometry) {
  *
  * returns 1 if inside, 0 otherwise.
  */
-int point_in_geometry(struct point * point, struct geometry * geometry) {
+int point_in_geometry(struct point const * const point, struct geometry const * const geometry) {
   size_t iter = 0;
   int count = 0;
   for(iter = 0; iter < geometry->segments_count; ++iter) {

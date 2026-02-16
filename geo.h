@@ -4,6 +4,18 @@
 #include <stddef.h>
 #define EPSILON 0.00001
 
+enum orientation {
+  RIGHT = -1,
+  COLINEAR = 0,
+  LEFT = 1
+};
+
+enum disk_position {
+  INSIDE = -1,
+  ON_EDGE = 0,
+  OUTSIDE = 1
+};
+
 struct point {
   float x;
   float y;
@@ -16,7 +28,7 @@ struct segment {
   struct point * end;
 };
 
-int segments_intersect(struct segment * segment1, struct segment * segment2);
+int segments_intersect(struct segment const * segment1, struct segment const * segment2);
 
 struct geometry {
   struct segment ** segments;
@@ -40,7 +52,7 @@ int geometry_is_simple(struct geometry const * geometry);
  * check point_in_geometry of point (p_x, p_y) if min_x < p_x < max_x and
  * min_y < p_y < max_y
  */
-int point_in_geometry(struct point * point, struct geometry * geometry);
+int point_in_geometry(struct point const * point, struct geometry const * geometry);
 
 /*
  * int geometry_in_geometry(struct geometry * parent, struct geometry * child);
