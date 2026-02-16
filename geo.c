@@ -5,9 +5,8 @@
 static float dot_product(struct point const * vec_ab, struct point const * vec_ac);
 static float cross_product(struct point const * vec_ab, struct point const * vec_ac);
 
-static enum orientation orient(struct segment const * segment, struct point const * point);
-static int is_in_disk(struct segment const * segment, struct point const * point);
-static int is_on_segment(struct segment const * segment, struct point const * point);
+static enum orientation orientation(struct segment const * segment, struct point const * point);
+static enum disk_position disk_position(struct segment const * segment, struct point const * point);
 
 static float dot_product(struct point const * const vec_ab, struct point const * const vec_ac) {
   return ((vec_ab->x*vec_ac->x) + (vec_ab->y*vec_ac->y));
@@ -21,7 +20,7 @@ static float cross_product(struct point const * const vec_ab, struct point const
  * Creates vector AB and AC and finds the cross product. Returns the orientation
  * found from the cross product.
  */
-static enum orientation orient(struct segment const * const segment, struct point const * const point) {
+static enum orientation orientation(struct segment const * const segment, struct point const * const point) {
   struct point vec_ab;
   struct point vec_ac;
   float cross = 0.0F;
@@ -41,13 +40,9 @@ static enum orientation orient(struct segment const * const segment, struct poin
 }
 
 /*
- * Checks if `point` lies on a disk whose diameter is `segment`.
- *
- * - dot > 0 -> false because cos(theta) between the 2 vectors is less than pi/2 (90 degrees)
- * - dot == 0 -> true because cos (theta) = pi/2 (90 degrees) and point is _on disk edge_
- * - dot < 0 -> true becuse cos(theta) is greater than pi/2 (90 degrees)
+ * Checks if `point` lies inside, on the edge, or outside of a disk whose diameter is `segment`.
  */
-static int is_in_disk(struct segment const * const segment, struct point const * const point) {
+static enum disk_position disk_position(struct segment const * const segment, struct point const * const point) {
   float dot = 0.0F;
   struct point vec_ap;
   struct point vec_bp;
@@ -57,20 +52,19 @@ static int is_in_disk(struct segment const * const segment, struct point const *
   vec_bp.x = (segment->end->x - point->x);
   vec_bp.y = (segment->end->y - point->y);
   dot = dot_product(&vec_ap, &vec_bp);
-  return (dot < 0 || fabs((double) dot) < EPSILON);
-}
 
-/*
- * Checks if `point` is on `segment`. This is useful to determine proper intersections
- * vs intersections where one of the endpoint of a segment is exactly on the other.
- *
- */
-static int is_on_segment(struct segment const * segment, struct point const * point) {
-  return orient(segment, point) == COLINEAR && is_in_disk(segment, point);
+  if (fabs((double) dot) < EPSILON) {
+    return ON_EDGE;
+  }
+  if (dot < 0) {
+    return INSIDE;
+  }
+  return OUTSIDE;
 }
 
 /*
  * Checks that if 2 points x and y values are within EPSILON tolerance, returning
+ * either start or end points.
  * 1 if both are and 0 otherwise.
  *
  */
@@ -78,39 +72,52 @@ int points_equal(struct point const * const lhs, struct point const * const rhs)
   return (fabs((double) lhs->x - rhs->x) < EPSILON && fabs((double) lhs->y - rhs->y) < EPSILON);
 }
 
-/*
- * Checks the if segment1's start and end points are on opposite sides of segment2 and
- * if segment2's start and end points are on opposite sides of segment1.
+/**
+ * @brief Determines if 2 segments intersect.
  *
- * the note on "properly intersect" means that the lines:
- * 1. do intersect.
- * 2. are not colinear.
- * 3. don't have endpoints of either one of the segments lay on the other (meaning they don't
- *    intersect at either one's endpoints
+ * @details function determines if segment1 and segment2 intersect. It does so by
+ *         first checking if they "properly intersect" through finding the orientations
+ *         of the start and end points of one segment with the other line segment.
+ *         If the two line segments don't "properly intersect", the start and end
+ *         points of each segment are checked to see if they are on the other segment.
+ *         This determines if a segment intersects the other segment at the start point,
+ *         end point, or both points while being colinear. This informs if the segment
+ *         intersects the other or if the segment is the same segment as the other.
  *
- * FIXME: this does not properly handle when the intersecting point of segment1 on segment2 is
- * either start or end points.
+ * @param[in] segment1 The first segment to test for intersection
+ * @param[in] segment2 The second segment to test for intersection
+ *
+ * @returns the count of intersectings points on both lines. 0 of there is none,
+ * 1 if the segments properly intersect or intersect at one segment's start or end
+ * point, 2 if one segment lies entirely on the other, 4 if the 2 segments are the
+ * same segment.
+ *
  */
 int segments_intersect(struct segment const * const segment1, struct segment const * const segment2) {
-  int count = 0;
-  enum orientation orientation_a = orient(segment2, segment1->start);
-  enum orientation orientation_b = orient(segment2, segment1->end);
-  enum orientation orientation_c = orient(segment1, segment2->start);
-  enum orientation orientation_d = orient(segment1, segment2->end);
+  int intersect_count = 0;
+  enum orientation orientation_a = orientation(segment2, segment1->start);
+  enum orientation orientation_b = orientation(segment2, segment1->end);
+  enum orientation orientation_c = orientation(segment1, segment2->start);
+  enum orientation orientation_d = orientation(segment1, segment2->end);
 
-  /* properly intersect */
   if ((orientation_a*orientation_b < 0) && (orientation_c*orientation_d < 0)) {
     return 1;
   }
 
-  /* check if endpoints are where the intersection happens */
-  if (orientation_a == COLINEAR && is_in_disk(segment2, segment1->start)) {
-    count++;
+  if (orientation_a == COLINEAR && disk_position(segment2, segment1->start) != OUTSIDE) {
+    ++intersect_count;
+  }
+  if (orientation_b == COLINEAR && disk_position(segment2, segment1->end) != OUTSIDE) {
+    ++intersect_count;
+  }
+  if (orientation_c == COLINEAR && disk_position(segment1, segment1->start) != OUTSIDE) {
+    ++intersect_count;
+  }
+  if (orientation_d == COLINEAR && disk_position(segment1, segment1->end) != OUTSIDE) {
+    ++intersect_count;
   }
 
-  if 
-
-  return 0;
+  return intersect_count;
 }
 
 /*
