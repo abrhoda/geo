@@ -2,17 +2,17 @@
 #include <math.h>
 
 /* point may not be the best type name but its easiest */
-static float dot_product(struct point const * vec_ab, struct point const * vec_ac);
-static float cross_product(struct point const * vec_ab, struct point const * vec_ac);
+static float dot_product(struct geo_point const * vec_ab, struct geo_point const * vec_ac);
+static float cross_product(struct geo_point const * vec_ab, struct geo_point const * vec_ac);
 
-static enum orientation orientation(struct segment const * segment, struct point const * point);
-static enum disk_position disk_position(struct segment const * segment, struct point const * point);
+static enum geo_orientation orientation(struct geo_segment const * segment, struct geo_point const * point);
+static enum geo_disk_position disk_position(struct geo_segment const * segment, struct geo_point const * point);
 
-static float dot_product(struct point const * const vec_ab, struct point const * const vec_ac) {
+static float dot_product(struct geo_point const * const vec_ab, struct geo_point const * const vec_ac) {
   return ((vec_ab->x*vec_ac->x) + (vec_ab->y*vec_ac->y));
 }
 
-static float cross_product(struct point const * const vec_ab, struct point const * const vec_ac) {
+static float cross_product(struct geo_point const * const vec_ab, struct geo_point const * const vec_ac) {
   return (vec_ab->x*vec_ac->y) - (vec_ab->y*vec_ac->x);
 }
 
@@ -20,9 +20,9 @@ static float cross_product(struct point const * const vec_ab, struct point const
  * Creates vector AB and AC and finds the cross product. Returns the orientation
  * found from the cross product.
  */
-static enum orientation orientation(struct segment const * const segment, struct point const * const point) {
-  struct point vec_ab;
-  struct point vec_ac;
+static enum geo_orientation orientation(struct geo_segment const * const segment, struct geo_point const * const point) {
+  struct geo_point vec_ab;
+  struct geo_point vec_ac;
   float cross = 0.0F;
 
   vec_ab.x = segment->end->x-segment->start->x;
@@ -30,7 +30,7 @@ static enum orientation orientation(struct segment const * const segment, struct
   vec_ac.x = point->x-segment->start->x;
   vec_ac.y = point->y-segment->start->y;
   cross = cross_product(&vec_ab, &vec_ac);
-  if (fabs((double) cross) < EPSILON) {
+  if (fabs((double) cross) < GEO_EPSILON) {
     return COLINEAR;
   }
   if (cross < 0) {
@@ -42,10 +42,10 @@ static enum orientation orientation(struct segment const * const segment, struct
 /*
  * Checks if `point` lies inside, on the edge, or outside of a disk whose diameter is `segment`.
  */
-static enum disk_position disk_position(struct segment const * const segment, struct point const * const point) {
+static enum geo_disk_position disk_position(struct geo_segment const * const segment, struct geo_point const * const point) {
   float dot = 0.0F;
-  struct point vec_ap;
-  struct point vec_bp;
+  struct geo_point vec_ap;
+  struct geo_point vec_bp;
   vec_ap.x = (segment->start->x - point->x);
   vec_ap.y = (segment->start->y - point->y);
 
@@ -53,7 +53,7 @@ static enum disk_position disk_position(struct segment const * const segment, st
   vec_bp.y = (segment->end->y - point->y);
   dot = dot_product(&vec_ap, &vec_bp);
 
-  if (fabs((double) dot) < EPSILON) {
+  if (fabs((double) dot) < GEO_EPSILON) {
     return ON_EDGE;
   }
   if (dot < 0) {
@@ -62,43 +62,16 @@ static enum disk_position disk_position(struct segment const * const segment, st
   return OUTSIDE;
 }
 
-/*
- * Checks that if 2 points x and y values are within EPSILON tolerance, returning
- * either start or end points.
- * 1 if both are and 0 otherwise.
- *
- */
-int points_equal(struct point const * const lhs, struct point const * const rhs) {
-  return (fabs((double) lhs->x - rhs->x) < EPSILON && fabs((double) lhs->y - rhs->y) < EPSILON);
+int geo_points_equal(struct geo_point const * const lhs, struct geo_point const * const rhs) {
+  return (fabs((double) lhs->x - rhs->x) < GEO_EPSILON && fabs((double) lhs->y - rhs->y) < GEO_EPSILON);
 }
 
-/**
- * @brief Determines if 2 segments intersect.
- *
- * @details function determines if segment1 and segment2 intersect. It does so by
- *         first checking if they "properly intersect" through finding the orientations
- *         of the start and end points of one segment with the other line segment.
- *         If the two line segments don't "properly intersect", the start and end
- *         points of each segment are checked to see if they are on the other segment.
- *         This determines if a segment intersects the other segment at the start point,
- *         end point, or both points while being colinear. This informs if the segment
- *         intersects the other or if the segment is the same segment as the other.
- *
- * @param[in] segment1 The first segment to test for intersection
- * @param[in] segment2 The second segment to test for intersection
- *
- * @returns the count of intersectings points on both lines. 0 of there is none,
- * 1 if the segments properly intersect or intersect at one segment's start or end
- * point, 2 if one segment lies entirely on the other, 4 if the 2 segments are the
- * same segment.
- *
- */
-int segments_intersect(struct segment const * const segment1, struct segment const * const segment2) {
+int geo_segments_intersect(struct geo_segment const * const segment1, struct geo_segment const * const segment2) {
   int intersect_count = 0;
-  enum orientation orientation_a = orientation(segment2, segment1->start);
-  enum orientation orientation_b = orientation(segment2, segment1->end);
-  enum orientation orientation_c = orientation(segment1, segment2->start);
-  enum orientation orientation_d = orientation(segment1, segment2->end);
+  enum geo_orientation orientation_a = orientation(segment2, segment1->start);
+  enum geo_orientation orientation_b = orientation(segment2, segment1->end);
+  enum geo_orientation orientation_c = orientation(segment1, segment2->start);
+  enum geo_orientation orientation_d = orientation(segment1, segment2->end);
 
   if ((orientation_a*orientation_b < 0) && (orientation_c*orientation_d < 0)) {
     return 1;
@@ -120,37 +93,26 @@ int segments_intersect(struct segment const * const segment1, struct segment con
   return intersect_count;
 }
 
-/*
- * Checks if geometry is a closed geometry or not by checking if the nth segment's end point
- * is the same as the (n+1)th segment's starting point. When n == segments_count, the segment's
- * end point is checked against the n == 0 segment's starting point. This forms a closed
- * geometry.
- *
- */
-int geometry_is_closed(struct geometry const * const geometry) {
+int geo_geometry_is_closed(struct geo_geometry const * const geometry) {
   size_t iter = 0;
   if (geometry->segments_count < 3) {
     return 0;
   }
 
   for (iter = 0; iter < geometry->segments_count - 2; ++iter) {
-    if (!points_equal(geometry->segments[iter]->end, geometry->segments[iter+1]->start)) {
+    if (!geo_points_equal(geometry->segments[iter]->end, geometry->segments[iter+1]->start)) {
       return 0;
     }
   }
-  return points_equal(geometry->segments[geometry->segments_count-1]->end, geometry->segments[0]->start);
+  return geo_points_equal(geometry->segments[geometry->segments_count-1]->end, geometry->segments[0]->start);
 }
 
-/*
- * Checks if any line segments of the geometry intersect with another line segment of the geometry.
- * Start and end points of the line segments should not be considered as intersecting.
- */
-int geometry_is_simple(struct geometry const * const geometry) {
+int geo_geometry_is_simple(struct geo_geometry const * const geometry) {
   size_t outer_iter = 0;
   size_t inner_iter = 0;
   for (outer_iter = 0; outer_iter < (geometry->segments_count-1); ++outer_iter) {
     for (inner_iter = (outer_iter+1); inner_iter < geometry->segments_count; ++inner_iter) {
-      if (segments_intersect(geometry->segments[outer_iter], geometry->segments[inner_iter]) != 0) {
+      if (geo_segments_intersect(geometry->segments[outer_iter], geometry->segments[inner_iter]) != 0) {
         return 0;
       }
     }
@@ -182,7 +144,7 @@ int geometry_is_simple(struct geometry const * const geometry) {
  *
  * returns 1 if inside, 0 otherwise.
  */
-int point_in_geometry(struct point const * const point, struct geometry const * const geometry) {
+int geo_point_in_geometry(struct geo_point const * const point, struct geo_geometry const * const geometry) {
   size_t iter = 0;
   int count = 0;
   for(iter = 0; iter < geometry->segments_count; ++iter) {
@@ -216,7 +178,7 @@ int point_in_geometry(struct point const * const point, struct geometry const * 
     /*
      * Check if the line segment is vertical because the 'ray' would always intersect
      */
-    if (fabs((double)geometry->segments[iter]->start->x - geometry->segments[iter]->end->x) < EPSILON) {
+    if (fabs((double)geometry->segments[iter]->start->x - geometry->segments[iter]->end->x) < GEO_EPSILON) {
       ++count;
       continue;
     }
