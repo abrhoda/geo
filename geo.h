@@ -2,7 +2,10 @@
 #define GEO_H
 
 #include <stddef.h>
+
+#ifndef GEO_EPSILON
 #define GEO_EPSILON 0.00001
+#endif
 
 enum geo_orientation {
   RIGHT = -1,
