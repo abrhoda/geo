@@ -24,6 +24,7 @@ In the `point_in_geometry` function, this entire function might need a rewrite d
 However, if a point is colinear with any line segment of the geometry, the point could be considered in the geometry. In some uses of this library it could be considered inside while some other uses it could be considered outside. Allow for a boolean parameter to control this.
 
 ## TODOs For Future Me
+- [ ] validate function input params for `NULL`. Currently, there's no input validation! Doing this will also require updating doxygen documentation in the `geo.h` file.
 - [ ] think about getting rid of need for `<math.h>`. The only function needed from there is `fabs`. Changing these to `value < EPSION && value > -EPSILON` would save needing this dependecy to be linked but possibly slower in general.
 - [ ] handle floats bounds checking. Currently, there's potential overflows in the cross and dot products. These should be handled correctly.
 - [ ] create a `TYPE` macro to allow for support of `float` and `double` depending on how it's compiled.

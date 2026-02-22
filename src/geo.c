@@ -1,5 +1,18 @@
 #include "geo.h"
 #include <math.h>
+#include <stdio.h>
+
+enum geo_orientation {
+  RIGHT = -1,
+  COLINEAR = 0,
+  LEFT = 1
+};
+
+enum geo_disk_position {
+  INSIDE = -1,
+  ON_EDGE = 0,
+  OUTSIDE = 1
+};
 
 /* point may not be the best type name but its easiest */
 static float dot_product(struct geo_point const * vec_ab, struct geo_point const * vec_ac);
@@ -94,7 +107,7 @@ int geo_segments_intersect(struct geo_segment const * const segment1, struct geo
 }
 
 int geo_geometry_is_closed(struct geo_geometry const * const geometry) {
-  size_t iter = 0;
+  int iter = 0;
   if (geometry->segments_count < 3) {
     return 0;
   }
@@ -108,8 +121,8 @@ int geo_geometry_is_closed(struct geo_geometry const * const geometry) {
 }
 
 int geo_geometry_is_simple(struct geo_geometry const * const geometry) {
-  size_t outer_iter = 0;
-  size_t inner_iter = 0;
+  int outer_iter = 0;
+  int inner_iter = 0;
   for (outer_iter = 0; outer_iter < (geometry->segments_count-1); ++outer_iter) {
     for (inner_iter = (outer_iter+1); inner_iter < geometry->segments_count; ++inner_iter) {
       if (geo_segments_intersect(geometry->segments[outer_iter], geometry->segments[inner_iter]) != 0) {
@@ -119,6 +132,25 @@ int geo_geometry_is_simple(struct geo_geometry const * const geometry) {
   }
 
   return 1;
+}
+
+int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry const * geometry, int strict) {
+  int intersections = 0;
+  int iter = 0;
+  enum geo_orientation orientation_p;
+  for (iter = 0; iter < geometry->segments_count; ++iter) {
+    orientation_p = orientation(geometry->segments[iter], point);
+    if (orientation_p == COLINEAR) {
+      return !strict;
+    }
+    /*
+     * checks that a ray from `point` bisects the segment and that the orientation puts the `point` on the appropriate side of the `segment`.
+     */
+    intersections += (((geometry->segments[iter]->end->y >= point->y) - (geometry->segments[iter]->start->y >= point->y)) * orientation_p) > 0;
+  }
+
+  printf("intersection count = %d\n", intersections);
+  return intersections & 1;
 }
 
 /*
@@ -144,8 +176,8 @@ int geo_geometry_is_simple(struct geo_geometry const * const geometry) {
  *
  * returns 1 if inside, 0 otherwise.
  */
-int geo_point_in_geometry(struct geo_point const * const point, struct geo_geometry const * const geometry) {
-  size_t iter = 0;
+int old_geo_point_in_geometry(struct geo_point const * const point, struct geo_geometry const * const geometry) {
+  int iter = 0;
   int count = 0;
   for(iter = 0; iter < geometry->segments_count; ++iter) {
     float min_y = 0.0F;

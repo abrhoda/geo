@@ -1,23 +1,9 @@
 #ifndef GEO_H
 #define GEO_H
 
-#include <stddef.h>
-
 #ifndef GEO_EPSILON
 #define GEO_EPSILON 0.00001
 #endif
-
-enum geo_orientation {
-  RIGHT = -1,
-  COLINEAR = 0,
-  LEFT = 1
-};
-
-enum geo_disk_position {
-  INSIDE = -1,
-  ON_EDGE = 0,
-  OUTSIDE = 1
-};
 
 struct geo_point {
   float x;
@@ -33,7 +19,10 @@ struct geo_point {
  * @param[in] lhs The first geo_point to test for equality
  * @param[in] rhs The second geo_point to test for equality
  *
- * @return 1 if the points are equal, 0 otherwise.
+ * @return int result code indicating the outcome:
+ *   - -1 if either point is NULL
+ *   - 0 if the points are not equal
+ *   - 1 if the points are equal
  *
  */
 int geo_points_equal(struct geo_point const * lhs, struct geo_point const * rhs);
@@ -70,7 +59,7 @@ int geo_segments_intersect(struct geo_segment const * segment1, struct geo_segme
 
 struct geo_geometry {
   struct geo_segment ** segments;
-  size_t segments_count;
+  int segments_count;
   /* TODO int is_negative_space; // tell if a geometry is a cut of of a parent. */
 };
 
@@ -104,12 +93,27 @@ int geo_geometry_is_simple(struct geo_geometry const * geometry);
 /**
  * @brief determines if a given geo_point is inside of the geo_geometry.
  *
- * param[in] geo_point The point to test
- * param[in] geo_geometry The geometry to test if the point is inside.
+ * @warning this function might produce unexpected results if
+ *          `geo_geometry_is_closed(geo_geometry) &&
+ *          geo_geometry_is_simple(geo_geometry) != 1`. Ensure that your geo_geometry
+ *          meets this condition BEFORE using this function.
+ *
+ * @details uses a raycasting algorithm to check if `point` is in `geometry`
+ *
+ * @param[in] geo_point The point to test
+ * @param[in] geo_geometry The geometry to test if the point is inside.
+ * @param[in] strict Controls whether a point on a segment is considered in or out
+ *                   of the geometry.
  *
  * @return 1 if the geo_point is inside the geo_geometry, 0 otherwise
  */
-int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry const * geometry);
+int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry const * geometry, int strict);
+
+/**
+ * @brief determins if a given geo_point is inside of the geo_geometry
+ * @deprecated and might not work as intended.
+ */
+int old_geo_point_in_geometry(struct geo_point const * point, struct geo_geometry const * geometry);
 
 
 
