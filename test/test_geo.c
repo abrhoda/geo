@@ -515,16 +515,399 @@ void test_geo_point_in_geometry_returns_1_when_point_in_geometry_and_strict_true
   result = geo_point_in_geometry(&to_test, &geom, strict);
   assert(result == 1);
 }
-void test_geo_point_in_geometry_returns_0_when_point_to_the_right_of_geometry_and_strict_true(void){}
-void test_geo_point_in_geometry_returns_0_when_point_to_the_left_of_geometry_and_strict_true(void){}
-void test_geo_point_in_geometry_returns_0_when_point_is_above_geometry_and_strict_true(void){}
-void test_geo_point_in_geometry_returns_0_when_point_is_below_geometry_and_strict_true(void){}
-void test_geo_point_in_geometry_returns_0_when_point_is_on_segment_of_geometry_and_strict_true(void){}
-void test_geo_point_in_geometry_returns_1_when_point_is_on_segment_of_geometry_and_strict_false(void){}
+
+void test_geo_point_in_geometry_returns_0_when_point_to_the_right_of_geometry_and_strict_true(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { 6.0F, 1.5F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 0);
+}
+
+void test_geo_point_in_geometry_returns_0_when_point_to_the_left_of_geometry_and_strict_true(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { -1.0F, 1.5F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 0);
+}
+
+void test_geo_point_in_geometry_returns_0_when_point_is_above_geometry_and_strict_true(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { 1.0F, 7.0F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 0);
+}
+
+void test_geo_point_in_geometry_returns_0_when_point_is_below_geometry_and_strict_true(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { 1.0F, -1.5F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 0);
+}
+
+void test_geo_point_in_geometry_returns_0_when_point_is_on_segment_of_geometry_and_strict_true(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { 0.0F, 1.5F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 0);
+}
+
+void test_geo_point_in_geometry_returns_1_when_point_is_on_segment_of_geometry_and_strict_false(void) {
+  int result = 0;
+  int strict = 0;
+  struct geo_point to_test = { 2.0F, 0.0F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 1);
+}
 
 /* these edge cases along with images are documented */
-void test_geo_point_in_geometry_returns_1_when_point_crosses_at_vertex_and_different_sgement(void){}
-void test_geo_point_in_geometry_returns_1_when_point_crosses_at_only_segment_vertex_geometry(void){}
+void test_geo_point_in_geometry_returns_1_when_point_crosses_at_vertex_and_different_sgement(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { 1.0F, 1.0F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 4.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 1);
+}
+
+void test_geo_point_in_geometry_returns_1_when_point_crosses_at_only_segment_vertex_geometry(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point to_test = { 4.9F, 2.0F };
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 2.0F, 0.0F };
+  struct geo_point point3 = { 5.0F, 2.0F };
+  struct geo_point point4 = { 5.0F, 3.0F };
+  struct geo_point point5 = { 2.0F, 1.0F };
+  struct geo_point point6 = { 2.0F, 2.0F };
+  struct geo_point point7 = { 0.0F, 2.0F };
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment segment5;
+  struct geo_segment segment6;
+  struct geo_segment segment7;
+  struct geo_segment * segments[7];
+  struct geo_geometry geom;
+  segment1.start = &point1;
+  segment1.end = &point2;
+  segments[0] = &segment1;
+  segment2.start = &point2;
+  segment2.end = &point3;
+  segments[1] = &segment2;
+  segment3.start = &point3;
+  segment3.end = &point4;
+  segments[2] = &segment3;
+  segment4.start = &point4;
+  segment4.end = &point5;
+  segments[3] = &segment4;
+  segment5.start = &point5;
+  segment5.end = &point6;
+  segments[4] = &segment5;
+  segment6.start = &point6;
+  segment6.end = &point7;
+  segments[5] = &segment6;
+  segment7.start = &point7;
+  segment7.end = &point1;
+  segments[6] = &segment7;
+
+  geom.segments = segments;
+  geom.segments_count = 7;
+
+  result = geo_point_in_geometry(&to_test, &geom, strict);
+  assert(result == 1);
+}
 
 int main(void) {
   test_geo_points_equal_returns_1_when_points_are_equal();
@@ -548,5 +931,15 @@ int main(void) {
   test_geo_geometry_is_simple_returns_0_when_2_segments_cross();
 
   test_geo_point_in_geometry_returns_1_when_point_in_geometry_and_strict_true();
+  test_geo_point_in_geometry_returns_0_when_point_to_the_right_of_geometry_and_strict_true();
+  test_geo_point_in_geometry_returns_0_when_point_to_the_left_of_geometry_and_strict_true();
+  test_geo_point_in_geometry_returns_0_when_point_is_above_geometry_and_strict_true();
+  test_geo_point_in_geometry_returns_0_when_point_is_below_geometry_and_strict_true();
+
+  test_geo_point_in_geometry_returns_0_when_point_is_on_segment_of_geometry_and_strict_true();
+  test_geo_point_in_geometry_returns_1_when_point_is_on_segment_of_geometry_and_strict_false();
+
+  test_geo_point_in_geometry_returns_1_when_point_crosses_at_vertex_and_different_sgement();
+  test_geo_point_in_geometry_returns_1_when_point_crosses_at_only_segment_vertex_geometry();
   return 0;
 }

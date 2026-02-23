@@ -140,7 +140,7 @@ int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry co
   enum geo_orientation orientation_p;
   for (iter = 0; iter < geometry->segments_count; ++iter) {
     orientation_p = orientation(geometry->segments[iter], point);
-    if (orientation_p == COLINEAR) {
+    if (orientation_p == COLINEAR && disk_position(geometry->segments[iter], point) != OUTSIDE) {
       return !strict;
     }
     /*
@@ -148,8 +148,6 @@ int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry co
      */
     intersections += (((geometry->segments[iter]->end->y >= point->y) - (geometry->segments[iter]->start->y >= point->y)) * orientation_p) > 0;
   }
-
-  printf("intersection count = %d\n", intersections);
   return intersections & 1;
 }
 
@@ -225,5 +223,5 @@ int old_geo_point_in_geometry(struct geo_point const * const point, struct geo_g
       ++count;
     }
   }
-  return count % 2;
+  return count & 1;
 }
