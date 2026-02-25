@@ -76,6 +76,9 @@ static enum geo_disk_position disk_position(struct geo_segment const * const seg
 }
 
 int geo_points_equal(struct geo_point const * const lhs, struct geo_point const * const rhs) {
+  if (lhs == NULL || rhs == NULL) {
+    return -1;
+  }
   return (fabs((double) lhs->x - rhs->x) < GEO_EPSILON && fabs((double) lhs->y - rhs->y) < GEO_EPSILON);
 }
 

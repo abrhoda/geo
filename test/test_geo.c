@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "../src/geo.h"
 
@@ -62,7 +63,31 @@ void test_geo_points_equal_returns_0_when_difference_more_than_epsilon(void) {
   assert(result == 0);
 }
 
-void test_get_segments_intersect_returns_0_when_no_intersection(void) {
+void test_geo_points_equal_returns__negative_1_when_lhs_is_null_ptr(void) {
+  struct geo_point point;
+  int result = 0;
+
+  point.x = 1.0F;
+  point.y = 1.0F;
+
+  result = geo_points_equal(0, &point);
+
+  assert(result == -1);
+}
+
+void test_geo_points_equal_returns__negative_1_when_rhs_is_null_ptr(void) {
+  struct geo_point point;
+  int result = 0;
+
+  point.x = 1.0F;
+  point.y = 1.0F;
+
+  result = geo_points_equal(&point, 0);
+
+  assert(result == -1);
+}
+
+void test_geo_segments_intersect_returns_0_when_no_intersection(void) {
   struct geo_point point1;
   struct geo_point point2;
   struct geo_point point3;
@@ -89,7 +114,7 @@ void test_get_segments_intersect_returns_0_when_no_intersection(void) {
   assert(result == 0);
 }
 
-void test_get_segments_intersect_returns_1_when_proper_intersection(void) {
+void test_geo_segments_intersect_returns_1_when_proper_intersection(void) {
   struct geo_point point1;
   struct geo_point point2;
   struct geo_point point3;
@@ -116,7 +141,7 @@ void test_get_segments_intersect_returns_1_when_proper_intersection(void) {
   assert(result == 1);
 }
 
-void test_get_segments_intersect_returns_2_when_1_segment_entirely_contained_by_other_segment(void) {
+void test_geo_segments_intersect_returns_2_when_1_segment_entirely_contained_by_other_segment(void) {
   struct geo_point point1;
   struct geo_point point2;
   struct geo_point point3;
@@ -143,7 +168,7 @@ void test_get_segments_intersect_returns_2_when_1_segment_entirely_contained_by_
   assert(result == 2);
 }
 
-void test_get_segments_intersect_returns_3_when_1_segment_entirely_contained_by_other_segment_sharing_1_endpoint(void) {
+void test_geo_segments_intersect_returns_3_when_1_segment_entirely_contained_by_other_segment_sharing_1_endpoint(void) {
   struct geo_point point1;
   struct geo_point point2;
   struct geo_point point3;
@@ -170,7 +195,7 @@ void test_get_segments_intersect_returns_3_when_1_segment_entirely_contained_by_
   assert(result == 3);
 }
 
-void test_get_segments_intersect_returns_4_when_segments_are_exactly_equal(void) {
+void test_geo_segments_intersect_returns_4_when_segments_are_exactly_equal(void) {
   struct geo_point point1;
   struct geo_point point2;
   struct geo_point point3;
@@ -197,7 +222,7 @@ void test_get_segments_intersect_returns_4_when_segments_are_exactly_equal(void)
   assert(result == 4);
 }
 
-void test_get_segments_intersect_returns_1_when_1_segments_start_endpoint_on_other_segment(void) {
+void test_geo_segments_intersect_returns_1_when_1_segments_start_endpoint_on_other_segment(void) {
   struct geo_point point1;
   struct geo_point point2;
   struct geo_point point3;
@@ -914,13 +939,15 @@ int main(void) {
   test_geo_points_equal_returns_0_when_points_arent_equal();
   test_geo_points_equal_returns_1_when_difference_less_than_epsilon();
   test_geo_points_equal_returns_0_when_difference_more_than_epsilon();
+  test_geo_points_equal_returns__negative_1_when_lhs_is_null_ptr();
+  test_geo_points_equal_returns__negative_1_when_rhs_is_null_ptr();
 
-  test_get_segments_intersect_returns_0_when_no_intersection();
-  test_get_segments_intersect_returns_1_when_proper_intersection();
-  test_get_segments_intersect_returns_2_when_1_segment_entirely_contained_by_other_segment();
-  test_get_segments_intersect_returns_3_when_1_segment_entirely_contained_by_other_segment_sharing_1_endpoint();
-  test_get_segments_intersect_returns_4_when_segments_are_exactly_equal();
-  test_get_segments_intersect_returns_1_when_1_segments_start_endpoint_on_other_segment();
+  test_geo_segments_intersect_returns_0_when_no_intersection();
+  test_geo_segments_intersect_returns_1_when_proper_intersection();
+  test_geo_segments_intersect_returns_2_when_1_segment_entirely_contained_by_other_segment();
+  test_geo_segments_intersect_returns_3_when_1_segment_entirely_contained_by_other_segment_sharing_1_endpoint();
+  test_geo_segments_intersect_returns_4_when_segments_are_exactly_equal();
+  test_geo_segments_intersect_returns_1_when_1_segments_start_endpoint_on_other_segment();
 
   test_geo_geometry_is_closed_returns_1_when_closed();
   test_geo_geometry_is_closed_returns_0_when_gap_in_geometry();
@@ -941,5 +968,6 @@ int main(void) {
 
   test_geo_point_in_geometry_returns_1_when_point_crosses_at_vertex_and_different_sgement();
   test_geo_point_in_geometry_returns_1_when_point_crosses_at_only_segment_vertex_geometry();
+  (void) fprintf(stderr, "Tests all passed.\n");
   return 0;
 }
