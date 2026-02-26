@@ -84,10 +84,19 @@ int geo_points_equal(struct geo_point const * const lhs, struct geo_point const 
 
 int geo_segments_intersect(struct geo_segment const * const segment1, struct geo_segment const * const segment2) {
   int intersect_count = 0;
-  enum geo_orientation orientation_a = orientation(segment2, segment1->start);
-  enum geo_orientation orientation_b = orientation(segment2, segment1->end);
-  enum geo_orientation orientation_c = orientation(segment1, segment2->start);
-  enum geo_orientation orientation_d = orientation(segment1, segment2->end);
+  enum geo_orientation orientation_a;
+  enum geo_orientation orientation_b;
+  enum geo_orientation orientation_c;
+  enum geo_orientation orientation_d;
+
+  if (segment1 == NULL || segment2 == NULL || segment1->start == NULL || segment1->end == NULL || segment2->start == NULL || segment2->end == NULL ) {
+    return -1;
+  }
+
+  orientation_a = orientation(segment2, segment1->start);
+  orientation_b = orientation(segment2, segment1->end);
+  orientation_c = orientation(segment1, segment2->start);
+  orientation_d = orientation(segment1, segment2->end);
 
   if ((orientation_a*orientation_b < 0) && (orientation_c*orientation_d < 0)) {
     return 1;
@@ -111,24 +120,51 @@ int geo_segments_intersect(struct geo_segment const * const segment1, struct geo
 
 int geo_geometry_is_closed(struct geo_geometry const * const geometry) {
   int iter = 0;
+  int mod = 0;
+  int equal = 0;
+
+  if (geometry == NULL || geometry->segments == NULL) {
+    return -1;
+  }
+
   if (geometry->segments_count < 3) {
     return 0;
   }
 
-  for (iter = 0; iter < geometry->segments_count - 2; ++iter) {
-    if (!geo_points_equal(geometry->segments[iter]->end, geometry->segments[iter+1]->start)) {
-      return 0;
+  for (iter = 0; iter < geometry->segments_count; ++iter) {
+    mod = (iter + 1) % geometry->segments_count;
+    equal = geo_points_equal(geometry->segments[iter]->end, geometry->segments[mod]->start);
+    if (equal != 1) {
+      return equal;
     }
   }
-  return geo_points_equal(geometry->segments[geometry->segments_count-1]->end, geometry->segments[0]->start);
+  return 1;
 }
 
 int geo_geometry_is_simple(struct geo_geometry const * const geometry) {
   int outer_iter = 0;
   int inner_iter = 0;
+  int intersect = 0;
+  if (geometry == NULL || geometry->segments == NULL) {
+    return -1;
+  }
+
+  printf("A\n");
+  if (geometry->segments_count < 3) {
+    return 0;
+  }
+
+  printf("B with total seg count = %d\n", geometry->segments_count);
   for (outer_iter = 0; outer_iter < (geometry->segments_count-1); ++outer_iter) {
     for (inner_iter = (outer_iter+1); inner_iter < geometry->segments_count; ++inner_iter) {
-      if (geo_segments_intersect(geometry->segments[outer_iter], geometry->segments[inner_iter]) != 0) {
+      intersect = geo_segments_intersect(geometry->segments[outer_iter], geometry->segments[inner_iter]);
+      printf("intersect = %d\n", intersect);
+
+      if (intersect == -1) {
+        return -1;
+      }
+      if (intersect == 1) {
+        printf("intersecting lines at %d and %d\n", outer_iter, inner_iter);
         return 0;
       }
     }

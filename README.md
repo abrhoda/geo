@@ -2,13 +2,7 @@
 geofencing library in c89.
 
 ## Public API
-See documentation.
-
-## Using in a Project
-Geo is made to be a single header and implementation file pairing. It can be included by copy/pasting the pair of files into their respective places in your codebase. It could also be built as a dynamic or static library that you can then link to your program.
-
-## Handling of "Edge" Cases
-Close attention needs to be paid in a few different cases. Functions should provide a boolean parameter in the function declaration to handle each case where applicable.
+See doxygen documentation.
 
 ### Properties of a Geometry
 `geometry_is_closed` simply checks that a set of line segments form a closed loop through testing that the nth line segment ends at the start point of the (n+1)th line segment and that the last line segment ends at the start point of the first line segment.
@@ -29,6 +23,15 @@ However, if a point is colinear with any line segment of the geometry, the point
 - [ ] handle floats bounds checking. Currently, there's potential overflows in the cross and dot products. These should be handled correctly.
 - [ ] create a `TYPE` macro to allow for support of `float` and `double` depending on how it's compiled.
 - [ ] segments and points all all passed as `struct Type const * const name`. For trivial structs (such as point) that don't modify the point or segment, passing by value might be a better way to handle this. Need to think about whether this has a tangible benefit over just the `const *` being passed.
+
+# Code Layout, Contribution Guide, and Design Considerations
+1. set up dirs with `make setup`
+2. Run `make format && make lint`
+3. Defensive coding. Check nulls even where excessive. It's the trade off of not owning memory allocations.
+4. Write unit tests.
+
+## Unit Tests
+Check `UNIT_TEST_CASES.md` where I documented unit tests. To run the unit tests, run `make setup && make test` from project root.
 
 ## References
 1. [Handbook of Geometry for Competitive Programmers](https://victorlecomte.com/cp-geo.pdf) - used for learning about programmatic approaches to determining line segment intersections and other neat geometry things.
