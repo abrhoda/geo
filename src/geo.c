@@ -8,18 +8,12 @@ enum geo_orientation {
   LEFT = 1
 };
 
-enum geo_disk_position {
-  INSIDE = -1,
-  ON_EDGE = 0,
-  OUTSIDE = 1
-};
-
 /* point may not be the best type name but its easiest */
 static float dot_product(struct geo_point const * vec_ab, struct geo_point const * vec_ac);
 static float cross_product(struct geo_point const * vec_ab, struct geo_point const * vec_ac);
 
 static enum geo_orientation orientation(struct geo_segment const * segment, struct geo_point const * point);
-static enum geo_disk_position disk_position(struct geo_segment const * segment, struct geo_point const * point);
+static int in_disk(struct geo_segment const * segment, struct geo_point const * point);
 
 static float dot_product(struct geo_point const * const vec_ab, struct geo_point const * const vec_ac) {
   return ((vec_ab->x*vec_ac->x) + (vec_ab->y*vec_ac->y));
@@ -52,11 +46,7 @@ static enum geo_orientation orientation(struct geo_segment const * const segment
   return LEFT;
 }
 
-/*
- * Checks if `point` lies inside, on the edge, or outside of a disk whose diameter is `segment`.
- */
-static enum geo_disk_position disk_position(struct geo_segment const * const segment, struct geo_point const * const point) {
-  float dot = 0.0F;
+static int in_disk(struct geo_segment const * const segment, struct geo_point const * const point) {
   struct geo_point vec_ap;
   struct geo_point vec_bp;
   vec_ap.x = (segment->start->x - point->x);
@@ -64,15 +54,7 @@ static enum geo_disk_position disk_position(struct geo_segment const * const seg
 
   vec_bp.x = (segment->end->x - point->x);
   vec_bp.y = (segment->end->y - point->y);
-  dot = dot_product(&vec_ap, &vec_bp);
-
-  if (fabs((double) dot) < GEO_EPSILON) {
-    return ON_EDGE;
-  }
-  if (dot < 0) {
-    return INSIDE;
-  }
-  return OUTSIDE;
+  return dot_product(&vec_ap, &vec_bp) <= 0.0F;
 }
 
 int geo_points_equal(struct geo_point const * const lhs, struct geo_point const * const rhs) {
@@ -102,16 +84,16 @@ int geo_segments_intersect(struct geo_segment const * const segment1, struct geo
     return 1;
   }
 
-  if (orientation_a == COLINEAR && disk_position(segment2, segment1->start) != OUTSIDE) {
+  if (orientation_a == COLINEAR && in_disk(segment2, segment1->start)) {
     ++intersect_count;
   }
-  if (orientation_b == COLINEAR && disk_position(segment2, segment1->end) != OUTSIDE) {
+  if (orientation_b == COLINEAR && in_disk(segment2, segment1->end)) {
     ++intersect_count;
   }
-  if (orientation_c == COLINEAR && disk_position(segment1, segment1->start) != OUTSIDE) {
+  if (orientation_c == COLINEAR && in_disk(segment1, segment2->start)) {
     ++intersect_count;
   }
-  if (orientation_d == COLINEAR && disk_position(segment1, segment1->end) != OUTSIDE) {
+  if (orientation_d == COLINEAR && in_disk(segment1, segment2->end)) {
     ++intersect_count;
   }
 
@@ -179,7 +161,7 @@ int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry co
   enum geo_orientation orientation_p;
   for (iter = 0; iter < geometry->segments_count; ++iter) {
     orientation_p = orientation(geometry->segments[iter], point);
-    if (orientation_p == COLINEAR && disk_position(geometry->segments[iter], point) != OUTSIDE) {
+    if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
       return !strict;
     }
     /*
