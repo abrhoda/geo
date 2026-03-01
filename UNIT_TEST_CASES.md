@@ -16,23 +16,23 @@ Just a checklist of test cases per function.
 - [x] when segment1-\>end == NULL, assert -1
 - [x] when segment2-\>start == NULL, assert -1
 - [x] when segment2-\>end == NULL, assert -1
-- [ ] when segment1 is parallel to segment2, assert 0
-- [ ] when segment1 is colinear to segment2 but doesn't intersect, assert 0
-- [ ] when segment1 doesn't intersect segment2, assert 0
-- [ ] when segment1 intersect segment2 properly, assert 1
-- [ ] when segment1 end point is equal to segment2 start point, assert 2
-- [ ] when segment1 is a section of segment 2, assert 2
-- [ ] when segment2 is a section of segment 1, assert 2
-- [ ] when segment1 and segment2 have the exact same endpoints, assert 4
+- [x] when segment1 is parallel to segment2, assert 0
+- [x] when segment1 is colinear to segment2 but doesn't intersect, assert 0
+- [x] when segment1 doesn't intersect segment2, assert 0
+- [x] when segment1 intersect segment2 properly, assert 1
+- [x] when segment1 end point is equal to segment2 start point, assert 2
+- [x] when segment1 is a section of segment 2, assert 2
+- [x] when segment2 is a section of segment 1, assert 2
+- [x] when segment1 and segment2 have the exact same endpoints, assert 4
 
 ## geo\_geometry\_is\_closed
-- [ ] when geometry == NULL, assert -1
-- [ ] when geometry-\>segments == NULL, assert -1
-- [ ] when geometry-\>segments[i]-\>start == NULL, assert -1
-- [ ] when geometry-\>segments[i]-\>end == NULL, assert -1
-- [ ] when geometry-\>segments\_count < 3, assert 0
-- [ ] when every nth segment-\>end == (n+1 [or 0 for last])th segment's-\>start, assert 1
-- [ ] when nth segment-\>end != (n+1)th segment-\>start, assert 0
+- [x] when geometry == NULL, assert -1
+- [x] when geometry-\>segments == NULL, assert -1
+- [x] when geometry-\>segments[i]-\>start == NULL, assert -1
+- [x] when geometry-\>segments[i]-\>end == NULL, assert -1
+- [x] when geometry-\>segments\_count < 3, assert 0
+- [x] when every nth segment-\>end == (n+1 [or 0 for last])th segment's-\>start, assert 1
+- [x] when nth segment-\>end != (n+1)th segment-\>start, assert 0
 
 ## geo\_geometry\_is\_simple
 - [ ] when geometry == NULL, assert -1

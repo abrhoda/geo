@@ -131,22 +131,17 @@ int geo_geometry_is_simple(struct geo_geometry const * const geometry) {
     return -1;
   }
 
-  printf("A\n");
   if (geometry->segments_count < 3) {
     return 0;
   }
 
-  printf("B with total seg count = %d\n", geometry->segments_count);
   for (outer_iter = 0; outer_iter < (geometry->segments_count-1); ++outer_iter) {
     for (inner_iter = (outer_iter+1); inner_iter < geometry->segments_count; ++inner_iter) {
       intersect = geo_segments_intersect(geometry->segments[outer_iter], geometry->segments[inner_iter]);
-      printf("intersect = %d\n", intersect);
-
       if (intersect == -1) {
         return -1;
       }
       if (intersect == 1) {
-        printf("intersecting lines at %d and %d\n", outer_iter, inner_iter);
         return 0;
       }
     }
