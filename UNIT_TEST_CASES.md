@@ -35,13 +35,13 @@ Just a checklist of test cases per function.
 - [x] when nth segment-\>end != (n+1)th segment-\>start, assert 0
 
 ## geo\_geometry\_is\_simple
-- [ ] when geometry == NULL, assert -1
-- [ ] when geometry-\>segments == NULL, assert -1
-- [ ] when geometry-\>segments[i]-\>start == NULL, assert -1
-- [ ] when geometry-\>segments[i]-\>end == NULL, assert -1
-- [ ] when geometry-\>segments\_count < 3, assert 0
-- [ ] when geometry-\>segments[i] and every [i..len] segment don't intersect, return 1
-- [ ] when geometry-\>segments[i] and some of [i..len] segment do intersect, return 0
+- [x] when geometry == NULL, assert -1
+- [x] when geometry-\>segments == NULL, assert -1
+- [x] when geometry-\>segments[i]-\>start == NULL, assert -1
+- [x] when geometry-\>segments[i]-\>end == NULL, assert -1
+- [x] when geometry-\>segments\_count < 3, assert 0
+- [x] when geometry-\>segments[i] and every [i..len] segment don't intersect, return 1
+- [x] when geometry-\>segments[i] and some of [i..len] segment do intersect, return 0
 
 ## geo\_point\_in\_geometry
 - [ ] when point == NULL, assert -1
@@ -52,7 +52,7 @@ Just a checklist of test cases per function.
 - [ ] when geometry-\>segments[i]-\>start == NULL, assert -1
 - [ ] when geometry-\>segments[i]-\>end == NULL, assert -1
 - [ ] when atrict is 1 and point is on geometry-\>segments[i], assert 0
-- [ ] when atrict is 0 and point is on geometry-\>segments[i], assert 1
+- [ ] when strict is 0 and point is on geometry-\>segments[i], assert 1
 - [ ] when point is to the left of the geometry and colinear with geometry-\>segment[i], return 0
 - [ ] when point is to the right of the geometry, return 0
 - [ ] when point is above of the geometry and colinear with geometry-\>segment[i], return 0

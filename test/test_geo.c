@@ -666,6 +666,10 @@ void geo_geometry_is_simple_returns_1_when_no_segments_intersect(void) {
  * geo_point_in_geometry tests
  *----------------------------------
  */
+void geo_point_in_geometry_returns_negative_1_when_point_is_null(void) {}
+void geo_point_in_geometry_returns_negative_1_when_geometry_is_null(void) {}
+void geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null(void) {}
+void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3(void) {}
 
 
 int main(void) {
@@ -708,6 +712,8 @@ int main(void) {
   geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_end_is_null();
   geo_geometry_is_simple_returns_0_when_any_segments_intersect();
   geo_geometry_is_simple_returns_1_when_no_segments_intersect();
+
+  /* geo_point_in_geometry tests */
 
   printf("All tests pass.\n");
   return 0;
