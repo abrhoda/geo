@@ -1,8 +1,12 @@
 # geo
 geofencing library in c89.
 
-## Public API
+## Documentation
+
+### Public API
 See doxygen documentation.
+
+##
 
 ### Properties of a Geometry
 `geometry_is_closed` simply checks that a set of line segments form a closed loop through testing that the nth line segment ends at the start point of the (n+1)th line segment and that the last line segment ends at the start point of the first line segment.
@@ -19,6 +23,7 @@ In the `point_in_geometry` function, this entire function might need a rewrite d
 - [ ] handle floats bounds checking. Currently, there's potential overflows in the cross and dot products. These should be handled correctly.
 - [ ] create a `TYPE` macro to allow for support of `float` and `double` depending on how it's compiled.
 - [ ] segments and points all all passed as `struct Type const * const name`. For trivial structs (such as point) that don't modify the point or segment, passing by value might be a better way to handle this. Need to think about whether this has a tangible benefit over just the `const *` being passed.
+- [ ] for `geo_point_in_geometry`, would there be a benefit in finding the geometry's bounding box and seeing if the point is inside that before checking? could this speed up the calculation?
 
 # Code Layout, Contribution Guide, and Design Considerations
 1. set up dirs with `make setup`

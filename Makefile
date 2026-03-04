@@ -5,6 +5,8 @@ SRC_DIR := src
 TEST_DIR := test
 #BUILD_DIR := build
 BIN_DIR := bin
+FORMATTER := clang-format
+LINTER := clang-tidy
 
 # For containing make's dependency (.d) files. Read more here: https://make.mad-scientist.net/papers/advanced-auto-dependency-generation/
 #DEPS_DIR := deps
@@ -33,7 +35,7 @@ CFLAGS += -Wcast-qual
 CFLAGS += -Wdeclaration-after-statement
 CFLAGS += -Wfloat-equal
 CFLAGS += -Wformat=2
-CFLAGS += -Wlogical-op
+#CFLAGS += -Wlogical-op
 CFLAGS += -Wmissing-declarations
 CFLAGS += -Wmissing-include-dirs
 CFLAGS += -Wmissing-prototypes
@@ -70,6 +72,13 @@ test:
 	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo.c $(SRC_DIR)/geo.c $(LDLIBS) -o $(BIN_DIR)/test_geo
 	@$(BIN_DIR)/test_geo
 
+.PHONY: format
+format:
+	$(FORMATTER) --style=file -i $(SRC_DIR)/geo.c $(SRC_DIR)/geo.h
+
+.PHONY: lint
+lint:
+	$(LINTER) --config-file=.clang-tidy $(SRC_DIR)/geo.c $(SRC_DIR)/geo.h -- $(CFLAGS) -Wmost
 
 .PHONY: setup
 setup:
