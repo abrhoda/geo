@@ -666,10 +666,356 @@ void geo_geometry_is_simple_returns_1_when_no_segments_intersect(void) {
  * geo_point_in_geometry tests
  *----------------------------------
  */
-void geo_point_in_geometry_returns_negative_1_when_point_is_null(void) {}
-void geo_point_in_geometry_returns_negative_1_when_geometry_is_null(void) {}
-void geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null(void) {}
-void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3(void) {}
+void geo_point_in_geometry_returns_negative_1_when_point_is_null(void) {
+  struct geo_geometry geometry;
+  struct geo_segment * segments[3];
+  int strict = 1;
+  int result = 0;
+  geometry.segments = segments;
+  geometry.segments_count = 3;
+  result = geo_point_in_geometry(NULL, &geometry, strict);
+  assert(result == -1);
+}
+
+void geo_point_in_geometry_returns_negative_1_when_geometry_is_null(void) {
+  struct geo_point point = { 0.0F, 0.0F };
+  int strict = 1;
+  int result = geo_point_in_geometry(&point, NULL, strict);
+  assert(result == -1);
+}
+
+void geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null(void) {
+  struct geo_geometry geometry;
+  struct geo_point point = { 0.0F, 0.0F };
+  int strict = 1;
+  int result = 0;
+  geometry.segments = NULL;
+  geometry.segments_count = 3;
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == -1);
+}
+
+void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_is_null(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point point = {1.5F, 1.5F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = NULL;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == -1);
+}
+
+void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_null(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point point = {1.5F, 1.5F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = NULL;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == -1);
+}
+
+void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point point = {1.5F, 1.5F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment * segments[2];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  geometry.segments_count = 2;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 0);
+
+}
+
+void geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_is_1(void) {
+  int result = 0;
+  int strict = 1;
+  struct geo_point point = {3.0F, 1.5F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 0);
+}
+
+void geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_is_0(void) {
+  int result = 0;
+  int strict = 0;
+  struct geo_point point = {3.0F, 1.5F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 1);
+}
+
+void geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment(void) {
+  int result = 0;
+  int strict = 0;
+  struct geo_point point = {3.0F, -1.0F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 0);
+}
+
+void geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment(void) {
+  int result = 0;
+  int strict = 0;
+  struct geo_point point = {4.0F, 0.0F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 0);
+}
+
+void geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment(void) {
+  int result = 0;
+  int strict = 0;
+  struct geo_point point = {0.0F, 4.0F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 0);
+}
+
+void geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment(void) {
+  int result = 0;
+  int strict = 0;
+  struct geo_point point = {0.0F, -1.0F};
+  struct geo_point start1 = {0.0F, 0.0F};
+  struct geo_point end1 = {3.0F, 0.0F};
+  struct geo_point start2 = {3.0F, 0.0F};
+  struct geo_point end2 = {3.0F, 3.0F};
+  struct geo_point start3 = {3.0F, 3.0F};
+  struct geo_point end3 = {0.0F, 3.0F};
+  struct geo_point start4 = {0.0F, 3.0F};
+  struct geo_point end4 = {0.0F, 0.0F};
+  struct geo_segment segment1;
+  struct geo_segment segment2;
+  struct geo_segment segment3;
+  struct geo_segment segment4;
+  struct geo_segment * segments[4];
+  struct geo_geometry geometry;
+  segment1.start = &start1;
+  segment1.end = &end1;
+  segments[0] = &segment1;
+  segment2.start = &start2;
+  segment2.end = &end2;
+  segments[1] = &segment2;
+  segment3.start = &start3;
+  segment3.end = &end3;
+  segments[2] = &segment3;
+  segment4.start = &start4;
+  segment4.end = &end4;
+  segments[3] = &segment4;
+  geometry.segments_count = 4;
+  geometry.segments = segments;
+
+  result = geo_point_in_geometry(&point, &geometry, strict);
+  assert(result == 0);
+}
 
 
 int main(void) {
@@ -714,6 +1060,20 @@ int main(void) {
   geo_geometry_is_simple_returns_1_when_no_segments_intersect();
 
   /* geo_point_in_geometry tests */
+  geo_point_in_geometry_returns_negative_1_when_point_is_null();
+  geo_point_in_geometry_returns_negative_1_when_geometry_is_null();
+  geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null();
+  geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_is_null();
+  geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_null();
+  geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3();
+  geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_is_1();
+  geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_is_0();
+  geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment();
+  geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment();
+  geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment();
+  geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment();
+
+
 
   printf("All tests pass.\n");
   return 0;

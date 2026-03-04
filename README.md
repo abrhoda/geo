@@ -14,7 +14,7 @@ In the `point_in_geometry` function, this entire function might need a rewrite d
 
 ## TODOs For Future Me
 - [ ] validate function input params for `NULL`. Currently, there's no input validation! Doing this will also require updating doxygen documentation in the `geo.h` file.
-- [ ] maybe add a macro to compile wth 'unsafe' which just means that `assert`s are used for null checking instead of returning a sentinel value. This leads null checking being removed when `NDEBUG` is set.
+- [ ] maybe add a macro to compile wth `GEO_UNSAFE` which just means that `assert`s are used for null checking instead of returning a sentinel value. This leads null checking being removed when `NDEBUG` is set. Also, remove the `geometry->segments_count < 3` checks with this. This pushes ALL validation onto the caller of the library.
 - [ ] think about getting rid of need for `<math.h>`. The only function needed from there is `fabs`. Changing these to `value < EPSION && value > -EPSILON` would save needing this dependecy to be linked but possibly slower in general.
 - [ ] handle floats bounds checking. Currently, there's potential overflows in the cross and dot products. These should be handled correctly.
 - [ ] create a `TYPE` macro to allow for support of `float` and `double` depending on how it's compiled.

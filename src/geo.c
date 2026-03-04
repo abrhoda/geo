@@ -154,7 +154,18 @@ int geo_point_in_geometry(struct geo_point const * point, struct geo_geometry co
   int intersections = 0;
   int iter = 0;
   enum geo_orientation orientation_p;
+  if (geometry == NULL || geometry->segments == NULL || point == NULL) {
+    return -1;
+  }
+
+  if (geometry->segments_count < 3) {
+    return 0;
+  }
   for (iter = 0; iter < geometry->segments_count; ++iter) {
+    if (geometry->segments[iter]->start == NULL || geometry->segments[iter]->end == NULL) {
+      return -1;
+    }
+
     orientation_p = orientation(geometry->segments[iter], point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
       return !strict;
