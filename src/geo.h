@@ -52,8 +52,11 @@ struct geo_segment {
  * point, 2 if one segment lies entirely on the other, 4 if the 2 segments are the
  * same segment.
  *
- * TODO add a proper_only control param to handle cases where colinearity should be considered on
- * intersections and when it shouldn't.
+ * NOTE: 2 is also returned when one segment's end is the same as another segment's start. There
+ * should be a way to determine whether the intersect == 2 is due to sharing an end+start pair or
+ * if its because the first segment is contained by another. Maybe this can be done with a
+ * `proper_only` flag that only checks if an intersection is a proper intersect for cases
+ * where end+start pairs are expected to "intersect" but shouldn't count as an intersection.
  */
 int geo_segments_intersect(struct geo_segment const * segment1, struct geo_segment const * segment2);
 
