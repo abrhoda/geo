@@ -4,7 +4,7 @@
  * \brief Header file for the libgeo geometric enums, functions, and structs.
  *
  * \author Alexander Rhoda
- * \date March 2026
+ * \date 2026
  */
 #ifndef GEO_H
 #define GEO_H
@@ -38,7 +38,7 @@ struct geo_point {
  * \param[in] rhs The second geo_point to test for equality
  *
  * \return int result code indicating the outcome:
- *   - -1 if either point is NULL
+ *   - -1 if either point is NULL (removed when compiled with GEO_UNSAFE set)
  *   - 0 if the points are not equal
  *   - 1 if the points are equal
  *
@@ -71,18 +71,15 @@ struct geo_segment {
  * \param[in] segment1 The first segment to test for intersection
  * \param[in] segment2 The second segment to test for intersection
  *
- * \returns the count of intersectings points on both lines. 0 of there is none,
- * 1 if the segments properly intersect or intersect at one segment's start or
- * end point, 2 if one segment lies entirely on the other, 4 if the 2 segments
- * are the same segment.
- *
- * NOTE: 2 is also returned when one segment's end is the same as another
- * segment's start. There should be a way to determine whether the intersect ==
- * 2 is due to sharing an end+start pair or if its because the first segment is
- * contained by another. Maybe this can be done with a `proper_only` flag that
- * only checks if an intersection is a proper intersect for cases where
- * end+start pairs are expected to "intersect" but shouldn't count as an
- * intersection.
+ * \return int result code indicating the outcome:
+ *   - -1 if either segment is NULL or if either segments start point or end point
+ *        are NULL (removed when compiled with GEO_UNSAFE set)
+ *   - 0 if the segments don't intersect
+ *   - 1 if the segments properly intersect
+ *   - 2 if the segments share an end + start point pair or if one segment is a
+ *        section of the other.
+ *   - 3 if one segment is a section of another and they share an end + start point pair.
+ *   - 4 if the segments have identical start and end points.
  */
 int geo_segments_intersect(struct geo_segment const* segment1,
                            struct geo_segment const* segment2);
@@ -110,7 +107,10 @@ struct geo_geometry {
  *
  * \param[in] geometry The geometry to test.
  *
- * \return 1 if the geometry is a closed shape, 0 otherwise.
+ * \return int result code indicating the outcome:
+ *   - -1 if geometry or geometry's segments are NULL (removed when compiled with GEO_UNSAFE set)
+ *   - 0 if the geometry is not closed
+ *   - 1 if the geometry is closed
  */
 int geo_geometry_is_closed(struct geo_geometry const* geometry);
 
@@ -122,7 +122,10 @@ int geo_geometry_is_closed(struct geo_geometry const* geometry);
  *
  * \param[in] geometry The geometry to test.
  *
- * \return 1 if the geometry is simple, 0 otherwise.
+ * \return int result code indicating the outcome:
+ *   - -1 if geometry or geometry's segments are NULL (removed when compiled with GEO_UNSAFE set)
+ *   - 0 if the geometry is not simple
+ *   - 1 if the geometry is simple
  */
 int geo_geometry_is_simple(struct geo_geometry const* geometry);
 
@@ -141,7 +144,10 @@ int geo_geometry_is_simple(struct geo_geometry const* geometry);
  * \param[in] strict Controls whether a point on a segment is considered in or
  * out of the geometry.
  *
- * \return 1 if the geo_point is inside the geo_geometry, 0 otherwise
+ * \return int result code indicating the outcome:
+ *   - -1 if point, geometry, geometry's segments, any start point, or any end point is  NULL (removed when compiled with GEO_UNSAFE set)
+ *   - 0 if not in the geometry
+ *   - 1 if in the geometry
  */
 int geo_point_in_geometry(struct geo_point const* point,
                           struct geo_geometry const* geometry, int strict);

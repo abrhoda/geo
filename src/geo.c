@@ -64,9 +64,11 @@ static int in_disk(struct geo_segment const* const segment,
 
 int geo_points_equal(struct geo_point const* const lhs,
                      struct geo_point const* const rhs) {
+#ifndef GEO_UNSAFE
   if (lhs == NULL || rhs == NULL) {
     return -1;
   }
+#endif
   return (fabs((double)lhs->x - rhs->x) < GEO_EPSILON &&
           fabs((double)lhs->y - rhs->y) < GEO_EPSILON);
 }
@@ -78,12 +80,13 @@ int geo_segments_intersect(struct geo_segment const* const segment1,
   enum geo_orientation orientation_b;
   enum geo_orientation orientation_c;
   enum geo_orientation orientation_d;
-
+#ifndef GEO_UNSAFE
   if (segment1 == NULL || segment2 == NULL || segment1->start == NULL ||
       segment1->end == NULL || segment2->start == NULL ||
       segment2->end == NULL) {
     return -1;
   }
+#endif
 
   orientation_a = orientation(segment2, segment1->start);
   orientation_b = orientation(segment2, segment1->end);
@@ -116,6 +119,7 @@ int geo_geometry_is_closed(struct geo_geometry const* const geometry) {
   int mod = 0;
   int equal = 0;
 
+#ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
     return -1;
   }
@@ -123,6 +127,7 @@ int geo_geometry_is_closed(struct geo_geometry const* const geometry) {
   if (geometry->segments_count < 3) {
     return 0;
   }
+#endif
 
   for (iter = 0; iter < geometry->segments_count; ++iter) {
     mod = (iter + 1) % geometry->segments_count;
@@ -139,6 +144,8 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
   int outer_iter = 0;
   int inner_iter = 0;
   int intersect = 0;
+
+#ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
     return -1;
   }
@@ -146,6 +153,7 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
   if (geometry->segments_count < 3) {
     return 0;
   }
+#endif
 
   for (outer_iter = 0; outer_iter < (geometry->segments_count - 1);
        ++outer_iter) {
@@ -153,9 +161,11 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
          ++inner_iter) {
       intersect = geo_segments_intersect(geometry->segments[outer_iter],
                                          geometry->segments[inner_iter]);
+#ifndef GEO_UNSAFE
       if (intersect == -1) {
         return -1;
       }
+#endif
       if (intersect == 1) {
         return 0;
       }
@@ -170,6 +180,7 @@ int geo_point_in_geometry(struct geo_point const* point,
   int intersections = 0;
   int iter = 0;
   enum geo_orientation orientation_p;
+#ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL || point == NULL) {
     return -1;
   }
@@ -177,11 +188,14 @@ int geo_point_in_geometry(struct geo_point const* point,
   if (geometry->segments_count < 3) {
     return 0;
   }
+#endif
   for (iter = 0; iter < geometry->segments_count; ++iter) {
+#ifndef GEO_UNSAFE
     if (geometry->segments[iter]->start == NULL ||
         geometry->segments[iter]->end == NULL) {
       return -1;
     }
+#endif
 
     orientation_p = orientation(geometry->segments[iter], point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
