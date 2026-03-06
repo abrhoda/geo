@@ -52,9 +52,22 @@ Just a checklist of test cases per function.
 - [x] when geometry-\>segments[i]-\>end == NULL, assert -1
 - [x] when atrict is 1 and point is on geometry-\>segments[i], assert 0
 - [x] when strict is 0 and point is on geometry-\>segments[i], assert 1
-- [ ] when point is to the left of the geometry and colinear with geometry-\>segment[i], return 0
-- [ ] when point is to the right of the geometry, return 0
-- [ ] when point is above of the geometry and colinear with geometry-\>segment[i], return 0
-- [ ] when point is below of the geometry and colinear with geometry-\>segment[i], return 0
-- [ ] when ray cast has the same y coordinate with exactly end/start pair, assert 1 (this is to test the case where a point in a geometry "crosses" 2 segment of the geometry exactly at thier endpoints.)
-- [ ] when ray cast has the same y coordinate witt multiple end/start pair, assert 1 (this is to test the case where a point's ray can have an even number of crossings and still be inside the geometry)
+- [x] when point is to the left of the geometry and colinear with geometry-\>segment[i], return 0
+- [x] when point is to the right of the geometry, return 0
+- [x] when point is above of the geometry and colinear with geometry-\>segment[i], return 0
+- [x] when point is below of the geometry and colinear with geometry-\>segment[i], return 0
+- [x] when ray cast has the same y coordinate with exactly end/start pair, assert 1 (this is to test the case where a point in a geometry "crosses" 2 segment of the geometry exactly at thier endpoints.)
+- [x] when ray cast has the same y coordinate witt multiple end/start pair, assert 1 (this is to test the case where a point's ray can have an even number of crossings and still be inside the geometry)
+
+## geo\_geometry\_i\_geometry
+- [ ] when parent == NULL, assert -1
+- [ ] when parent-\>segments == NULL, assert -1
+- [ ] when any parent-\>segments[i] == NULL, assert -1
+- [ ] when any parent-\>segments[i]-\>start == NULL, assert -1
+- [ ] when any parent-\>segments[i]-\>end == NULL, assert -1
+- [ ] when child == NULL, assert -1
+- [ ] when child-\>segments == NULL, assert -1
+- [ ] when any child-\>segments[i] == NULL, assert -1
+- [ ] when any child-\>segments[i]-\>start == NULL, assert -1
+- [ ] when any child-\>segments[i]-\>end == NULL, assert -1
+

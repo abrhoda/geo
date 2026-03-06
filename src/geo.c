@@ -44,10 +44,7 @@ static enum geo_orientation orientation(struct geo_segment const* const segment,
   if (fabs((double)cross) < GEO_EPSILON) {
     return COLINEAR;
   }
-  if (cross < 0) {
-    return RIGHT;
-  }
-  return LEFT;
+  return cross < 0 ? RIGHT : LEFT;
 }
 
 static int in_disk(struct geo_segment const* const segment,
@@ -171,7 +168,6 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
       }
     }
   }
-
   return 1;
 }
 
@@ -191,7 +187,7 @@ int geo_point_in_geometry(struct geo_point const* point,
 #endif
   for (iter = 0; iter < geometry->segments_count; ++iter) {
 #ifndef GEO_UNSAFE
-    if (geometry->segments[iter]->start == NULL ||
+    if (geometry->segments[iter] == NULL || geometry->segments[iter]->start == NULL ||
         geometry->segments[iter]->end == NULL) {
       return -1;
     }
@@ -210,4 +206,38 @@ int geo_point_in_geometry(struct geo_point const* point,
                       orientation_p) > 0;
   }
   return intersections & 1;
+}
+
+
+int geo_geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry * child, int strict) {
+  int iter = 0;
+
+  int start_inside = 0;
+  int end_inside = 0;
+#ifndef GEO_UNSAFE
+  if (parent == NULL || parent->segments == NULL || child == NULL || child->segments == NULL) {
+    return -1;
+  }
+
+  if (parent->segments_count < 3 || child->segments_count < 3) {
+    return 0;
+  }
+#endif
+  for (iter = 0; iter < child->segments_count; ++iter) {
+#ifndef GEO_UNSAFE
+    if (child->segments[iter] == NULL) {
+      return -1;
+    }
+#endif
+    /* could be -1, 0, or 1 depending on GEO_UNSAFE flag and actual result. */
+    start_inside = geo_point_in_geometry(child->segments[iter]->start, parent, strict);
+    if (start_inside != 1) {
+      return start_inside;
+    }
+    end_inside = geo_point_in_geometry(child->segments[iter]->end, parent, strict);
+    if (end_inside != 1) {
+      return end_inside;
+    }
+  }
+  return 1;
 }

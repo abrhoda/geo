@@ -92,8 +92,8 @@ int geo_segments_intersect(struct geo_segment const* segment1,
  * segments that intersect (except for overlapping start point and end points)
  */
 struct geo_geometry {
-  struct geo_segment** segments;
   int segments_count;
+  struct geo_segment** segments;
   /* TODO int is_negative_space; // tell if a geometry is a cut of of a parent.
    */
 };
@@ -133,9 +133,9 @@ int geo_geometry_is_simple(struct geo_geometry const* geometry);
  * \brief determines if a given geo_point is inside of the geo_geometry.
  *
  * \warning this function might produce unexpected results if
- *          `geo_geometry_is_closed(geo_geometry) &&
+ *          `geo_geometry_is_closed(geo_geometry) != 1 ||
  *          geo_geometry_is_simple(geo_geometry) != 1`. Ensure that your
- * geo_geometry meets this condition BEFORE using this function.
+ *          geo_geometry meets this condition BEFORE using this function.
  *
  * \details uses a raycasting algorithm to check if `point` is in `geometry`
  *
@@ -145,12 +145,39 @@ int geo_geometry_is_simple(struct geo_geometry const* geometry);
  * out of the geometry.
  *
  * \return int result code indicating the outcome:
- *   - -1 if point, geometry, geometry's segments, any start point, or any end point is  NULL (removed when compiled with GEO_UNSAFE set)
+ *   - -1 if point, geometry, geometry's segments, any start point, or any end point is NULL (removed when compiled with GEO_UNSAFE set)
  *   - 0 if not in the geometry
  *   - 1 if in the geometry
  */
 int geo_point_in_geometry(struct geo_point const* point,
                           struct geo_geometry const* geometry, int strict);
+
+/**
+ * \brief determines if one geometry (called `child`) is entirely contained in
+ *        the other geometry (called `parent`)
+ *
+ * \warning this function might produce unexpected results if
+ *          `geo_geometry_is_closed(child) != 1 ||
+ *          geo_geometry_is_simple(child) != 1 ||
+ *          geo_geometry_is_closed(parent) != 1 ||
+ *          geo_geometry_is_simple(parent) != 1`. Ensure that your
+ *          `geo_geometry` structs meets this condition BEFORE using this function.
+ *
+ * \details checks that each segment in `child` is entirely contained in `parent`
+ *          by checking that each segment in the child geo_geometry has a start point
+ *          and an end point inside the parent geo_geometry using the `geo_point_in_geometry`
+ *          function.
+ *
+ * \param[in] parent The containing geometry
+ * \param[in] child The geometry to test if it is contained in parent geometry
+ * \param[in] strict Controls whether a point on a segment is considered in or
+ *
+ * \return int result code indicating the outcome:
+ *   - -1 if either geometry, either geometry's segments, any start point, or any end point is NULL (removed when compiled with GEO_UNSAFE set)
+ *   - 0 if child geometry is not contained in the parent geometry
+ *   - 1 if child geometry is contained in the parent geometry
+ */
+int geo_geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry * child, int strict);
 
 /*
  * TODO Implement these functions:
@@ -158,9 +185,6 @@ int geo_point_in_geometry(struct geo_point const* point,
  * implement as graham's scan because graham's scan minimizes segment count.
  * int geometry_from_points(struct geo_point **points, int count, struct
  * geo_geometry * geometry);
- *
- * int geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry *
- * child);
  */
 
 #endif
