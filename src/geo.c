@@ -211,9 +211,7 @@ int geo_point_in_geometry(struct geo_point const* point,
 
 int geo_geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry * child, int strict) {
   int iter = 0;
-
-  int start_inside = 0;
-  int end_inside = 0;
+  int inside = 0;
 #ifndef GEO_UNSAFE
   if (parent == NULL || parent->segments == NULL || child == NULL || child->segments == NULL) {
     return -1;
@@ -230,13 +228,13 @@ int geo_geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry *
     }
 #endif
     /* could be -1, 0, or 1 depending on GEO_UNSAFE flag and actual result. */
-    start_inside = geo_point_in_geometry(child->segments[iter]->start, parent, strict);
-    if (start_inside != 1) {
-      return start_inside;
+    inside = geo_point_in_geometry(child->segments[iter]->start, parent, strict);
+    if (inside != 1) {
+      return inside;
     }
-    end_inside = geo_point_in_geometry(child->segments[iter]->end, parent, strict);
-    if (end_inside != 1) {
-      return end_inside;
+    inside = geo_point_in_geometry(child->segments[iter]->end, parent, strict);
+    if (inside != 1) {
+      return inside;
     }
   }
   return 1;

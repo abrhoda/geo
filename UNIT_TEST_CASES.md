@@ -59,15 +59,22 @@ Just a checklist of test cases per function.
 - [x] when ray cast has the same y coordinate with exactly end/start pair, assert 1 (this is to test the case where a point in a geometry "crosses" 2 segment of the geometry exactly at thier endpoints.)
 - [x] when ray cast has the same y coordinate witt multiple end/start pair, assert 1 (this is to test the case where a point's ray can have an even number of crossings and still be inside the geometry)
 
-## geo\_geometry\_i\_geometry
+## geo\_geometry\_in\_geometry
 - [ ] when parent == NULL, assert -1
 - [ ] when parent-\>segments == NULL, assert -1
+- [ ] when parent-\>segments\_count < 3, assert 0
 - [ ] when any parent-\>segments[i] == NULL, assert -1
 - [ ] when any parent-\>segments[i]-\>start == NULL, assert -1
 - [ ] when any parent-\>segments[i]-\>end == NULL, assert -1
 - [ ] when child == NULL, assert -1
 - [ ] when child-\>segments == NULL, assert -1
+- [ ] when child-\>segments\_count < 3, assert 0
 - [ ] when any child-\>segments[i] == NULL, assert -1
 - [ ] when any child-\>segments[i]-\>start == NULL, assert -1
 - [ ] when any child-\>segments[i]-\>end == NULL, assert -1
+- [ ] when all of child-\>segment's points are inside of parent, return 1
+- [ ] when any of child-\>segment's points are outside of parent, return 0
+- [ ] when any of child-\>segment's points are on any of parent-\>segments and strict is 1, return 0
+- [ ] when any of child-\>segment's points are on any of parent-\>segments and strict is 0, return 1
+
 
