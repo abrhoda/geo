@@ -2011,8 +2011,6 @@ int main(void) {
   geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_1();
   geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_0();
 
-
-
   printf("All tests pass.\n");
   return 0;
 }

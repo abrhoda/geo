@@ -187,7 +187,8 @@ int geo_point_in_geometry(struct geo_point const* point,
 #endif
   for (iter = 0; iter < geometry->segments_count; ++iter) {
 #ifndef GEO_UNSAFE
-    if (geometry->segments[iter] == NULL || geometry->segments[iter]->start == NULL ||
+    if (geometry->segments[iter] == NULL ||
+        geometry->segments[iter]->start == NULL ||
         geometry->segments[iter]->end == NULL) {
       return -1;
     }
@@ -208,12 +209,13 @@ int geo_point_in_geometry(struct geo_point const* point,
   return intersections & 1;
 }
 
-
-int geo_geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry * child, int strict) {
+int geo_geometry_in_geometry(struct geo_geometry* parent,
+                             struct geo_geometry* child, int strict) {
   int iter = 0;
   int inside = 0;
 #ifndef GEO_UNSAFE
-  if (parent == NULL || parent->segments == NULL || child == NULL || child->segments == NULL) {
+  if (parent == NULL || parent->segments == NULL || child == NULL ||
+      child->segments == NULL) {
     return -1;
   }
 
@@ -228,7 +230,8 @@ int geo_geometry_in_geometry(struct geo_geometry * parent, struct geo_geometry *
     }
 #endif
     /* could be -1, 0, or 1 depending on GEO_UNSAFE flag and actual result. */
-    inside = geo_point_in_geometry(child->segments[iter]->start, parent, strict);
+    inside =
+        geo_point_in_geometry(child->segments[iter]->start, parent, strict);
     if (inside != 1) {
       return inside;
     }
