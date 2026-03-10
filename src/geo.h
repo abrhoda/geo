@@ -9,6 +9,10 @@
 #ifndef GEO_H
 #define GEO_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * \def GEO_EPSILON
  *
@@ -194,4 +198,7 @@ int geo_geometry_in_geometry(struct geo_geometry* parent,
  * geo_geometry * geometry);
  */
 
+#ifdef __cplusplus
+}
+#endif
 #endif
