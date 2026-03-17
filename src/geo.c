@@ -11,10 +11,14 @@ static float dot_product(struct geo_point const* vec_ab,
 static float cross_product(struct geo_point const* vec_ab,
                            struct geo_point const* vec_ac);
 
-static enum geo_orientation orientation(struct geo_segment const* segment,
+static enum geo_orientation orientation(struct geo_point const* start,
+                                        struct geo_point const* end,
                                         struct geo_point const* point);
 static int in_disk(struct geo_segment const* segment,
                    struct geo_point const* point);
+
+static float squared_distance(struct geo_point const* point1,
+                              struct geo_point const* point2);
 
 static float dot_product(struct geo_point const* const vec_ab,
                          struct geo_point const* const vec_ac) {
@@ -26,20 +30,22 @@ static float cross_product(struct geo_point const* const vec_ab,
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
 
+
 /*
  * Creates vector AB and AC and finds the cross product. Returns the orientation
  * found from the cross product.
  */
-static enum geo_orientation orientation(struct geo_segment const* const segment,
+static enum geo_orientation orientation(struct geo_point const* const start,
+                                        struct geo_point const* const end,
                                         struct geo_point const* const point) {
   struct geo_point vec_ab;
   struct geo_point vec_ac;
   float cross = 0.0F;
 
-  vec_ab.x = segment->end->x - segment->start->x;
-  vec_ab.y = segment->end->y - segment->start->y;
-  vec_ac.x = point->x - segment->start->x;
-  vec_ac.y = point->y - segment->start->y;
+  vec_ab.x = end->x - start->x;
+  vec_ab.y = end->y - start->y;
+  vec_ac.x = point->x - start->x;
+  vec_ac.y = point->y - start->y;
   cross = cross_product(&vec_ab, &vec_ac);
   if (fabs((double)cross) < GEO_EPSILON) {
     return COLINEAR;
@@ -58,6 +64,15 @@ static int in_disk(struct geo_segment const* const segment,
   vec_bp.y = (segment->end->y - point->y);
   return dot_product(&vec_ap, &vec_bp) <= 0.0F;
 }
+
+static float squared_distance(struct geo_point const* point1,
+                              struct geo_point const* point2) {
+
+  return (((point2->x) - (point1->x)) * ((point2->x) - (point1->x))) +
+          (((point2->y) - (point1->y)) * ((point2->y) - (point1->y)));
+}
+
+
 
 int geo_points_equal(struct geo_point const* const lhs,
                      struct geo_point const* const rhs) {
@@ -85,10 +100,10 @@ int geo_segments_intersect(struct geo_segment const* const segment1,
   }
 #endif
 
-  orientation_a = orientation(segment2, segment1->start);
-  orientation_b = orientation(segment2, segment1->end);
-  orientation_c = orientation(segment1, segment2->start);
-  orientation_d = orientation(segment1, segment2->end);
+  orientation_a = orientation(segment2->start, segment2->end, segment1->start);
+  orientation_b = orientation(segment2->start, segment2->end, segment1->end);
+  orientation_c = orientation(segment1->start, segment1->end, segment2->start);
+  orientation_d = orientation(segment1->start, segment1->end, segment2->end);
 
   if ((orientation_a * orientation_b < 0) &&
       (orientation_c * orientation_d < 0)) {
@@ -194,7 +209,7 @@ int geo_point_in_geometry(struct geo_point const* point,
     }
 #endif
 
-    orientation_p = orientation(geometry->segments[iter], point);
+    orientation_p = orientation(geometry->segments[iter]->start, geometry->segments[iter]->end, point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
       return !strict;
     }
@@ -241,4 +256,28 @@ int geo_geometry_in_geometry(struct geo_geometry* parent,
     }
   }
   return 1;
+}
+
+int geo_convex_hull(struct geo_point ** points, struct geo_point ** convex_hull, int size) {
+  int convex_hull_point_count = -1;
+  int iter = 1;
+  struct geo_point * starting_point = points[0];
+#ifndef GEO_UNSAFE
+  if(points == NULL || convex_hull == NULL || size < 3) {
+    return convex_hull_point_count;
+  }
+#endif
+  for (iter = 0; iter < size; ++iter) {
+#ifndef GEO_UNSAFE
+    if (points[iter] == NULL) {
+      return convex_hull_point_count;
+    }
+#endif
+    if ((points[iter]->y < starting_point->y) || (fabs((double) (points[iter]->y - starting_point->y)) < GEO_EPSILON && points[iter]->x < starting_point->x)) {
+      starting_point = points[iter];
+    }
+  }
+
+
+  return convex_hull_point_count;
 }
