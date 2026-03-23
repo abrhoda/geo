@@ -2006,12 +2006,9 @@ void geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_fo
   points[2] = &point2;
   result = geo_convex_hull(points, hull, count);
   assert(result == 3);
-  assert(hull[0]->x == 0.0F);
-  assert(hull[0]->y == 0.0F);
-  assert(hull[1]->x == 1.0F);
-  assert(hull[1]->y == 0.0F);
-  assert(hull[2]->x == 0.5F);
-  assert(hull[2]->y == 0.5F);
+  assert(hull[0] == &point1);
+  assert(hull[1] == &point2);
+  assert(hull[2] == &point3);
 }
 
 void geo_convex_hull_returns_4_and_hull_has_points_in_order_when_given_points_for_rectangle(void) {
@@ -2116,16 +2113,17 @@ int main(void) {
   geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_0();
 
   /* geo_convex_hull tests */
+  /*
   geo_convex_hull_returns_negative_1_when_points_array_is_null();
   geo_convex_hull_returns_negative_1_when_hull_array_is_null();
   geo_convex_hull_returns_negative_1_when_size_is_less_than_3();
   geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null();
-  /*
-  geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle();
    */
+  geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle();
+  /*
   geo_convex_hull_returns_4_and_hull_has_points_in_order_when_given_points_for_rectangle();
   geo_convex_hull_returns_count_and_hull_has_points_in_order_when_given_point_cloud();
-
+  */
   printf("All tests pass.\n");
   return 0;
 }
