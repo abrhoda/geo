@@ -20,7 +20,8 @@ There are some useful flags that can be set at compile time:
 - [ ] for `geo_point_in_geometry`, would there be a benefit in finding the geometry's bounding box and seeing if the point is inside that before checking? could this speed up the calculation?
 - [ ] implement `r-tree` and `r*-tree` for holding all geometries and points.
 - [ ] switch to c99? `boolean`, `inline`, designated initializers, and fixed width types sound tasty.
-- [ ] change stdlib.h's qsort to other hand written sorting algo in order to facilitate removing stdlib.h/any reliance on the standard lib.
+- [ ] change stdlib.h's `qsort` to other hand written sorting algo in order to facilitate removing stdlib.h/any reliance on the standard lib. Removing `qsort` also allows for not using the nasty little `global_starting_point` variable to sneaky pass an additional argument to the `compare` fn.
+- [ ] consider not using local variables for everything. Example in `geo_convex_hull`, `current_y` and `miny_y` variables aren't needed. It just saved me from typing and saved the need to dereference the pointer to find the `y` values.
 
 ## Code Layout, Contribution Guide, and Design Considerations
 1. set up dirs with `make setup`
@@ -33,3 +34,4 @@ Check `UNIT_TEST_CASES.md` where I documented unit tests. To run the unit tests,
 
 ## References
 1. [Handbook of Geometry for Competitive Programmers](https://victorlecomte.com/cp-geo.pdf) - used for learning about programmatic approaches to determining line segment intersections and other neat geometry things.
+2. [Graham's Scan](https://en.wikipedia.org/wiki/Graham_scan) - pseudocode wiki page should be enough to implement.
