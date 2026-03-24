@@ -60,29 +60,28 @@ Just a checklist of test cases per function.
 - [x] when ray cast has the same y coordinate witt multiple end/start pair, assert 1 (this is to test the case where a point's ray can have an even number of crossings and still be inside the geometry)
 
 ## geo\_geometry\_in\_geometry
-- [ ] when parent == NULL, assert -1
-- [ ] when parent-\>segments == NULL, assert -1
-- [ ] when parent-\>segments\_count < 3, assert 0
-- [ ] when any parent-\>segments[i] == NULL, assert -1
-- [ ] when any parent-\>segments[i]-\>start == NULL, assert -1
-- [ ] when any parent-\>segments[i]-\>end == NULL, assert -1
-- [ ] when child == NULL, assert -1
-- [ ] when child-\>segments == NULL, assert -1
-- [ ] when child-\>segments\_count < 3, assert 0
-- [ ] when any child-\>segments[i] == NULL, assert -1
-- [ ] when any child-\>segments[i]-\>start == NULL, assert -1
-- [ ] when any child-\>segments[i]-\>end == NULL, assert -1
-- [ ] when all of child-\>segment's points are inside of parent, return 1
-- [ ] when any of child-\>segment's points are outside of parent, return 0
-- [ ] when any of child-\>segment's points are on any of parent-\>segments and strict is 1, return 0
-- [ ] when any of child-\>segment's points are on any of parent-\>segments and strict is 0, return 1
+- [x] when parent == NULL, assert -1
+- [x] when parent-\>segments == NULL, assert -1
+- [x] when parent-\>segments\_count < 3, assert 0
+- [x] when any parent-\>segments[i] == NULL, assert -1
+- [x] when any parent-\>segments[i]-\>start == NULL, assert -1
+- [x] when any parent-\>segments[i]-\>end == NULL, assert -1
+- [x] when child == NULL, assert -1
+- [x] when child-\>segments == NULL, assert -1
+- [x] when child-\>segments\_count < 3, assert 0
+- [x] when any child-\>segments[i] == NULL, assert -1
+- [x] when any child-\>segments[i]-\>start == NULL, assert -1
+- [x] when any child-\>segments[i]-\>end == NULL, assert -1
+- [x] when all of child-\>segment's points are inside of parent, return 1
+- [x] when any of child-\>segment's points are outside of parent, return 0
+- [x] when any of child-\>segment's points are on any of parent-\>segments and strict is 1, return 0
+- [x] when any of child-\>segment's points are on any of parent-\>segments and strict is 0, return 1
 
 ## geo\_convex\_hull
-- [ ] when points == NULL, assert -1
-- [ ] when hull == NULL, assert -1
-- [ ] when size < 3, assert -1
-- [ ] when any point in points with an index < size == NULL, assert -1
-- [ ] when points contains 3 points and size == 3, assert returns 3 and points ordered CCW.
-- [ ] when points contains 7 points and 5 form the hull, returns 5 and the 5 points in CCW order.
-- [ ] when points contains 6 points and 4 form the hull with 3 colinear, returns 4 and the 4 points in CCW order
-
+- [x] when points == NULL, assert -1
+- [x] when hull == NULL, assert -1
+- [x] when size < 3, assert -1
+- [x] when any point in points with an index < size == NULL, assert -1
+- [x] when points contains 3 points and size == 3, assert returns 3 and points ordered CCW.
+- [x] when points contains 7 points and 5 form the hull, returns 5 and the 5 points in CCW order.
+- [x] when points contains many points, returns the count of points on the hull and hull contains points on hull in ccw order
