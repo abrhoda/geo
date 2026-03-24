@@ -1992,7 +1992,6 @@ void geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null(void) {
   assert(result == -1);
 }
 
-/* TODO pointers are changed here. So asserting are values and not the pointer values */
 void geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle(void) {
   int count = 3;
   struct geo_point *hull[3];
@@ -2012,28 +2011,34 @@ void geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_fo
   assert(hull[2] == &point3);
 }
 
-void geo_convex_hull_returns_4_and_hull_has_points_in_order_when_given_points_for_rectangle(void) {
-  int count = 4;
-  struct geo_point *hull[4];
-  struct geo_point *points[4];
-  struct geo_point point1 = { 0.0F, 0.0F };
-  struct geo_point point2 = { 1.0F, 1.0F };
-  struct geo_point point3 = { 1.0F, 0.0F };
-  struct geo_point point4 = { 0.0F, 1.0F };
+void geo_convex_hull_returns_5_and_hull_has_points_in_order_when_given_point_cloud(void) {
+  int count = 7;
+  struct geo_point *hull[7];
+  struct geo_point *points[7];
+  struct geo_point point1 = { 1.0F, 1.0F };
+  struct geo_point point2 = { 7.0F, 0.0F };
+  struct geo_point point3 = { 4.0F, 2.0F };
+  struct geo_point point4 = { 6.0F, 4.0F };
+  struct geo_point point5 = { 3.0F, 5.0F };
+  struct geo_point point6 = { 5.0F, 6.0F };
+  struct geo_point point7 = { 2.0F, 7.0F };
   int result = 0;
+
   points[0] = &point1;
   points[1] = &point2;
-  points[2] = &point4;
-  points[3] = &point3;
+  points[2] = &point3;
+  points[3] = &point4;
+  points[4] = &point5;
+  points[5] = &point6;
+  points[6] = &point7;
   result = geo_convex_hull(points, hull, count);
-  assert(result == 4);
-  assert(hull[0] == &point1);
-  assert(hull[1] == &point3);
-  assert(hull[2] == &point2);
-  assert(hull[3] == &point4);
+  assert(result == 5);
+  assert(hull[0] == &point2);
+  assert(hull[1] == &point4);
+  assert(hull[2] == &point6);
+  assert(hull[3] == &point7);
+  assert(hull[4] == &point1);
 }
-
-void geo_convex_hull_returns_count_and_hull_has_points_in_order_when_given_point_cloud(void) {}
 
 int main(void) {
   /* geo_points_equal tests */
@@ -2115,8 +2120,7 @@ int main(void) {
   geo_convex_hull_returns_negative_1_when_size_is_less_than_3();
   geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null();
   geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle();
-  geo_convex_hull_returns_4_and_hull_has_points_in_order_when_given_points_for_rectangle();
-  geo_convex_hull_returns_count_and_hull_has_points_in_order_when_given_point_cloud();
+  geo_convex_hull_returns_5_and_hull_has_points_in_order_when_given_point_cloud();
   printf("All tests pass.\n");
   return 0;
 }

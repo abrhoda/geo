@@ -77,4 +77,12 @@ Just a checklist of test cases per function.
 - [ ] when any of child-\>segment's points are on any of parent-\>segments and strict is 1, return 0
 - [ ] when any of child-\>segment's points are on any of parent-\>segments and strict is 0, return 1
 
+## geo\_convex\_hull
+- [ ] when points == NULL, assert -1
+- [ ] when hull == NULL, assert -1
+- [ ] when size < 3, assert -1
+- [ ] when any point in points with an index < size == NULL, assert -1
+- [ ] when points contains 3 points and size == 3, assert returns 3 and points ordered CCW.
+- [ ] when points contains 7 points and 5 form the hull, returns 5 and the 5 points in CCW order.
+- [ ] when points contains 6 points and 4 form the hull with 3 colinear, returns 4 and the 4 points in CCW order
 
