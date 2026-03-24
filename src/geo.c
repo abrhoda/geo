@@ -51,7 +51,6 @@ static enum geo_orientation orientation(struct geo_point const* const start,
   struct geo_point vec_ab;
   struct geo_point vec_ac;
   float cross = 0.0F;
-
   vec_ab.x = end->x - start->x;
   vec_ab.y = end->y - start->y;
   vec_ac.x = point->x - start->x;
@@ -91,19 +90,17 @@ static float squared_distance(struct geo_point const* point1,
  *      and compare takes 2 args. I'd like to not use stdlib.h/qsort and then i could
  *      get rid of the static `start` variable.
  */
-static struct geo_point * start;
+static struct geo_point * global_start_point;
 static int compare(const void *first, const void *second) {
-  struct geo_point * vec_end = (struct geo_point *)first;
-  struct geo_point * point = (struct geo_point *)second;
-  enum geo_orientation orientation_p = orientation(start, vec_end, point);
+  const struct geo_point * vec_end = *(const struct geo_point **)first;
+  const struct geo_point * point = *(const struct geo_point **)second;
+  enum geo_orientation orientation_p;
+  orientation_p = orientation(global_start_point, vec_end, point);
 
-  printf("start (%f, %f) and end (%f, %f)\n", start->x, start->y, vec_end->x, vec_end->y);
-  printf("point (%f, %f) to find orientation\n", point->x, point->y);
   if (orientation_p == COLINEAR) {
-    int distance = (squared_distance(start, point) >= squared_distance(start, vec_end));
+    int distance = (squared_distance(global_start_point, point) >= squared_distance(global_start_point, vec_end));
     return distance == 1 ? -1 : 1;
   }
-  printf("orientation = %d\n", orientation_p);
 
   /* turn RIGHT into a positive and LEFT into negative to sort properly */
   return -1*orientation_p;
@@ -334,7 +331,7 @@ int geo_convex_hull(struct geo_point ** points, struct geo_point ** hull, int si
     points[min_idx] = temp;
   }
   /* setting `start` which is a static global var to "pass a 3rd arg" to qsort. :( */
-  start = points[0];
+  global_start_point = points[0];
   /*
    * Sort points by polar angle from starting_point
    *
@@ -343,10 +340,7 @@ int geo_convex_hull(struct geo_point ** points, struct geo_point ** hull, int si
    *        tells you which side of v p[x+1] falls on. This tells you the relative
    *        angle and not the exact polar angle.
    */
-  qsort(points[1], size-1, sizeof(struct geo_point *), compare);
-  for (iter = 0; iter < size; ++iter) {
-    printf("%d. (pointer = %p). (%f, %f)\n", iter,  (void *)points[iter], points[iter]->x, points[iter]->y);
-  }
+  qsort((void *) &points[1], size-1, sizeof(struct geo_point *), compare);
   /*
    * 1. add p0, p1, and p2 onto a stack from the sorted list. The first 2 are guaranteed to be on the hull
    * 2. iterate over points in sorted list in order starting at p2
@@ -359,14 +353,11 @@ int geo_convex_hull(struct geo_point ** points, struct geo_point ** hull, int si
   hull[2] = points[2];
   hull_idx = 3;
   for (iter = 3; iter < size; ++iter) {
-    while(orientation(points[iter-2], points[iter-1], points[iter]) != LEFT) {
+    while(orientation(hull[hull_idx-2], points[hull_idx-1], points[iter]) != LEFT) {
       hull_idx--;
     }
     hull[hull_idx] = points[iter];
-  }
-
-  for (iter = 0; iter < hull_idx; ++iter) {
-    printf("%d. (pointer = %p). (%f, %f)\n", iter,  (void *)hull[iter], hull[iter]->x, hull[iter]->y);
+    hull_idx++;
   }
 
   return hull_idx;
