@@ -193,21 +193,25 @@ int geo_geometry_in_geometry(struct geo_geometry* parent,
 /**
  * \brief creates a convex hull from the given points.
  *
- * \details uses Graham's Scan algorithm to create a convex hull from the points.
- *          This algorithm is used because it minimizes the segments needed to create
- *          the geometry with the tradeoff being an increased area of the geometry.
+ * \details uses Graham's Scan algorithm to create a convex hull from the
+ * points. This algorithm is used because it minimizes the segments needed to
+ * create the geometry with the tradeoff being an increased area of the
+ * geometry.
  *
  * \param[in] points The set of points used to create the convex hull.
- * \param[out] convex_hull The set of points, in order, that create the convex hull.
- * \param[in] size The number of points in both the points and convex hull arrays.
+ * \param[out] convex_hull The set of points, in order, that create the convex
+ * hull.
+ * \param[in] size The number of points in both the points and convex hull
+ * arrays.
  *
  * \return int result code indicating the outcome:
  *  - (-1) in the case of an error such as < 3 points in points array.
  *  - 0 if a convex hull cannot be created.
- *  - N indicating the number of points in the convex_hull array. Note that N will be
- *      on the range 3 <= N <= size.
+ *  - N indicating the number of points in the convex_hull array. Note that N
+ * will be on the range 3 <= N <= size.
  */
-int geo_convex_hull(struct geo_point ** points, struct geo_point ** convex_hull, int size);
+int geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
+                    int size);
 
 #ifdef __cplusplus
 }

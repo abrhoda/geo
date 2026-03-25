@@ -21,7 +21,7 @@ static int in_disk(struct geo_segment const* segment,
 static float squared_distance(struct geo_point const* point1,
                               struct geo_point const* point2);
 
-static int compare(const void *first, const void *second);
+static int compare(const void* first, const void* second);
 
 static float dot_product(struct geo_point const* const vec_ab,
                          struct geo_point const* const vec_ac) {
@@ -32,7 +32,6 @@ static float cross_product(struct geo_point const* const vec_ab,
                            struct geo_point const* const vec_ac) {
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
-
 
 /*
  * Creates vector AB and AC and finds the cross product. Returns the orientation
@@ -59,7 +58,7 @@ static enum geo_orientation orientation(struct geo_point const* const start,
   if (fabs((double)cross) < GEO_EPSILON) {
     return COLINEAR;
   }
-return cross < 0 ? RIGHT : LEFT;
+  return cross < 0 ? RIGHT : LEFT;
 }
 
 static int in_disk(struct geo_segment const* const segment,
@@ -76,34 +75,34 @@ static int in_disk(struct geo_segment const* const segment,
 
 static float squared_distance(struct geo_point const* point1,
                               struct geo_point const* point2) {
-
   float diff_x = point2->x - point1->x;
   float diff_y = point2->y - point1->y;
-  return (diff_x*diff_x) + (diff_y*diff_y);
+  return (diff_x * diff_x) + (diff_y * diff_y);
 }
 
-/* 
- * This returns -1 when the point (second) is a CCW turn. 1 if 
+/*
+ * This returns -1 when the point (second) is a CCW turn. 1 if
  * point (second) is a CW turn. 0 if point (second) is equal to vec->end (first)
  *
- * TODO; this uses start as a global variable because orientation requires 3 points
- *      and compare takes 2 args. I'd like to not use stdlib.h/qsort and then i could
- *      get rid of the static `start` variable.
+ * TODO; this uses start as a global variable because orientation requires 3
+ * points and compare takes 2 args. I'd like to not use stdlib.h/qsort and then
+ * i could get rid of the static `start` variable.
  */
-static struct geo_point * global_start_point;
-static int compare(const void *first, const void *second) {
-  const struct geo_point * vec_end = *(const struct geo_point **)first;
-  const struct geo_point * point = *(const struct geo_point **)second;
+static struct geo_point* global_start_point;
+static int compare(const void* first, const void* second) {
+  const struct geo_point* vec_end = *(const struct geo_point* const*)first;
+  const struct geo_point* point = *(const struct geo_point* const*)second;
   enum geo_orientation orientation_p;
   orientation_p = orientation(global_start_point, vec_end, point);
 
   if (orientation_p == COLINEAR) {
-    int distance = (squared_distance(global_start_point, point) >= squared_distance(global_start_point, vec_end));
+    int distance = (squared_distance(global_start_point, point) >=
+                    squared_distance(global_start_point, vec_end));
     return distance == 1 ? -1 : 1;
   }
 
   /* turn RIGHT into a positive and LEFT into negative to sort properly */
-  return -1*orientation_p;
+  return -1 * orientation_p;
 }
 
 int geo_points_equal(struct geo_point const* const lhs,
@@ -241,7 +240,8 @@ int geo_point_in_geometry(struct geo_point const* point,
     }
 #endif
 
-    orientation_p = orientation(geometry->segments[iter]->start, geometry->segments[iter]->end, point);
+    orientation_p = orientation(geometry->segments[iter]->start,
+                                geometry->segments[iter]->end, point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
       return !strict;
     }
@@ -290,18 +290,19 @@ int geo_geometry_in_geometry(struct geo_geometry* parent,
   return 1;
 }
 
-int geo_convex_hull(struct geo_point ** points, struct geo_point ** hull, int size) {
+int geo_convex_hull(struct geo_point** points, struct geo_point** hull,
+                    int size) {
   int hull_idx = -1;
   int iter = 1;
 
   /* used to find starting point */
-  struct geo_point * temp;
+  struct geo_point* temp;
   int min_idx = 0;
   float current_y = 0.0F;
   float min_y = 0.0F;
 
 #ifndef GEO_UNSAFE
-  if(points == NULL || hull == NULL || size < 3) {
+  if (points == NULL || hull == NULL || size < 3) {
     return hull_idx;
   }
 #endif
@@ -318,34 +319,40 @@ int geo_convex_hull(struct geo_point ** points, struct geo_point ** hull, int si
     }
 
     current_y = points[iter]->y;
-    if ((current_y < min_y) || (fabs((double) (current_y - min_y)) < GEO_EPSILON && points[iter]->x < points[min_idx]->x)) {
+    if ((current_y < min_y) ||
+        (fabs((double)(current_y - min_y)) < GEO_EPSILON &&
+         points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
     }
   }
 
-  /* swap (if needed) so p0 is the actual starting point based on y and x coords */
+  /* swap (if needed) so p0 is the actual starting point based on y and x coords
+   */
   if (min_idx != 0) {
     temp = points[0];
     points[0] = points[min_idx];
     points[min_idx] = temp;
   }
-  /* setting `start` which is a static global var to "pass a 3rd arg" to qsort. :( */
+  /* setting `start` which is a static global var to "pass a 3rd arg" to qsort.
+   * :( */
   global_start_point = points[0];
   /*
    * Sort points by polar angle from starting_point
    *
-   *  NOTE: uses orientation instead of actual polar angle because if p[0] and p[x]
-   *        for a vector, v, then finding orientation of p[x+1] with respect to v
-   *        tells you which side of v p[x+1] falls on. This tells you the relative
-   *        angle and not the exact polar angle.
+   *  NOTE: uses orientation instead of actual polar angle because if p[0] and
+   * p[x] for a vector, v, then finding orientation of p[x+1] with respect to v
+   *        tells you which side of v p[x+1] falls on. This tells you the
+   * relative angle and not the exact polar angle.
    */
-  qsort((void *) &points[1], size-1, sizeof(struct geo_point *), compare);
+  qsort((void*)&points[1], size - 1, sizeof(struct geo_point*), compare);
   /*
-   * 1. add p0, p1, and p2 onto a stack from the sorted list. The first 2 are guaranteed to be on the hull
+   * 1. add p0, p1, and p2 onto a stack from the sorted list. The first 2 are
+   * guaranteed to be on the hull
    * 2. iterate over points in sorted list in order starting at p2
-   *    2a. calcuate orientation of pX compared to the vector formed by p(x-2) and p(x-1).
-   *    2b if CCW, push onto stack. if CW, pop last p(x-1) off the stack and move back to 2a using p(x-2) and p(x-1) without popped point.
+   *    2a. calcuate orientation of pX compared to the vector formed by p(x-2)
+   * and p(x-1). 2b if CCW, push onto stack. if CW, pop last p(x-1) off the
+   * stack and move back to 2a using p(x-2) and p(x-1) without popped point.
    *
    */
   hull[0] = points[0];
@@ -353,7 +360,8 @@ int geo_convex_hull(struct geo_point ** points, struct geo_point ** hull, int si
   hull[2] = points[2];
   hull_idx = 3;
   for (iter = 3; iter < size; ++iter) {
-    while(orientation(hull[hull_idx-2], points[hull_idx-1], points[iter]) != LEFT) {
+    while (orientation(hull[hull_idx - 2], points[hull_idx - 1],
+                       points[iter]) != LEFT) {
       hull_idx--;
     }
     hull[hull_idx] = points[iter];
