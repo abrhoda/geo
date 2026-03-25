@@ -1937,6 +1937,203 @@ void geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on
   assert(result == 1);
 }
 
+/*----------------------------------
+ * geo_convex_hull tests
+*----------------------------------
+ */
+void geo_convex_hull_returns_negative_1_when_points_array_is_null(void) {
+  int count = 5;
+  struct geo_point *hull[5];
+  int result = geo_convex_hull(NULL, hull, count);
+  assert(result == -1);
+}
+
+void geo_convex_hull_returns_negative_1_when_hull_array_is_null(void) {
+  int count = 3;
+  struct geo_point *points[3];
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 1.0F, 0.0F };
+  struct geo_point point3 = { 0.5F, 0.5F };
+  int result = 0;
+  points[0] = &point1;
+  points[1] = &point2;
+  points[2] = &point3;
+
+  result = geo_convex_hull(points, NULL, count);
+  assert(result == -1);
+}
+
+void geo_convex_hull_returns_negative_1_when_size_is_less_than_3(void) {
+  int count = 2;
+  struct geo_point *hull[2];
+  struct geo_point *points[2];
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 1.0F, 0.0F };
+  int result = 0;
+  points[0] = &point1;
+  points[1] = &point2;
+
+  result = geo_convex_hull(points, hull, count);
+  assert(result == -1);
+}
+
+void geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null(void) {
+  int count = 3;
+  struct geo_point *hull[3];
+  struct geo_point *points[3];
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point3 = { 0.5F, 0.5F };
+  int result = 0;
+  points[0] = &point1;
+  points[1] = NULL;
+  points[2] = &point3;
+
+  result = geo_convex_hull(points, hull, count);
+  assert(result == -1);
+}
+
+void geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle(void) {
+  int count = 3;
+  struct geo_point *hull[3];
+  struct geo_point *points[3];
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 1.0F, 0.0F };
+  struct geo_point point3 = { 0.5F, 0.5F };
+  int result = 0;
+  points[0] = &point1;
+  points[1] = &point3;
+  points[2] = &point2;
+
+  result = geo_convex_hull(points, hull, count);
+  assert(result == 3);
+  assert(hull[0] == &point1);
+  assert(hull[1] == &point2);
+  assert(hull[2] == &point3);
+}
+
+void geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point_cloud(void) {
+  int count = 7;
+  struct geo_point *hull[7];
+  struct geo_point *points[7];
+  struct geo_point point1 = { 1.0F, 1.0F };
+  struct geo_point point2 = { 7.0F, 0.0F };
+  struct geo_point point3 = { 4.0F, 2.0F };
+  struct geo_point point4 = { 6.0F, 4.0F };
+  struct geo_point point5 = { 3.0F, 5.0F };
+  struct geo_point point6 = { 5.0F, 6.0F };
+  struct geo_point point7 = { 2.0F, 7.0F };
+  int result = 0;
+
+  points[0] = &point1;
+  points[1] = &point2;
+  points[2] = &point3;
+  points[3] = &point4;
+  points[4] = &point5;
+  points[5] = &point6;
+  points[6] = &point7;
+  result = geo_convex_hull(points, hull, count);
+  assert(result == 5);
+  assert(hull[0] == &point2);
+  assert(hull[1] == &point4);
+  assert(hull[2] == &point6);
+  assert(hull[3] == &point7);
+  assert(hull[4] == &point1);
+}
+
+void geo_convex_hull_returns_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points(void) {
+  int count = 6;
+  struct geo_point *hull[6];
+  struct geo_point *points[6];
+  struct geo_point point1 = { 0.0F, 0.0F };
+  struct geo_point point2 = { 3.0F, 0.0F };
+  struct geo_point point3 = { 3.0F, 1.0F };
+  struct geo_point point4 = { 3.0F, 2.0F };
+  struct geo_point point5 = { 3.0F, 3.0F };
+  struct geo_point point6 = { 0.0F, 3.0F };
+  int result = 0;
+  points[0] = &point1;
+  points[1] = &point6;
+  points[2] = &point3;
+  points[3] = &point2;
+  points[4] = &point5;
+  points[5] = &point4;
+  result = geo_convex_hull(points, hull, count);
+  assert(result == 4);
+  assert(hull[0] == &point1);
+  assert(hull[1] == &point2);
+  assert(hull[2] == &point5);
+  assert(hull[3] == &point6);
+}
+
+void convex_hull_with_30_points_returns_12_in_ccw_order(void) {
+  int count = 30;
+  struct geo_point *hull[30];
+  struct geo_point *points[30];
+  struct geo_point point1 = { -100.0f, 100.0f };
+  struct geo_point point2 = { -125.0f, 125.0f };
+  struct geo_point point3 = { -150.0f, 125.0f };
+  struct geo_point point4 = { -175.0f, 100.0f };
+  struct geo_point point5 = { -200.0f, 50.0f };
+  struct geo_point point6 = { -200.0f, -50.0f };
+  struct geo_point point7 = { -175.0f, -100.0f };
+  struct geo_point point8 = { -150.0f, -125.0f };
+  struct geo_point point9 = { -125.0f, -125.0f };
+  struct geo_point point10 = { -100.0f, -100.0f };
+  struct geo_point point11 = { 75.0f, 150.0f };
+  struct geo_point point12 = { 25.0f, 200.0f };
+  struct geo_point point13 = { -25.0f, 200.0f };
+  struct geo_point point14 = { -75.0f, 125.0f };
+  struct geo_point point15 = { -25.0f, 50.0f };
+  struct geo_point point16 = { 25.0f, -50.0f };
+  struct geo_point point17 = { 75.0f, -125.0f };
+  struct geo_point point18 = { 25.0f, -200.0f };
+  struct geo_point point19 = { -25.0f, -200.0f };
+  struct geo_point point20 = { -75.0f, -150.0f };
+  struct geo_point point21 = { 200.0f, 125.0f };
+  struct geo_point point22 = { 150.0f, 125.0f };
+  struct geo_point point23 = { 100.0f, 125.0f };
+  struct geo_point point24 = { 100.0f, 50.0f };
+  struct geo_point point25 = { 100.0f, 0.0f };
+  struct geo_point point26 = { 150.0f, 0.0f };
+  struct geo_point point27 = { 100.0f, -50.0f };
+  struct geo_point point28 = { 100.0f, -125.0f };
+  struct geo_point point29 = { 150.0f, -125.0f };
+  struct geo_point point30 = { 200.0f, -125.0f };
+  int result = 0;
+  points[0] = &point1;
+  points[1] = &point2;
+  points[2] = &point3;
+  points[3] = &point4;
+  points[4] = &point5;
+  points[5] = &point6;
+  points[6] = &point7;
+  points[7] = &point8;
+  points[8] = &point9;
+  points[9] = &point10;
+  points[10] = &point11;
+  points[11] = &point12;
+  points[12] = &point13;
+  points[13] = &point14;
+  points[14] = &point15;
+  points[15] = &point16;
+  points[16] = &point17;
+  points[17] = &point18;
+  points[18] = &point19;
+  points[19] = &point20;
+  points[20] = &point21;
+  points[21] = &point22;
+  points[22] = &point23;
+  points[23] = &point24;
+  points[24] = &point25;
+  points[25] = &point26;
+  points[26] = &point27;
+  points[27] = &point28;
+  points[28] = &point29;
+  points[29] = &point30;
+  result = geo_convex_hull(points, hull, count);
+  assert(result == 12);
+}
+
 int main(void) {
   /* geo_points_equal tests */
   geo_points_equal_returns_negative_1_when_lhs_is_null();
@@ -2011,6 +2208,14 @@ int main(void) {
   geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_1();
   geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_0();
 
+  /* geo_convex_hull tests */
+  geo_convex_hull_returns_negative_1_when_points_array_is_null();
+  geo_convex_hull_returns_negative_1_when_hull_array_is_null();
+  geo_convex_hull_returns_negative_1_when_size_is_less_than_3();
+  geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null();
+  geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle();
+  geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point_cloud();
+  geo_convex_hull_returns_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points();
   printf("All tests pass.\n");
   return 0;
 }
