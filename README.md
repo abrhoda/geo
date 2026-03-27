@@ -13,7 +13,7 @@ There are some useful flags that can be set at compile time:
 - `TEST` - currently unused but is set during the unit test compilation. This allows for any test specific behavior.
 
 ## TODOs
-see [TODOs](TODO.md)
+See [TODO.md](TODO.md) file.
 
 ## Code Layout, Contribution Guide, and Design Considerations
 1. set up dirs with `make setup`
@@ -22,7 +22,7 @@ see [TODOs](TODO.md)
 4. Write unit tests.
 
 ## Unit Tests
-Check `UNIT_TEST_CASES.md` where I documented unit tests. To run the unit tests, run `make setup && make test` from project root.
+Check list in [UNIT_TEST_CASES.md](UNIT_TEST_CASES.md) where I documented unit test cases. To run the unit tests, run `make setup && make test` from project root.
 
 ## References
 1. [Handbook of Geometry for Competitive Programmers](https://victorlecomte.com/cp-geo.pdf) - used for learning about programmatic approaches to determining line segment intersections and other neat geometry things.
