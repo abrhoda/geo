@@ -21,7 +21,7 @@ LINTER := clang-tidy
 #CFLAGS += -Wmost
 
 # set c standard
-C_VERSION= -std=c99
+CFLAGS= -std=c99
 
 #set headers dir
 #CFLAGS += -I./$(INCLUDE_DIR)
@@ -69,7 +69,7 @@ LDLIBS += -lm
 
 .PHONY: test
 test:
-	@$(CC) $(C_VERSION) $(TEST_CFLAGS) $(TEST_DIR)/test_geo.c $(SRC_DIR)/geo.c $(LDLIBS) -o $(BIN_DIR)/test_geo
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo.c $(SRC_DIR)/geo.c $(LDLIBS) -o $(BIN_DIR)/test_geo
 	@$(BIN_DIR)/test_geo
 
 .PHONY: format

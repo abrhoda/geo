@@ -15,7 +15,7 @@ static enum geo_orientation orientation(struct geo_point const* start,
                                         struct geo_point const* end,
                                         struct geo_point const* point);
 static bool in_disk(struct geo_segment const* segment,
-                   struct geo_point const* point);
+                    struct geo_point const* point);
 
 inline static float squared_distance(struct geo_point const* point1,
                                      struct geo_point const* point2);
@@ -60,7 +60,7 @@ static enum geo_orientation orientation(struct geo_point const* const start,
 }
 
 static bool in_disk(struct geo_segment const* const segment,
-                   struct geo_point const* const point) {
+                    struct geo_point const* const point) {
   struct geo_point vec_ap;
   struct geo_point vec_bp;
   vec_ap.x = (segment->start->x - point->x);
