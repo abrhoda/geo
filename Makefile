@@ -1,4 +1,4 @@
-DEBUG ?= 0hull_idx
+DEBUG ?= 0
 NAME := geo
 #INCLUDE_DIR := include
 SRC_DIR := src
