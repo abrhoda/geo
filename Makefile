@@ -1,4 +1,4 @@
-DEBUG ?= 0
+DEBUG ?= 0hull_idx
 NAME := geo
 #INCLUDE_DIR := include
 SRC_DIR := src
@@ -13,7 +13,7 @@ LINTER := clang-tidy
 
 # Set Clang Options
 #CC = clang
-#CFLAGS += -std=c89
+#CFLAGS += -std=c99
 #CFLAGS += -Wpedantic
 #CFLAGS += -Werror
 #CFLAGS += -Wall
@@ -21,7 +21,7 @@ LINTER := clang-tidy
 #CFLAGS += -Wmost
 
 # set c standard
-CFLAGS += -std=c89
+C_VERSION= -std=c99
 
 #set headers dir
 #CFLAGS += -I./$(INCLUDE_DIR)
@@ -32,7 +32,7 @@ CFLAGS += -Waggregate-return
 CFLAGS += -Wbad-function-cast
 CFLAGS += -Wcast-align
 CFLAGS += -Wcast-qual
-CFLAGS += -Wdeclaration-after-statement
+#CFLAGS += -Wdeclaration-after-statement
 CFLAGS += -Wfloat-equal
 CFLAGS += -Wformat=2
 #CFLAGS += -Wlogical-op
@@ -61,7 +61,7 @@ endif
 
 # Test specific set of flags for maximum debug potential with TEST macro defined
 # for potential use in code.
-TEST_CFLAGS += -std=c89 -g3 -O0 -fno-builtin -DTEST
+TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DTEST
 
 # Linker opts. Remember to set LDFLAGS before objs and LDLIBS after objs to avoid undefined refs when linking.
 #LDFLAGS += -L/$(LIBS)/libspecific
@@ -69,7 +69,7 @@ LDLIBS += -lm
 
 .PHONY: test
 test:
-	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo.c $(SRC_DIR)/geo.c $(LDLIBS) -o $(BIN_DIR)/test_geo
+	@$(CC) $(C_VERSION) $(TEST_CFLAGS) $(TEST_DIR)/test_geo.c $(SRC_DIR)/geo.c $(LDLIBS) -o $(BIN_DIR)/test_geo
 	@$(BIN_DIR)/test_geo
 
 .PHONY: format

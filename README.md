@@ -1,5 +1,5 @@
 # geo
-geofencing library in c89.
+geofencing library in c99.
 
 ## Documentation
 
