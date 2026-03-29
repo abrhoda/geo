@@ -23,6 +23,15 @@ extern "C" {
 #endif
 
 /**
+ * TODO
+ */
+enum geo_result {
+  ERROR = -1,
+  TRUE = 0,
+  FALSE = 1,
+};
+
+/**
  * \struct geo_point
  *
  * \brief a 2d point that holds x and y coordinates.

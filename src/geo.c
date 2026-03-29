@@ -5,22 +5,19 @@
 #include <stdlib.h>
 
 enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
-
 inline static float dot_product(struct geo_point const* vec_ab,
                                 struct geo_point const* vec_ac);
 inline static float cross_product(struct geo_point const* vec_ab,
                                   struct geo_point const* vec_ac);
-
+inline static float squared_distance(struct geo_point const* point1,
+                                     struct geo_point const* point2);
 static enum geo_orientation orientation(struct geo_point const* start,
                                         struct geo_point const* end,
                                         struct geo_point const* point);
 static bool in_disk(struct geo_segment const* segment,
                     struct geo_point const* point);
-
-inline static float squared_distance(struct geo_point const* point1,
-                                     struct geo_point const* point2);
-
 static int compare(const void* first, const void* second);
+
 
 inline static float dot_product(struct geo_point const* const vec_ab,
                                 struct geo_point const* const vec_ac) {

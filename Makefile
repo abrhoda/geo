@@ -38,6 +38,7 @@ CFLAGS += -Wformat=2
 #CFLAGS += -Wlogical-op
 CFLAGS += -Wmissing-declarations
 CFLAGS += -Wmissing-include-dirs
+CFLAGS += -Wno-missing-field-initializers
 CFLAGS += -Wmissing-prototypes
 CFLAGS += -Wnested-externs
 CFLAGS += -Wpointer-arith
