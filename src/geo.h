@@ -22,13 +22,10 @@ extern "C" {
 #define GEO_EPSILON 0.00001
 #endif
 
-/**
- * TODO
- */
 enum geo_result {
   ERROR = -1,
-  TRUE = 0,
-  FALSE = 1,
+  FALSE = 0,
+  TRUE = 1,
 };
 
 /**

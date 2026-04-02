@@ -18,14 +18,15 @@ static bool in_disk(struct geo_segment const* segment,
                     struct geo_point const* point);
 static int compare(const void* first, const void* second);
 
-
 inline static float dot_product(struct geo_point const* const vec_ab,
                                 struct geo_point const* const vec_ac) {
+  // TODO handle float overflow
   return ((vec_ab->x * vec_ac->x) + (vec_ab->y * vec_ac->y));
 }
 
 inline static float cross_product(struct geo_point const* const vec_ab,
                                   struct geo_point const* const vec_ac) {
+  // TODO handle float overflow
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
 
