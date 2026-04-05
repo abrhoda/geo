@@ -19,7 +19,7 @@ extern "C" {
  * \brief epsilon value to use as tolerance when comparing floats and doubles.
  */
 #ifndef GEO_EPSILON
-#define GEO_EPSILON 0.00001
+#define GEO_EPSILON 1e-5F
 #endif
 
 /**

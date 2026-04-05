@@ -28,3 +28,5 @@ Check list in [UNIT_TEST_CASES.md](UNIT_TEST_CASES.md) where I documented unit t
 1. [Handbook of Geometry for Competitive Programmers](https://victorlecomte.com/cp-geo.pdf) - used for learning about programmatic approaches to determining line segment intersections and other neat geometry things.
 2. [ PNPOLY - Point Inclusion in Polygon Test](https://wrfranklin.org/Research/Short_Notes/pnpoly.html) - more computational geometry reading to help understand some topics.
 3. [Graham's Scan](https://en.wikipedia.org/wiki/Graham_scan) - pseudocode wiki page should be enough to implement.
+4. [Comparing Floating Point Numbers, 2012 Edition](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/) - "fun" with floating point values. Needed in the project for making the dot and cross product implementations robust.
+5. [Comparing Floating-Points Numbers Is Tricky](https://bitbashing.io/comparing-floats.html) - more information on ways to compare floats

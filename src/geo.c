@@ -1,12 +1,11 @@
 #include "geo.h"
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
 
-/* point may not be the best type name but its easiest */
+/* Forward Declartions */
 static float dot_product(struct geo_point const* vec_ab,
                          struct geo_point const* vec_ac);
 static float cross_product(struct geo_point const* vec_ab,
@@ -23,6 +22,7 @@ static float squared_distance(struct geo_point const* point1,
 
 static int compare(const void* first, const void* second);
 
+/* Function Defintions */
 static float dot_product(struct geo_point const* const vec_ab,
                          struct geo_point const* const vec_ac) {
   return ((vec_ab->x * vec_ac->x) + (vec_ab->y * vec_ac->y));
@@ -70,6 +70,7 @@ static int in_disk(struct geo_segment const* const segment,
 
   vec_bp.x = (segment->end->x - point->x);
   vec_bp.y = (segment->end->y - point->y);
+
   return dot_product(&vec_ap, &vec_bp) <= 0.0F;
 }
 
