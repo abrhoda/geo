@@ -21,7 +21,7 @@ LINTER := clang-tidy
 #CFLAGS += -Wmost
 
 # set c standard
-CFLAGS += -std=c89
+CFLAGS += -std=c99
 
 #set headers dir
 #CFLAGS += -I./$(INCLUDE_DIR)
@@ -61,7 +61,7 @@ endif
 
 # Test specific set of flags for maximum debug potential with TEST macro defined
 # for potential use in code.
-TEST_CFLAGS += -std=c89 -g3 -O0 -fno-builtin -DTEST
+TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DTEST
 
 # Linker opts. Remember to set LDFLAGS before objs and LDLIBS after objs to avoid undefined refs when linking.
 #LDFLAGS += -L/$(LIBS)/libspecific
