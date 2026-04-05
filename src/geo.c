@@ -25,11 +25,13 @@ static int compare(const void* first, const void* second);
 /* Function Defintions */
 static float dot_product(struct geo_point const* const vec_ab,
                          struct geo_point const* const vec_ac) {
+  /* TODO handle overflow */
   return ((vec_ab->x * vec_ac->x) + (vec_ab->y * vec_ac->y));
 }
 
 static float cross_product(struct geo_point const* const vec_ab,
                            struct geo_point const* const vec_ac) {
+  /* TODO handle overflow */
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
 
@@ -54,11 +56,12 @@ static enum geo_orientation orientation(struct geo_point const* const start,
   vec_ab.y = end->y - start->y;
   vec_ac.x = point->x - start->x;
   vec_ac.y = point->y - start->y;
+
   cross = cross_product(&vec_ab, &vec_ac);
   if (fabs((double)cross) < GEO_EPSILON) {
     return COLINEAR;
   }
-  return cross < 0 ? RIGHT : LEFT;
+  return cross < 0.0F ? RIGHT : LEFT;
 }
 
 static int in_disk(struct geo_segment const* const segment,
@@ -78,6 +81,7 @@ static float squared_distance(struct geo_point const* point1,
                               struct geo_point const* point2) {
   float diff_x = point2->x - point1->x;
   float diff_y = point2->y - point1->y;
+  /* TODO handle overflow */
   return (diff_x * diff_x) + (diff_y * diff_y);
 }
 
@@ -113,6 +117,7 @@ int geo_points_equal(struct geo_point const* const lhs,
     return -1;
   }
 #endif
+  /* TODO handle overflow */
   return (fabs((double)lhs->x - rhs->x) < GEO_EPSILON &&
           fabs((double)lhs->y - rhs->y) < GEO_EPSILON);
 }
@@ -250,6 +255,11 @@ int geo_point_in_geometry(struct geo_point const* point,
      * checks that a ray from `point` bisects the segment and that the
      * orientation puts the `point` on the appropriate side of the `segment`.
      */
+    /*
+     * TODO is this accurate? what if `point->y - ...->end->y < GEO_EPSILON` ?
+     * this is to say that end->y is roughly equal to point->y but is less than
+     * by less than an epsilon value?
+     * */
     intersections += (((geometry->segments[iter]->end->y >= point->y) -
                        (geometry->segments[iter]->start->y >= point->y)) *
                       orientation_p) > 0;
@@ -322,6 +332,7 @@ int geo_convex_hull(struct geo_point** points, struct geo_point** hull,
     current_y = points[iter]->y;
     if ((current_y < min_y) ||
         (fabs((double)(current_y - min_y)) < GEO_EPSILON &&
+         /* TODO this could have a false positive. */
          points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
