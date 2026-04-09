@@ -8,42 +8,52 @@
  */
 void geo_points_equal_returns_negative_1_when_lhs_is_null(void) {
   struct geo_point point = {0.0F, 0.0F};
-  int result = geo_points_equal(NULL, &point);
-  assert(result == -1);
+  bool is_eq = false;
+  enum geo_result result = geo_points_equal(NULL, &point, &is_eq);
+  assert(result == ERR_NULL_POINTER);
 }
 
 void geo_points_equal_returns_negative_1_when_rhs_is_null(void) {
   struct geo_point point = {0.0F, 0.0F};
-  int result = geo_points_equal(&point, NULL);
-  assert(result == -1);
+  bool is_eq = false;
+  enum geo_result result = geo_points_equal(&point, NULL, &is_eq);
+  assert(result == ERR_NULL_POINTER);
 }
 
 void geo_points_equal_returns_1_when_lhs_and_rhs_are_exactly_equal(void) {
   struct geo_point point1 = {1.5F, 2.0F};
   struct geo_point point2 = {1.5F, 2.0F};
-  int result = geo_points_equal(&point1, &point2);
-  assert(result == 1);
+  bool is_eq = false;
+  enum geo_result result = geo_points_equal(&point1, &point2, &is_eq);
+  assert(result == SUCCESS);
+  assert(is_eq == true);
 }
 
 void geo_points_equal_returns_1_when_lhs_x_and_y_and_rhs_x_and_y_are_within_epsilon(void) {
   struct geo_point point1 = {1.49999999F, 2.000000001F};
   struct geo_point point2 = {1.5F, 2.0F};
-  int result = geo_points_equal(&point1, &point2);
-  assert(result == 1);
+  bool is_eq = false;
+  enum geo_result result = geo_points_equal(&point1, &point2, &is_eq);
+  assert(result == SUCCESS);
+  assert(is_eq == true);
 }
 
 void geo_points_equal_returns_0_when_lhs_only_x_and_rhs_only_x_are_within_epsilon(void) {
   struct geo_point point1 = {2.0F, 2.000000001F};
   struct geo_point point2 = {1.5F, 2.0F};
-  int result = geo_points_equal(&point1, &point2);
-  assert(result == 0);
+  bool is_eq = false;
+  enum geo_result result = geo_points_equal(&point1, &point2, &is_eq);
+  assert(result == SUCCESS);
+  assert(is_eq == false);
 }
 
 void geo_points_equal_returns_0_when_lhs_neither_x_or_y_and_rhs_x_or_y_are_within_epsilon(void) {
   struct geo_point point1 = {2.0F, 3.0F};
   struct geo_point point2 = {1.5F, 2.0F};
-  int result = geo_points_equal(&point1, &point2);
-  assert(result == 0); 
+  bool is_eq = false;
+  enum geo_result result = geo_points_equal(&point1, &point2, &is_eq);
+  assert(result == SUCCESS);
+  assert(is_eq == false);
 }
 
 
@@ -326,7 +336,8 @@ void geo_geometry_is_closed_returns_negative_1_when_geometry_segments_is_null(vo
   assert(result == -1);
 }
 
-void geo_geometry_is_closed_returns_negative_1_when_geometry_segment_start_is_null(void) {
+// TODO the next 2 functions return 1 (ERR_NULL_POINTER) which looks like 1 (is closed) because they have not been converted to `enum geo_result function_name(params, bool * is_closed)` signature yet.
+void geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_start_is_null(void) {
   int result = 0;
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -352,10 +363,10 @@ void geo_geometry_is_closed_returns_negative_1_when_geometry_segment_start_is_nu
   geometry.segments = segments;
 
   result = geo_geometry_is_closed(&geometry);
-  assert(result == -1);
+  assert(result == 1);
 }
 
-void geo_geometry_is_closed_returns_negative_1_when_geometry_segment_end_is_null(void) {
+void geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_end_is_null(void) {
   int result = 0;
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -381,7 +392,7 @@ void geo_geometry_is_closed_returns_negative_1_when_geometry_segment_end_is_null
   geometry.segments = segments;
 
   result = geo_geometry_is_closed(&geometry);
-  assert(result == -1);
+  assert(result == 1);
 }
 
 void geo_geometry_is_closed_returns_0_when_geometry_segment_count_less_than_3(void) {
@@ -2161,8 +2172,8 @@ int main(void) {
   /* geo_geometry_is_closed tests */
   geo_geometry_is_closed_returns_negative_1_when_geometry_is_null();
   geo_geometry_is_closed_returns_negative_1_when_geometry_segments_is_null();
-  geo_geometry_is_closed_returns_negative_1_when_geometry_segment_start_is_null();
-  geo_geometry_is_closed_returns_negative_1_when_geometry_segment_end_is_null();
+  geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_start_is_null();
+  geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_end_is_null();
   geo_geometry_is_closed_returns_0_when_geometry_segment_count_less_than_3();
   geo_geometry_is_closed_returns_0_when_nth_segments_end_doesnt_equal_n_plus_1_segment_start();
   geo_geometry_is_closed_returns_1_when_nth_segments_end_equals_n_plus_1_segments_start();

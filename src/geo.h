@@ -13,6 +13,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 /**
  * \def GEO_EPSILON
  *
@@ -21,6 +23,17 @@ extern "C" {
 #ifndef GEO_EPSILON
 #define GEO_EPSILON 1e-5F
 #endif
+
+/**
+ * TODO fill this out
+ *
+ */
+enum geo_result {
+  SUCCESS = 0,
+  ERR_NULL_POINTER = 1,
+  ERR_TOO_FEW_SEGMENTS = 2,
+  ERR_OVERFLOW = 3 // unused for now
+};
 
 /**
  * \struct geo_point
@@ -40,14 +53,16 @@ struct geo_point {
  *
  * \param[in] lhs The first geo_point to test for equality
  * \param[in] rhs The second geo_point to test for equality
+ * \param[out] is_equal The result of the equality test
  *
- * \return int result code indicating the outcome:
- *   - -1 if either point is NULL (removed when compiled with GEO_UNSAFE set)
- *   - 0 if the points are not equal
- *   - 1 if the points are equal
+ * \return enum geo_result indicating whether or not the operation was successful.
+ *         the `is_equal` out value should only be used when geo_result == SUCCESS
+ *         possible geo_result values are:
+ *         - SUCCESS (0)
+ *         - ERR_NULL_POINTER (1)
  *
  */
-int geo_points_equal(struct geo_point const* lhs, struct geo_point const* rhs);
+enum geo_result geo_points_equal(struct geo_point const* lhs, struct geo_point const* rhs, bool* is_equal);
 
 /**
  * \struct geo_segment
