@@ -33,6 +33,7 @@ Just a checklist of test cases per function.
 - [x] when geometry-\>segments\_count < 3, assert 0
 - [x] when every nth segment-\>end == (n+1 [or 0 for last])th segment's-\>start, assert 1
 - [x] when nth segment-\>end != (n+1)th segment-\>start, assert 0
+- [ ] when last segment's end is on the first segment but not at the start point, assert 1
 
 ## geo\_geometry\_is\_simple
 - [x] when geometry == NULL, assert -1
