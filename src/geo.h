@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include <stddef.h>
 
 /**
  * \def GEO_EPSILON
@@ -29,10 +30,10 @@ extern "C" {
  *
  */
 enum geo_result {
-  SUCCESS = 0,
-  ERR_NULL_POINTER = 1,
-  ERR_TOO_FEW_SEGMENTS = 2,
-  ERR_OVERFLOW = 3 // unused for now
+  GEO_SUCCESS = 0,
+  GEO_ERR_NULL_POINTER = 1,
+  GEO_ERR_TOO_SMALL = 2,
+  GEO_ERR_OVERFLOW = 3 // unused for now
 };
 
 /**
@@ -78,31 +79,38 @@ struct geo_segment {
  * \brief Determines if 2 segments intersect.
  *
  * \details checks determines if segment1 and segment2 intersect. It does so by
- *         first checking if they "properly intersect" through finding the
- * orientations of the start and end points of one segment with the other line
- * segment. If the two line segments don't "properly intersect", the start and
- * end points of each segment are checked to see if they are on the other
- * segment. This determines if a segment intersects the other segment at the
- * start point, end point, or both points while being colinear. This informs if
- * the segment intersects the other or if the segment is the same segment as the
- * other.
+ * first checking if they "properly intersect" through finding the orientations
+ * of the start and end points of one segment with the other line segment. If
+ * the two line segments don't "properly intersect", the start and end points
+ * of each segment are checked to see if they are on the other segment. This
+ * determines if a segment intersects the other segment at the start point, end
+ * point, or both points while being colinear. This informs if the segment
+ * intersects the other or if the segment is the same segment as the other.
  *
- * \param[in] segment1 The first segment to test for intersection
- * \param[in] segment2 The second segment to test for intersection
- *
- * \return int result code indicating the outcome:
- *   - -1 if either segment is NULL or if either segments start point or end
- * point are NULL (removed when compiled with GEO_UNSAFE set)
- *   - 0 if the segments don't intersect
+ * `intersect_count` has a different meaning depending on the value. Values are
+ * on the range 0 <= intersect_count <= 4:
+ *   - 0 if the segments do not intersect
  *   - 1 if the segments properly intersect
  *   - 2 if the segments share an end + start point pair or if one segment is a
  *        section of the other.
  *   - 3 if one segment is a section of another and they share an end + start
  * point pair.
  *   - 4 if the segments have identical start and end points.
+ *
+ *
+ * \param[in] segment1 The first segment to test for intersection
+ * \param[in] segment2 The second segment to test for intersection
+ * \param[out] intersect_count The number of intersection points
+ *
+ * \return enum geo_result indicating whether or not the operation was successful.
+ *         the `intersect_count` out value should only be used when geo_result == SUCCESS
+ *         possible geo_result values are:
+ *         - SUCCESS (0)
+ *         - ERR_NULL_POINTER (1)
+ *
  */
-int geo_segments_intersect(struct geo_segment const* segment1,
-                           struct geo_segment const* segment2);
+enum geo_result geo_segments_intersect(struct geo_segment const* segment1,
+                           struct geo_segment const* segment2, size_t * intersect_count);
 
 /**
  * \struct geo_geometry

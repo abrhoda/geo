@@ -113,22 +113,22 @@ enum geo_result geo_points_equal(struct geo_point const* const lhs,
                      struct geo_point const* const rhs, bool* is_equal) {
 #ifndef GEO_UNSAFE
   if (lhs == NULL || rhs == NULL) {
-    return ERR_NULL_POINTER;
+    return GEO_ERR_NULL_POINTER;
   }
 #endif
   /* TODO handle overflow */
   *is_equal = (fabs((double)lhs->x - rhs->x) < GEO_EPSILON &&
           fabs((double)lhs->y - rhs->y) < GEO_EPSILON);
-  return SUCCESS;
+  return GEO_SUCCESS;
 }
 
-int geo_segments_intersect(struct geo_segment const* const segment1,
-                           struct geo_segment const* const segment2) {
+enum geo_result geo_segments_intersect(struct geo_segment const* const segment1,
+                           struct geo_segment const* const segment2, size_t * intersect_count) {
 #ifndef GEO_UNSAFE
   if (segment1 == NULL || segment2 == NULL || segment1->start == NULL ||
       segment1->end == NULL || segment2->start == NULL ||
       segment2->end == NULL) {
-    return -1;
+    return GEO_ERR_NULL_POINTER;
   }
 #endif
   enum geo_orientation orientation_a = orientation(segment2->start, segment2->end, segment1->start);
@@ -138,24 +138,25 @@ int geo_segments_intersect(struct geo_segment const* const segment1,
 
   if ((orientation_a * orientation_b < 0) &&
       (orientation_c * orientation_d < 0)) {
-    return 1;
+    *intersect_count = 1;
+    return GEO_SUCCESS;
   }
 
-  int intersect_count = 0;
+  *intersect_count = 0;
   if (orientation_a == COLINEAR && in_disk(segment2, segment1->start)) {
-    ++intersect_count;
+    ++(*intersect_count);
   }
   if (orientation_b == COLINEAR && in_disk(segment2, segment1->end)) {
-    ++intersect_count;
+    ++(*intersect_count);
   }
   if (orientation_c == COLINEAR && in_disk(segment1, segment2->start)) {
-    ++intersect_count;
+    ++(*intersect_count);
   }
   if (orientation_d == COLINEAR && in_disk(segment1, segment2->end)) {
-    ++intersect_count;
+    ++(*intersect_count);
   }
 
-  return intersect_count;
+  return GEO_SUCCESS;
 }
 
 int geo_geometry_is_closed(struct geo_geometry const* const geometry) {
@@ -175,10 +176,11 @@ int geo_geometry_is_closed(struct geo_geometry const* const geometry) {
     enum geo_result res = geo_points_equal(geometry->segments[iter]->end,
                              geometry->segments[mod]->start, &is_equal);
 
-    if (res != SUCCESS) {
+#ifndef GEO_UNSAFE
+    if (res != GEO_SUCCESS) {
       return res;
     }
-
+#endif
     if (!is_equal) {
       return 0;
     }
@@ -186,9 +188,8 @@ int geo_geometry_is_closed(struct geo_geometry const* const geometry) {
   return 1;
 }
 
+// TODO WARN This doesn't work properly
 int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
-  int intersect = 0; // TODO intersect should be a boolean
-
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
     return -1;
@@ -198,23 +199,69 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
     return 0;
   }
 #endif
+  // check that the first and second segments intersect
+  enum geo_result result = GEO_SUCCESS;
+  size_t intersections = 0;
 
-  for (int outer_iter = 0; outer_iter < (geometry->segments_count - 1);
-       ++outer_iter) {
-    for (int inner_iter = (outer_iter + 1); inner_iter < geometry->segments_count;
-         ++inner_iter) {
-      intersect = geo_segments_intersect(geometry->segments[outer_iter],
-                                         geometry->segments[inner_iter]);
+  result = geo_segments_intersect(geometry->segments[0], geometry->segments[1], &intersections);
+
 #ifndef GEO_UNSAFE
-      if (intersect == -1) {
+  if (result != GEO_SUCCESS) {
+    return -1;
+  }
+#endif
+  if (intersections != 2) {
+    return 0;
+  }
+
+  // check that the first and last segments intersect
+  result = geo_segments_intersect(geometry->segments[0], geometry->segments[geometry->segments_count-1], &intersections);
+
+#ifndef GEO_UNSAFE
+  if (result != GEO_SUCCESS) {
+    return -1;
+  }
+#endif
+  if (intersections != 2) {
+    return 0;
+  }
+
+  for (int i = 2; i < geometry->segments_count - 1; ++i) {
+    result = geo_segments_intersect(geometry->segments[0], geometry->segments[i], &intersections);
+
+#ifndef GEO_UNSAFE
+    if (result != GEO_SUCCESS) {
+      return -1;
+    }
+#endif
+    if (intersections != 0) {
+      return 0;
+    }
+  }
+
+  for (int i = 1; i < geometry->segments_count - 1; ++i) {
+    result = geo_segments_intersect(geometry->segments[i], geometry->segments[i+1], &intersections);
+
+#ifndef GEO_UNSAFE
+    if (result != GEO_SUCCESS) {
+      return -1;
+    }
+#endif
+    if (intersections != 2) {
+      return 0;
+    }
+    for (int j = (i+1); j < geometry->segments_count; ++j) {
+#ifndef GEO_UNSAFE
+      if (result != GEO_SUCCESS) {
         return -1;
       }
 #endif
-      if (intersect == 1) {
+      if (intersections != 0) {
         return 0;
       }
     }
   }
+
   return 1;
 }
 
@@ -242,7 +289,7 @@ int geo_point_in_geometry(struct geo_point const* point,
     enum geo_orientation orientation_p = orientation(geometry->segments[iter]->start,
                                 geometry->segments[iter]->end, point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
-      return !strict;
+  return !strict;
     }
     /*
      * checks that a ray from `point` bisects the segment and that the
