@@ -61,7 +61,7 @@ void geo_points_equal_returns_geo_success_and_is_equal_set_to_0_when_lhs_neither
  * TODO all these functions have old names from before the result enum return type.
  *----------------------------------
  */
-void geo_segments_intersect_returns_negative_1_when_segment_1_is_null(void) {
+void geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_1_is_null(void) {
   struct geo_point point1 = {2.0F, 3.0F};
   struct geo_point point2 = {1.5F, 2.0F};
   struct geo_segment segment;
@@ -72,7 +72,7 @@ void geo_segments_intersect_returns_negative_1_when_segment_1_is_null(void) {
   result = geo_segments_intersect(NULL, &segment, &intersect_count);
   assert(result == GEO_ERR_NULL_POINTER);
 }
-void geo_segments_intersect_returns_negative_1_when_segment_2_is_null(void) {
+void geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_2_is_null(void) {
   struct geo_point point1 = {2.0F, 3.0F};
   struct geo_point point2 = {1.5F, 2.0F};
   struct geo_segment segment;
@@ -83,7 +83,7 @@ void geo_segments_intersect_returns_negative_1_when_segment_2_is_null(void) {
   result = geo_segments_intersect(&segment, NULL, &intersect_count);
   assert(result == GEO_ERR_NULL_POINTER);
 }
-void geo_segments_intersect_returns_negative_1_when_segment_1_start_is_null(void) {
+void geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_1_start_is_null(void) {
   /*struct geo_point point1 = {2.0F, 3.0F};*/
   struct geo_point point2 = {1.5F, 2.0F};
   struct geo_point point3 = {7.0F, 3.0F};
@@ -100,7 +100,7 @@ void geo_segments_intersect_returns_negative_1_when_segment_1_start_is_null(void
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_segments_intersect_returns_negative_1_when_segment_1_end_is_null(void) {
+void geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_1_end_is_null(void) {
   struct geo_point point1 = {2.0F, 3.0F};
   /*struct geo_point point2 = {1.5F, 2.0F};*/
   struct geo_point point3 = {7.0F, 3.0F};
@@ -117,7 +117,7 @@ void geo_segments_intersect_returns_negative_1_when_segment_1_end_is_null(void) 
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_segments_intersect_returns_negative_1_when_segment_2_start_is_null(void) {
+void geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_2_start_is_null(void) {
   struct geo_point point1 = {2.0F, 3.0F};
   struct geo_point point2 = {1.5F, 2.0F};
   /*struct geo_point point3 = {7.0F, 3.0F};*/
@@ -134,7 +134,7 @@ void geo_segments_intersect_returns_negative_1_when_segment_2_start_is_null(void
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_segments_intersect_returns_negative_1_when_segment_2_end_is_null(void) {
+void geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_2_end_is_null(void) {
   struct geo_point point1 = {2.0F, 3.0F};
   struct geo_point point2 = {1.5F, 2.0F};
   struct geo_point point3 = {7.0F, 3.0F};
@@ -151,7 +151,7 @@ void geo_segments_intersect_returns_negative_1_when_segment_2_end_is_null(void) 
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_segments_intersect_returns_0_when_segments_are_parallel(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_0_when_segments_are_parallel(void) {
   struct geo_point point1 = {0.0F, 3.0F};
   struct geo_point point2 = {3.0F, 3.0F};
   struct geo_point point3 = {0.0F, 4.0F};
@@ -169,7 +169,7 @@ void geo_segments_intersect_returns_0_when_segments_are_parallel(void) {
   assert(intersect_count == 0);
 }
 
-void geo_segments_intersect_returns_0_when_segments_are_colinear_but_dont_intersect(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_0_when_segments_are_colinear_but_dont_intersect(void) {
   struct geo_point point1 = {0.0F, 0.0F};
   struct geo_point point2 = {1.0F, 0.0F};
   struct geo_point point3 = {2.0F, 0.0F};
@@ -187,7 +187,7 @@ void geo_segments_intersect_returns_0_when_segments_are_colinear_but_dont_inters
   assert(intersect_count == 0);
 }
 
-void geo_segments_intersect_returns_0_when_segments_dont_intersect(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_0_when_segments_dont_intersect(void) {
   struct geo_point point1 = {0.0F, 0.0F};
   struct geo_point point2 = {1.0F, 1.0F};
   struct geo_point point3 = {2.0F, 3.0F};
@@ -205,7 +205,7 @@ void geo_segments_intersect_returns_0_when_segments_dont_intersect(void) {
   assert(intersect_count == 0);
 }
 
-void geo_segments_intersect_returns_1_when_segments_properly_intersect(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_1_when_segments_properly_intersect(void) {
   /*
    * p3    p2
    * |     |
@@ -237,7 +237,7 @@ void geo_segments_intersect_returns_1_when_segments_properly_intersect(void) {
   assert(intersect_count == 1);
 }
 
-void geo_segments_intersect_returns_2_when_segment_1_end_is_equal_to_segment_2_start(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_2_when_segment_1_end_is_equal_to_segment_2_start(void) {
   /*
    * o-----o
    * |    /|
@@ -267,7 +267,7 @@ void geo_segments_intersect_returns_2_when_segment_1_end_is_equal_to_segment_2_s
   assert(intersect_count == 2);
 }
 
-void geo_segments_intersect_returns_2_when_one_segment_is_section_of_other_segment(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_2_when_one_segment_is_section_of_other_segment(void) {
   /*
    * o----o----o----o
    * |    |    |    |
@@ -291,7 +291,7 @@ void geo_segments_intersect_returns_2_when_one_segment_is_section_of_other_segme
   assert(intersect_count == 2);
 }
 
-void geo_segments_intersect_returns_3_when_segment_1_is_section_of_segment_2_and_share_1_end(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_3_when_segment_1_is_section_of_segment_2_and_share_1_end(void) {
   /*
    * o----o--------o
    * |    |        |
@@ -314,7 +314,7 @@ void geo_segments_intersect_returns_3_when_segment_1_is_section_of_segment_2_and
   assert(intersect_count == 3);
 }
 
-void geo_segments_intersect_returns_4_when_segment_1_is_the_same_segment_as_segment_2(void) {
+void geo_segments_intersect_returns_geo_success_and_intersect_count_is_4_when_segment_1_is_the_same_segment_as_segment_2(void) {
   /*
    * o--------------o
    * |              |
@@ -657,7 +657,6 @@ void geo_geometry_is_simple_returns_0_when_any_segments_intersect(void) {
   geometry.segments = segments;
 
   result = geo_geometry_is_simple(&geometry);
-  printf("result is %d\n", result);
   assert(result == 0);
 }
 
@@ -693,7 +692,6 @@ void geo_geometry_is_simple_returns_1_when_no_segments_intersect(void) {
   geometry.segments = segments;
 
   result = geo_geometry_is_simple(&geometry);
-  printf("result is %d\n", result);
   assert(result == 1);
 }
 
@@ -2179,19 +2177,19 @@ int main(void) {
   geo_points_equal_returns_geo_success_and_is_equal_set_to_0_when_lhs_neither_x_or_y_and_rhs_x_or_y_are_within_epsilon();
 
   /* geo_segments_intersect tests */
-  geo_segments_intersect_returns_negative_1_when_segment_1_is_null();
-  geo_segments_intersect_returns_negative_1_when_segment_2_is_null();
-  geo_segments_intersect_returns_negative_1_when_segment_1_start_is_null();
-  geo_segments_intersect_returns_negative_1_when_segment_1_end_is_null();
-  geo_segments_intersect_returns_negative_1_when_segment_2_start_is_null();
-  geo_segments_intersect_returns_negative_1_when_segment_2_end_is_null();
-  geo_segments_intersect_returns_0_when_segments_are_parallel();
-  geo_segments_intersect_returns_0_when_segments_are_colinear_but_dont_intersect();
-  geo_segments_intersect_returns_0_when_segments_dont_intersect();
-  geo_segments_intersect_returns_1_when_segments_properly_intersect();
-  geo_segments_intersect_returns_2_when_segment_1_end_is_equal_to_segment_2_start();
-  geo_segments_intersect_returns_2_when_one_segment_is_section_of_other_segment();
-  geo_segments_intersect_returns_4_when_segment_1_is_the_same_segment_as_segment_2();
+  geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_1_is_null();
+  geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_2_is_null();
+  geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_1_start_is_null();
+  geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_1_end_is_null();
+  geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_2_start_is_null();
+  geo_segments_intersect_returns_geo_err_null_pointer_result_code_when_segment_2_end_is_null();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_0_when_segments_are_parallel();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_0_when_segments_are_colinear_but_dont_intersect();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_0_when_segments_dont_intersect();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_1_when_segments_properly_intersect();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_2_when_segment_1_end_is_equal_to_segment_2_start();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_2_when_one_segment_is_section_of_other_segment();
+  geo_segments_intersect_returns_geo_success_and_intersect_count_is_4_when_segment_1_is_the_same_segment_as_segment_2();
 
   /* geo_geometry_is_closed tests */
   geo_geometry_is_closed_returns_negative_1_when_geometry_is_null();

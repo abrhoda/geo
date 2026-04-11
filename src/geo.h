@@ -33,7 +33,7 @@ enum geo_result {
   GEO_SUCCESS = 0,
   GEO_ERR_NULL_POINTER = 1,
   GEO_ERR_TOO_SMALL = 2,
-  GEO_ERR_OVERFLOW = 3 // unused for now
+  GEO_ERR_OVERFLOW = 3  // unused for now
 };
 
 /**
@@ -56,14 +56,15 @@ struct geo_point {
  * \param[in] rhs The second geo_point to test for equality
  * \param[out] is_equal The result of the equality test
  *
- * \return enum geo_result indicating whether or not the operation was successful.
- *         the `is_equal` out value should only be used when geo_result == SUCCESS
- *         possible geo_result values are:
+ * \return enum geo_result indicating whether or not the operation was
+ * successful. the `is_equal` out value should only be used when geo_result ==
+ * SUCCESS possible geo_result values are:
  *         - SUCCESS (0)
  *         - ERR_NULL_POINTER (1)
  *
  */
-enum geo_result geo_points_equal(struct geo_point const* lhs, struct geo_point const* rhs, bool* is_equal);
+enum geo_result geo_points_equal(struct geo_point const* lhs,
+                                 struct geo_point const* rhs, bool* is_equal);
 
 /**
  * \struct geo_segment
@@ -102,15 +103,16 @@ struct geo_segment {
  * \param[in] segment2 The second segment to test for intersection
  * \param[out] intersect_count The number of intersection points
  *
- * \return enum geo_result indicating whether or not the operation was successful.
- *         the `intersect_count` out value should only be used when geo_result == SUCCESS
- *         possible geo_result values are:
+ * \return enum geo_result indicating whether or not the operation was
+ * successful. the `intersect_count` out value should only be used when
+ * geo_result == SUCCESS possible geo_result values are:
  *         - SUCCESS (0)
  *         - ERR_NULL_POINTER (1)
  *
  */
 enum geo_result geo_segments_intersect(struct geo_segment const* segment1,
-                           struct geo_segment const* segment2, size_t * intersect_count);
+                                       struct geo_segment const* segment2,
+                                       size_t* intersect_count);
 
 /**
  * \struct geo_geometry
