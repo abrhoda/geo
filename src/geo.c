@@ -157,46 +157,50 @@ enum geo_result geo_segments_intersect(struct geo_segment const* const segment1,
   return GEO_SUCCESS;
 }
 
-int geo_geometry_is_closed(struct geo_geometry const* const geometry) {
+enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
+                                       bool* is_closed) {
+  enum geo_result result = GEO_SUCCESS;
+  int mod = 0;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
-    return -1;
+    return GEO_ERR_NULL_POINTER;
   }
 
   if (geometry->segments_count < 3) {
-    return 0;
+    return GEO_ERR_TOO_SMALL;
   }
 #endif
 
   for (int iter = 0; iter < geometry->segments_count; ++iter) {
-    int mod = (iter + 1) % geometry->segments_count;
-    bool is_equal = 0;
-    enum geo_result res =
-        geo_points_equal(geometry->segments[iter]->end,
-                         geometry->segments[mod]->start, &is_equal);
+    mod = (iter + 1) % geometry->segments_count;
+    result = geo_points_equal(geometry->segments[iter]->end,
+                              geometry->segments[mod]->start, is_closed);
 
 #ifndef GEO_UNSAFE
-    if (res != GEO_SUCCESS) {
-      return res;
+    if (result != GEO_SUCCESS) {
+      return result;
     }
 #endif
-    if (!is_equal) {
-      return 0;
+    if (!(*is_closed)) {
+      *is_closed = false;
+      return GEO_SUCCESS;
     }
   }
-  return 1;
+  *is_closed = true;
+  return GEO_SUCCESS;
 }
 
-int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
+enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
+                                       bool* is_simple) {
   enum geo_result result = GEO_SUCCESS;
   size_t intersections = 0;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
-    return -1;
+    return GEO_ERR_NULL_POINTER;
   }
 
   if (geometry->segments_count < 3) {
-    return 0;
+    return GEO_ERR_TOO_SMALL;
   }
 #endif
   // check that the first and second segments intersect
@@ -206,11 +210,12 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
 
 #ifndef GEO_UNSAFE
   if (result != GEO_SUCCESS) {
-    return -1;
+    return result;
   }
 #endif
   if (intersections != 2) {
-    return 0;
+    *is_simple = false;
+    return GEO_SUCCESS;
   }
 
   // check that the first and last segments intersect
@@ -220,11 +225,12 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
 
 #ifndef GEO_UNSAFE
   if (result != GEO_SUCCESS) {
-    return -1;
+    return result;
   }
 #endif
   if (intersections != 2) {
-    return 0;
+    *is_simple = false;
+    return GEO_SUCCESS;
   }
 
   for (int i = 2; i < geometry->segments_count - 1; ++i) {
@@ -233,11 +239,12 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
 
 #ifndef GEO_UNSAFE
     if (result != GEO_SUCCESS) {
-      return -1;
+      return result;
     }
 #endif
     if (intersections != 0) {
-      return 0;
+      *is_simple = false;
+      return GEO_SUCCESS;
     }
   }
 
@@ -247,27 +254,29 @@ int geo_geometry_is_simple(struct geo_geometry const* const geometry) {
 
 #ifndef GEO_UNSAFE
     if (result != GEO_SUCCESS) {
-      return -1;
+      return result;
     }
 #endif
     if (intersections != 2) {
-      return 0;
+      *is_simple = false;
+      return GEO_SUCCESS;
     }
     for (int j = (i + 2); j < geometry->segments_count; ++j) {
       result = geo_segments_intersect(geometry->segments[i],
                                       geometry->segments[j], &intersections);
 #ifndef GEO_UNSAFE
       if (result != GEO_SUCCESS) {
-        return -1;
+        return result;
       }
 #endif
       if (intersections != 0) {
-        return 0;
+        *is_simple = false;
+        return GEO_SUCCESS;
       }
     }
   }
-
-  return 1;
+  *is_simple = true;
+  return GEO_SUCCESS;
 }
 
 int geo_point_in_geometry(struct geo_point const* point,

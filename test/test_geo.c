@@ -342,29 +342,26 @@ void geo_segments_intersect_returns_geo_success_and_intersect_count_is_4_when_se
  * geo_geometry_is_closed tests
  *----------------------------------
  */
-void geo_geometry_is_closed_returns_negative_1_when_geometry_is_null(void) {
+void geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_is_null(void) {
   struct geo_geometry * geometry = NULL;
-  int result = geo_geometry_is_closed(geometry);
-  assert(result == -1);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(geometry, &is_closed);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_closed_returns_negative_1_when_geometry_segments_is_null(void) {
-  int result = 0;
+void geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_segments_is_null(void) {
   struct geo_geometry geometry;
   geometry.segments_count = 0;
   geometry.segments = NULL;
-
-  result = geo_geometry_is_closed(&geometry);
-  assert(result == -1);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(&geometry, &is_closed);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-// TODO the next 2 functions return 1 (ERR_NULL_POINTER) which looks like 1 (is closed) because they have not been converted to `enum geo_result function_name(params, bool * is_closed)` signature yet.
-void geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_start_is_null(void) {
-  int result = 0;
+void geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_segment_start_is_null(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
-  /*struct geo_point end2 = {1.5F, 3.0F};*/
   struct geo_point start3 = {1.5F, 3.0F};
   struct geo_point end3 = {0.0F, 0.0F};
   struct geo_segment segment1;
@@ -384,12 +381,12 @@ void geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_se
   geometry.segments_count = 3;
   geometry.segments = segments;
 
-  result = geo_geometry_is_closed(&geometry);
-  assert(result == 1);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(&geometry, &is_closed);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_end_is_null(void) {
-  int result = 0;
+void geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_segment_end_is_null(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   /*struct geo_point start2 = {3.0F, 0.0F};*/
@@ -413,12 +410,12 @@ void geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_se
   geometry.segments_count = 3;
   geometry.segments = segments;
 
-  result = geo_geometry_is_closed(&geometry);
-  assert(result == 1);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(&geometry, &is_closed);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_closed_returns_0_when_geometry_segment_count_less_than_3(void) {
-  int result = 0;
+void geo_geometry_is_closed_returns_geo_err_too_small_when_geometry_segment_count_less_than_3(void) {
   struct geo_point start1 = {2.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
@@ -436,12 +433,12 @@ void geo_geometry_is_closed_returns_0_when_geometry_segment_count_less_than_3(vo
   geometry.segments_count = 2;
   geometry.segments = segments;
 
-  result = geo_geometry_is_closed(&geometry);
-  assert(result == 0);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(&geometry, &is_closed);
+  assert(result == GEO_ERR_TOO_SMALL);
 }
 
-void geo_geometry_is_closed_returns_0_when_nth_segments_end_doesnt_equal_n_plus_1_segment_start(void) {
-  int result = 0;
+void geo_geometry_is_closed_returns_geo_success_and_is_closed_is_false_when_nth_segments_end_doesnt_equal_n_plus_1_segment_start(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
@@ -467,12 +464,13 @@ void geo_geometry_is_closed_returns_0_when_nth_segments_end_doesnt_equal_n_plus_
   geometry.segments_count = 3;
   geometry.segments = segments;
 
-  result = geo_geometry_is_closed(&geometry);
-  assert(result == 0);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(&geometry, &is_closed);
+  assert(result == GEO_SUCCESS);
+  assert(is_closed == false);
 }
 
-void geo_geometry_is_closed_returns_1_when_nth_segments_end_equals_n_plus_1_segments_start(void) {
-  int result = 0;
+void geo_geometry_is_closed_returns_geo_success_and_is_closed_is_true_when_nth_segments_end_equals_n_plus_1_segments_start(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
@@ -496,32 +494,34 @@ void geo_geometry_is_closed_returns_1_when_nth_segments_end_equals_n_plus_1_segm
   geometry.segments_count = 3;
   geometry.segments = segments;
 
-  result = geo_geometry_is_closed(&geometry);
-  assert(result == 1);
+  bool is_closed = false;
+  enum geo_result result = geo_geometry_is_closed(&geometry, &is_closed);
+  assert(result == GEO_SUCCESS);
+  assert(is_closed == true);
 }
 
 /*----------------------------------
- * geo_geometry_is_closed tests
+ * geo_geometry_is_simple tests
  *----------------------------------
  */
-void geo_geometry_is_simple_returns_negative_1_when_geometry_is_null(void) {
+void geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_is_null(void) {
   struct geo_geometry * geometry = NULL;
-  int result = geo_geometry_is_simple(geometry);
-  assert(result == -1);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(geometry, &is_simple);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_simple_returns_negative_1_when_geometry_segments_is_null(void) {
-  int result = 0;
+void geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_segments_is_null(void) {
   struct geo_geometry geometry;
   geometry.segments_count = 0;
   geometry.segments = NULL;
 
-  result = geo_geometry_is_simple(&geometry);
-  assert(result == -1);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(&geometry, &is_simple);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_start_is_null(void) {
-  int result = 0;
+void geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_segments_ith_start_is_null(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
@@ -551,12 +551,12 @@ void geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_start_
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_geometry_is_simple(&geometry);
-  assert(result == -1);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(&geometry, &is_simple);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_end_is_null(void) {
-  int result = 0;
+void geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_segments_ith_end_is_null(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
@@ -586,47 +586,35 @@ void geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_end_is
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_geometry_is_simple(&geometry);
-  assert(result == -1);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(&geometry, &is_simple);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_is_simple_returns_0_when_geometry_segments_count_less_than_3(void) {
-  int result = 0;
+void geo_geometry_is_simple_returns_geo_err_too_small_when_geometry_segments_count_less_than_3(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
   struct geo_point end2 = {3.0F, 3.0F};
-  struct geo_point start3 = {3.0F, 3.0F};
-  struct geo_point end3 = {0.0F, 3.0F};
-  struct geo_point start4 = {0.0F, 3.0F};
-  struct geo_point end4 = {0.0F, 0.0F};
   struct geo_segment segment1;
   struct geo_segment segment2;
-  struct geo_segment segment3;
-  struct geo_segment segment4;
-  struct geo_segment * segments[4];
+  struct geo_segment * segments[2];
   struct geo_geometry geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
   segment2.start = &start2;
-  segment2.end = NULL;
+  segment2.end = &end2;
   segments[1] = &segment2;
-  segment3.start = &start3;
-  segment3.end = &end3;
-  segments[2] = &segment3;
-  segment4.start = &start4;
-  segment4.end = &end4;
-  segments[3] = &segment4;
-  geometry.segments_count = 4;
+  geometry.segments_count = 2;
   geometry.segments = segments;
 
-  result = geo_geometry_is_simple(&geometry);
-  assert(result == -1);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(&geometry, &is_simple);
+  assert(result == GEO_ERR_TOO_SMALL);
 }
 
-void geo_geometry_is_simple_returns_0_when_any_segments_intersect(void) {
-  int result = 0;
+void geo_geometry_is_simple_returns_geo_success_and_is_simple_is_false_when_any_segments_intersect(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 3.0F};
   struct geo_point start2 = {3.0F, 3.0F};
@@ -656,12 +644,13 @@ void geo_geometry_is_simple_returns_0_when_any_segments_intersect(void) {
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_geometry_is_simple(&geometry);
-  assert(result == 0);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(&geometry, &is_simple);
+  assert(result == GEO_SUCCESS);
+  assert(is_simple == false);
 }
 
-void geo_geometry_is_simple_returns_1_when_no_segments_intersect(void) {
-  int result = 0;
+void geo_geometry_is_simple_returns_geo_success_and_is_simple_is_true_when_no_segments_intersect(void) {
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
   struct geo_point start2 = {3.0F, 0.0F};
@@ -691,8 +680,10 @@ void geo_geometry_is_simple_returns_1_when_no_segments_intersect(void) {
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_geometry_is_simple(&geometry);
-  assert(result == 1);
+  bool is_simple = false;
+  enum geo_result result = geo_geometry_is_simple(&geometry, &is_simple);
+  assert(result == GEO_SUCCESS);
+  assert(is_simple == true);
 }
 
 /*----------------------------------
@@ -2192,21 +2183,22 @@ int main(void) {
   geo_segments_intersect_returns_geo_success_and_intersect_count_is_4_when_segment_1_is_the_same_segment_as_segment_2();
 
   /* geo_geometry_is_closed tests */
-  geo_geometry_is_closed_returns_negative_1_when_geometry_is_null();
-  geo_geometry_is_closed_returns_negative_1_when_geometry_segments_is_null();
-  geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_start_is_null();
-  geo_geometry_is_closed_returns_geo_result_err_null_pointer_when_geometry_segment_end_is_null();
-  geo_geometry_is_closed_returns_0_when_geometry_segment_count_less_than_3();
-  geo_geometry_is_closed_returns_0_when_nth_segments_end_doesnt_equal_n_plus_1_segment_start();
-  geo_geometry_is_closed_returns_1_when_nth_segments_end_equals_n_plus_1_segments_start();
+  geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_is_null();
+  geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_segments_is_null();
+  geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_segment_start_is_null();
+  geo_geometry_is_closed_returns_geo_err_null_pointer_when_geometry_segment_end_is_null();
+  geo_geometry_is_closed_returns_geo_err_too_small_when_geometry_segment_count_less_than_3();
+  geo_geometry_is_closed_returns_geo_success_and_is_closed_is_false_when_nth_segments_end_doesnt_equal_n_plus_1_segment_start();
+  geo_geometry_is_closed_returns_geo_success_and_is_closed_is_true_when_nth_segments_end_equals_n_plus_1_segments_start();
 
   /* geo_geometry_is_simple tests */
-  geo_geometry_is_simple_returns_negative_1_when_geometry_is_null();
-  geo_geometry_is_simple_returns_negative_1_when_geometry_segments_is_null();
-  geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_start_is_null();
-  geo_geometry_is_simple_returns_negative_1_when_geometry_segments_ith_end_is_null();
-  geo_geometry_is_simple_returns_0_when_any_segments_intersect();
-  geo_geometry_is_simple_returns_1_when_no_segments_intersect();
+  geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_is_null();
+  geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_segments_is_null();
+  geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_segments_ith_start_is_null();
+  geo_geometry_is_simple_returns_geo_err_null_pointer_when_geometry_segments_ith_end_is_null();
+  geo_geometry_is_simple_returns_geo_err_too_small_when_geometry_segments_count_less_than_3();
+  geo_geometry_is_simple_returns_geo_success_and_is_simple_is_false_when_any_segments_intersect();
+  geo_geometry_is_simple_returns_geo_success_and_is_simple_is_true_when_no_segments_intersect();
 
   /* geo_point_in_geometry tests */
   geo_point_in_geometry_returns_negative_1_when_point_is_null();
