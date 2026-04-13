@@ -693,35 +693,37 @@ void geo_geometry_is_simple_returns_geo_success_and_is_simple_is_true_when_no_se
 void geo_point_in_geometry_returns_negative_1_when_point_is_null(void) {
   struct geo_geometry geometry;
   struct geo_segment * segments[3];
-  int strict = 1;
-  int result = 0;
+  bool strict = true;
+  bool inside = false;
   geometry.segments = segments;
   geometry.segments_count = 3;
-  result = geo_point_in_geometry(NULL, &geometry, strict);
-  assert(result == -1);
+  enum geo_result result = geo_point_in_geometry(NULL, &geometry, strict, &inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_returns_negative_1_when_geometry_is_null(void) {
   struct geo_point point = { 0.0F, 0.0F };
-  int strict = 1;
-  int result = geo_point_in_geometry(&point, NULL, strict);
-  assert(result == -1);
+  bool strict = true;
+  bool inside = false;
+  enum geo_result result = geo_point_in_geometry(&point, NULL, strict, &inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null(void) {
   struct geo_geometry geometry;
   struct geo_point point = { 0.0F, 0.0F };
-  int strict = 1;
-  int result = 0;
+  bool strict = true;
+  bool inside = false;
   geometry.segments = NULL;
   geometry.segments_count = 3;
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == -1);
+
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {1.5F, 1.5F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -752,13 +754,13 @@ void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_i
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == -1);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {1.5F, 1.5F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -789,13 +791,13 @@ void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == -1);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3(void) {
-  int result = 0;
-  int strict = 1;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {1.5F, 1.5F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -814,14 +816,14 @@ void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3
   geometry.segments_count = 2;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 0);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_ERR_TOO_SMALL);
 
 }
 
 void geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_is_1(void) {
-  int result = 0;
-  int strict = 1;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {3.0F, 1.5F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -852,13 +854,14 @@ void geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_i
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 0);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_SUCCESS);
+  assert(inside == false);
 }
 
 void geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_is_0(void) {
-  int result = 0;
-  int strict = 0;
+  bool strict = false;
+  bool inside = false;
   struct geo_point point = {3.0F, 1.5F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -889,13 +892,14 @@ void geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_i
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 1);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_SUCCESS);
+  assert(inside == true);
 }
 
 void geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment(void) {
-  int result = 0;
-  int strict = 0;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {3.0F, -1.0F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -926,13 +930,14 @@ void geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_a
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 0);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_SUCCESS);
+  assert(inside == false);
 }
 
 void geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment(void) {
-  int result = 0;
-  int strict = 0;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {4.0F, 0.0F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -963,13 +968,14 @@ void geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 0);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_SUCCESS);
+  assert(inside == false);
 }
 
 void geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment(void) {
-  int result = 0;
-  int strict = 0;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {0.0F, 4.0F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -1000,13 +1006,14 @@ void geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_col
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 0);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_SUCCESS);
+  assert(inside == false);
 }
 
 void geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment(void) {
-  int result = 0;
-  int strict = 0;
+  bool strict = true;
+  bool inside = false;
   struct geo_point point = {0.0F, -1.0F};
   struct geo_point start1 = {0.0F, 0.0F};
   struct geo_point end1 = {3.0F, 0.0F};
@@ -1037,8 +1044,9 @@ void geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_col
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  result = geo_point_in_geometry(&point, &geometry, strict);
-  assert(result == 0);
+  enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
+  assert(result == GEO_SUCCESS);
+  assert(inside == false);
 }
 
 /*----------------------------------

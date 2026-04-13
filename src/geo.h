@@ -155,12 +155,14 @@ enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
  *          do not intersect with each other.
  *
  * \param[in] geometry The geometry to test.
+ * \param[out] is_simple The result of "is simple" test.
  *
- * \return int result code indicating the outcome:
- *   - -1 if geometry or geometry's segments are NULL (removed when compiled
- * with GEO_UNSAFE set)
- *   - 0 if the geometry is not simple
- *   - 1 if the geometry is simple
+ * \return enum geo_result indicating whether or not the operation was
+ * successful. the `is_simple` out value should only be used when geo_result ==
+ * SUCCESS possible geo_result values are:
+ *         - GEO_SUCCESS (0)
+ *         - GEO_ERR_NULL_POINTER (1)
+ *         - GEO_ERR_TOO_SMALL (2)
  */
 enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
                                        bool* is_simple);
@@ -186,8 +188,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
  *   - 0 if not in the geometry
  *   - 1 if in the geometry
  */
-int geo_point_in_geometry(struct geo_point const* point,
-                          struct geo_geometry const* geometry, int strict);
+enum geo_result geo_point_in_geometry(struct geo_point const* point,
+                          struct geo_geometry const* geometry, bool strict, bool * inside);
 
 /**
  * \brief determines if one geometry (called `child`) is entirely contained in

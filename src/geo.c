@@ -233,6 +233,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
     return GEO_SUCCESS;
   }
 
+  // no other segments intersect with the first.
   for (int i = 2; i < geometry->segments_count - 1; ++i) {
     result = geo_segments_intersect(geometry->segments[0],
                                     geometry->segments[i], &intersections);
@@ -279,17 +280,17 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
   return GEO_SUCCESS;
 }
 
-int geo_point_in_geometry(struct geo_point const* point,
-                          struct geo_geometry const* geometry, int strict) {
+enum geo_result geo_point_in_geometry(struct geo_point const* point,
+                          struct geo_geometry const* geometry, bool strict, bool * inside) {
   int intersections = 0;
   enum geo_orientation orientation_p;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL || point == NULL) {
-    return -1;
+    return GEO_ERR_NULL_POINTER;
   }
 
   if (geometry->segments_count < 3) {
-    return 0;
+    return GEO_ERR_TOO_SMALL;
   }
 #endif
   for (int iter = 0; iter < geometry->segments_count; ++iter) {
@@ -297,14 +298,15 @@ int geo_point_in_geometry(struct geo_point const* point,
     if (geometry->segments[iter] == NULL ||
         geometry->segments[iter]->start == NULL ||
         geometry->segments[iter]->end == NULL) {
-      return -1;
+      return GEO_ERR_NULL_POINTER;
     }
 #endif
 
     orientation_p = orientation(geometry->segments[iter]->start,
                                 geometry->segments[iter]->end, point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
-      return !strict;
+      *inside = !strict;
+      return GEO_SUCCESS;
     }
     /*
      * checks that a ray from `point` bisects the segment and that the
@@ -319,13 +321,15 @@ int geo_point_in_geometry(struct geo_point const* point,
                        (geometry->segments[iter]->start->y >= point->y)) *
                       orientation_p) > 0;
   }
-  return intersections & 1;
+  *inside = intersections & 1;
+  return GEO_SUCCESS;
 }
 
 int geo_geometry_in_geometry(struct geo_geometry* parent,
                              struct geo_geometry* child,
                              int strict /* TODO this should be bool */) {
-  int inside = 0;
+  bool inside = false;
+  enum geo_result result = GEO_SUCCESS;
 #ifndef GEO_UNSAFE
   if (parent == NULL || parent->segments == NULL || child == NULL ||
       child->segments == NULL) {
@@ -342,14 +346,21 @@ int geo_geometry_in_geometry(struct geo_geometry* parent,
       return -1;
     }
 #endif
-    /* could be -1, 0, or 1 depending on GEO_UNSAFE flag and actual result. */
-    inside =
-        geo_point_in_geometry(child->segments[iter]->start, parent, strict);
-    if (inside != 1) {
+    result =
+        geo_point_in_geometry(child->segments[iter]->start, parent, strict, &inside);
+    if (result != GEO_SUCCESS) {
+      return result;
+    }
+
+    if (!inside) {
       return inside;
     }
-    inside = geo_point_in_geometry(child->segments[iter]->end, parent, strict);
-    if (inside != 1) {
+    result = geo_point_in_geometry(child->segments[iter]->end, parent, strict, &inside);
+    if (result != GEO_SUCCESS) {
+      return result;
+    }
+
+    if (!inside) {
       return inside;
     }
   }
