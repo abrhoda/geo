@@ -67,6 +67,13 @@ enum geo_result geo_points_equal(struct geo_point const* lhs,
                                  struct geo_point const* rhs, bool* is_equal);
 
 /**
+ * TODO implement
+ */
+enum geo_result geo_point_nearby_point(struct geo_point const* root,
+                                     struct geo_point const* to_check,
+                                     float distance, bool* is_nearby);
+
+/**
  * \struct geo_segment
  *
  * \brief a line segment with a start point and an end point.
@@ -181,15 +188,19 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
  * \param[in] geo_geometry The geometry to test if the point is inside.
  * \param[in] strict Controls whether a point on a segment is considered in or
  * out of the geometry.
+ * \param[out] is_inside The result of "is inside" test, indicating whether the
+ * point is in the geometry.
  *
- * \return int result code indicating the outcome:
- *   - -1 if point, geometry, geometry's segments, any start point, or any end
- * point is NULL (removed when compiled with GEO_UNSAFE set)
- *   - 0 if not in the geometry
- *   - 1 if in the geometry
+ * \return enum geo_result indicating whether or not the operation was
+ * successful. the `is_inside` out value should only be used when geo_result ==
+ * SUCCESS possible geo_result values are:
+ *         - GEO_SUCCESS (0)
+ *         - GEO_ERR_NULL_POINTER (1)
+ *         - GEO_ERR_TOO_SMALL (2)
  */
 enum geo_result geo_point_in_geometry(struct geo_point const* point,
-                          struct geo_geometry const* geometry, bool strict, bool * inside);
+                                      struct geo_geometry const* geometry,
+                                      bool strict, bool* is_inside);
 
 /**
  * \brief determines if one geometry (called `child`) is entirely contained in
@@ -218,8 +229,8 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
  *   - 0 if child geometry is not contained in the parent geometry
  *   - 1 if child geometry is contained in the parent geometry
  */
-int geo_geometry_in_geometry(struct geo_geometry* parent,
-                             struct geo_geometry* child, int strict);
+enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
+                             struct geo_geometry* child, bool strict, bool * is_inside);
 
 /**
  * \brief creates a convex hull from the given points.

@@ -1054,8 +1054,9 @@ void geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_col
  *----------------------------------
  */
 void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1107,13 +1108,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_is_null(vo
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(NULL, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(NULL, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_segments_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1165,13 +1167,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_segments_i
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1223,13 +1226,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segmen
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_start_point_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1281,13 +1285,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segmen
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_end_point_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1339,13 +1344,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segmen
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1397,13 +1403,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_is_null(voi
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, NULL, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, NULL, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_segments_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1455,13 +1462,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_segments_is
   child_segments[3] = &child_segment4;
   child.segments = NULL;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1513,13 +1521,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_start_point_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1571,13 +1580,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_end_point_is_null(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1629,13 +1639,14 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == -1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_in_geometry_returns_0_when_parent_geometry_segments_count_less_than_3(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1681,13 +1692,14 @@ void geo_geometry_in_geometry_returns_0_when_parent_geometry_segments_count_less
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == 0);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_TOO_SMALL);
 }
 
 void geo_geometry_in_geometry_returns_0_when_child_geometry_segments_count_less_than_3(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1733,13 +1745,14 @@ void geo_geometry_in_geometry_returns_0_when_child_geometry_segments_count_less_
   child_segments[1] = &child_segment2;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == 0);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_ERR_TOO_SMALL);
 }
 
 void geo_geometry_in_geometry_returns_1_when_all_points_in_child_geometry_are_inside_parent_geometry(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1791,13 +1804,15 @@ void geo_geometry_in_geometry_returns_1_when_all_points_in_child_geometry_are_in
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == 1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_SUCCESS);
+  assert(is_inside == true);
 }
 
 void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_outside_parent_geometry(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1849,13 +1864,15 @@ void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_ou
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == 0);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_SUCCESS);
+  assert(is_inside == false);
 }
 
 void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_1(void) {
-  int result = 0;
-  int strict = 1;
+  bool is_inside = false;
+  bool strict = true;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1907,13 +1924,15 @@ void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == 0);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_SUCCESS);
+  assert(is_inside == false);
 }
 
 void geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_0(void) {
-  int result = 0;
-  int strict = 0;
+  bool is_inside = false;
+  bool strict = false;
+  enum geo_result result = GEO_SUCCESS;
   struct geo_point parent_vertex1 = { 0.0F, 0.0F };
   struct geo_point parent_vertex2 = { 5.0F, 0.0F };
   struct geo_point parent_vertex3 = { 5.0F, 5.0F };
@@ -1965,8 +1984,9 @@ void geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on
   child_segments[3] = &child_segment4;
   child.segments = child_segments;
   child.segments_count = child_segments_count;
-  result = geo_geometry_in_geometry(&parent, &child, strict);
-  assert(result == 1);
+  result = geo_geometry_in_geometry(&parent, &child, strict, &is_inside);
+  assert(result == GEO_SUCCESS);
+  assert(is_inside == true);
 }
 
 /*----------------------------------

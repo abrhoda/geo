@@ -281,7 +281,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
 }
 
 enum geo_result geo_point_in_geometry(struct geo_point const* point,
-                          struct geo_geometry const* geometry, bool strict, bool * inside) {
+                                      struct geo_geometry const* geometry,
+                                      bool strict, bool* is_inside) {
   int intersections = 0;
   enum geo_orientation orientation_p;
 #ifndef GEO_UNSAFE
@@ -305,7 +306,7 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
     orientation_p = orientation(geometry->segments[iter]->start,
                                 geometry->segments[iter]->end, point);
     if (orientation_p == COLINEAR && in_disk(geometry->segments[iter], point)) {
-      *inside = !strict;
+      *is_inside = !strict;
       return GEO_SUCCESS;
     }
     /*
@@ -321,50 +322,49 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
                        (geometry->segments[iter]->start->y >= point->y)) *
                       orientation_p) > 0;
   }
-  *inside = intersections & 1;
+  *is_inside = intersections & 1;
   return GEO_SUCCESS;
 }
 
-int geo_geometry_in_geometry(struct geo_geometry* parent,
-                             struct geo_geometry* child,
-                             int strict /* TODO this should be bool */) {
-  bool inside = false;
+enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
+                             struct geo_geometry* child, bool strict, bool * is_inside) {
   enum geo_result result = GEO_SUCCESS;
 #ifndef GEO_UNSAFE
   if (parent == NULL || parent->segments == NULL || child == NULL ||
       child->segments == NULL) {
-    return -1;
+    return GEO_ERR_NULL_POINTER;
   }
 
   if (parent->segments_count < 3 || child->segments_count < 3) {
-    return 0;
+    return GEO_ERR_TOO_SMALL;
   }
 #endif
   for (int iter = 0; iter < child->segments_count; ++iter) {
 #ifndef GEO_UNSAFE
     if (child->segments[iter] == NULL) {
-      return -1;
+      return GEO_ERR_NULL_POINTER;
     }
 #endif
-    result =
-        geo_point_in_geometry(child->segments[iter]->start, parent, strict, &inside);
+    result = geo_point_in_geometry(child->segments[iter]->start, parent, strict,
+                                   is_inside);
     if (result != GEO_SUCCESS) {
       return result;
     }
 
-    if (!inside) {
-      return inside;
+    if (!(*is_inside)) {
+      return GEO_SUCCESS;
     }
-    result = geo_point_in_geometry(child->segments[iter]->end, parent, strict, &inside);
+    result = geo_point_in_geometry(child->segments[iter]->end, parent, strict,
+                                   is_inside);
     if (result != GEO_SUCCESS) {
       return result;
     }
 
-    if (!inside) {
-      return inside;
+    if (!(*is_inside)) {
+      return GEO_SUCCESS;
     }
   }
-  return 1;
+  return GEO_SUCCESS;
 }
 
 int geo_convex_hull(struct geo_point** points, struct geo_point** hull,
