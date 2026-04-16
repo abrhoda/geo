@@ -56,3 +56,7 @@ dkms.conf
 
 # built binaries
 bin/
+
+# Doxygen generated directories
+html/
+latex/

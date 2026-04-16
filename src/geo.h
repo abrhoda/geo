@@ -45,8 +45,8 @@ enum geo_result {
  * \brief a 2d point that holds x and y coordinates.
  */
 struct geo_point {
-  float x;
-  float y;
+  float x; /**< The x coordinate of the point */
+  float y; /**< The y coordinate of the point */
 };
 
 /**
@@ -82,8 +82,8 @@ enum geo_result geo_point_nearby_point(struct geo_point const* root,
  * \brief a line segment with a start point and an end point.
  */
 struct geo_segment {
-  struct geo_point* start;
-  struct geo_point* end;
+  struct geo_point* start; /**< the start point of the line segment */
+  struct geo_point* end; /**< the end point of the line segment */
 };
 
 /**
@@ -127,13 +127,13 @@ enum geo_result geo_segments_intersect(struct geo_segment const* segment1,
 /**
  * \struct geo_geometry
  *
- * \brief a geometry is a polygon made of line segments. Closed geometries form
+ * \brief A geometry is a polygon made of line segments. Closed geometries form
  *        a ring with their line segments. Simple geometries have no line
  * segments that intersect (except for overlapping start point and end points)
  */
 struct geo_geometry {
-  int segments_count;
-  struct geo_segment** segments;
+  struct geo_segment** segments; /**< The list of segments that make up the geometry */
+  int segments_count; /**< The size of the segments array */
   /* TODO int is_negative_space; // tell if a geometry is a cut of of a parent.
    */
 };
@@ -187,8 +187,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
  *
  * \details uses a raycasting algorithm to check if `point` is in `geometry`
  *
- * \param[in] geo_point The point to test
- * \param[in] geo_geometry The geometry to test if the point is inside.
+ * \param[in] point The point to test
+ * \param[in] geometry The geometry to test if the point is inside.
  * \param[in] strict Controls whether a point on a segment is considered in or
  * out of the geometry.
  * \param[out] is_inside The result of "is inside" test, indicating whether the
