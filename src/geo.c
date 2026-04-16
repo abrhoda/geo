@@ -368,10 +368,10 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
 }
 
 enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
-                    int size, size_t * convex_hull_size) {
+                    size_t size, size_t * convex_hull_size) {
   /* used to find starting point */
   struct geo_point* temp = NULL;
-  int min_idx = 0;
+  size_t min_idx = 0;
   float min_y = 0.0F;
 
 #ifndef GEO_UNSAFE
@@ -382,7 +382,7 @@ enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** co
     return GEO_ERR_TOO_SMALL;
   }
 #endif
-  for (int iter = 0; iter < size; ++iter) {
+  for (size_t iter = 0; iter < size; ++iter) {
 #ifndef GEO_UNSAFE
     if (points[iter] == NULL) {
       return GEO_ERR_NULL_POINTER;
@@ -434,15 +434,14 @@ enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** co
   convex_hull[0] = points[0];
   convex_hull[1] = points[1];
   convex_hull[2] = points[2];
-  size_t idx = 3;
-  for (int iter = 3; iter < size; ++iter) {
-    while (orientation(convex_hull[idx - 2], convex_hull[idx - 1],
+  *convex_hull_size = 3;
+  for (size_t iter = *convex_hull_size; iter < size; ++iter) {
+    while (orientation(convex_hull[(*convex_hull_size) - 2], convex_hull[(*convex_hull_size) - 1],
                        points[iter]) != LEFT) {
-      idx--;
+      (*convex_hull_size)--;
     }
-    convex_hull[idx] = points[iter];
-    idx++;
+    convex_hull[(*convex_hull_size)] = points[iter];
+    (*convex_hull_size)++;
   }
-  *convex_hull_size = idx;
   return GEO_SUCCESS;
 }

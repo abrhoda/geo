@@ -26,7 +26,10 @@ extern "C" {
 #endif
 
 /**
- * TODO fill this out
+ * \enum geo_result
+ *
+ * \brief Tells whether a function successfully completed and if not, what error
+ * happened.
  *
  */
 enum geo_result {
@@ -58,7 +61,7 @@ struct geo_point {
  *
  * \return enum geo_result indicating whether or not the operation was
  * successful. the `is_equal` out value should only be used when geo_result ==
- * GEO_SUCCESS possible geo_result values are:
+ * GEO_SUCCESS. Possible geo_result values are:
  *         - GEO_SUCCESS (0)
  *         - GEO_ERR_NULL_POINTER (1)
  *
@@ -147,7 +150,7 @@ struct geo_geometry {
  *
  * \return enum geo_result indicating whether or not the operation was
  * successful. the `is_closed` out value should only be used when geo_result ==
- * SUCCESS possible geo_result values are:
+ * GEO_SUCCESS. Possible geo_result values are:
  *         - GEO_SUCCESS (0)
  *         - GEO_ERR_NULL_POINTER (1)
  *         - GEO_ERR_TOO_SMALL (2)
@@ -166,7 +169,7 @@ enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
  *
  * \return enum geo_result indicating whether or not the operation was
  * successful. the `is_simple` out value should only be used when geo_result ==
- * SUCCESS possible geo_result values are:
+ * GEO_SUCCESS. Possible geo_result values are:
  *         - GEO_SUCCESS (0)
  *         - GEO_ERR_NULL_POINTER (1)
  *         - GEO_ERR_TOO_SMALL (2)
@@ -193,7 +196,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
  *
  * \return enum geo_result indicating whether or not the operation was
  * successful. the `is_inside` out value should only be used when geo_result ==
- * SUCCESS possible geo_result values are:
+ * GEO_SUCCESS. Possible geo_result values are:
  *         - GEO_SUCCESS (0)
  *         - GEO_ERR_NULL_POINTER (1)
  *         - GEO_ERR_TOO_SMALL (2)
@@ -222,12 +225,15 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
  * \param[in] parent The containing geometry
  * \param[in] child The geometry to test if it is contained in parent geometry
  * \param[in] strict Controls whether a point on a segment is considered in or
+ * \param[out] is_inside The result of "is inside" test, indicating whether the
+ * child geometry is entirely in the parent geometry.
  *
- * \return int result code indicating the outcome:
- *   - -1 if either geometry, either geometry's segments, any start point, or
- * any end point is NULL (removed when compiled with GEO_UNSAFE set)
- *   - 0 if child geometry is not contained in the parent geometry
- *   - 1 if child geometry is contained in the parent geometry
+ * \return enum geo_result indicating whether or not the operation was
+ * successful. the `is_inside` out value should only be used when geo_result ==
+ * GEO_SUCCESS. Possible geo_result values are:
+ *         - GEO_SUCCESS (0)
+ *         - GEO_ERR_NULL_POINTER (1)
+ *         - GEO_ERR_TOO_SMALL (2)
  */
 enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
                              struct geo_geometry* child, bool strict, bool * is_inside);
@@ -245,15 +251,19 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
  * hull.
  * \param[in] size The number of points in both the points and convex hull
  * arrays.
+ * \param[out] convex_hull_size The number of points, N, in the convex_hull array that
+ * form the convex hull of the point cloud. Note that N will be on the range 3 <= N <= size.
  *
- * \return int result code indicating the outcome:
- *  - (-1) in the case of an error such as < 3 points in points array.
- *  - 0 if a convex hull cannot be created.
- *  - N indicating the number of points in the convex_hull array. Note that N
- * will be on the range 3 <= N <= size.
+ * \return enum geo_result indicating whether or not the operation was
+ * successful. The `convex_hull` array and `convex_hull_size` values should only
+ * be used when geo_result == GEO_SUCCESS
+ * Possible geo_result values are:
+ *         - GEO_SUCCESS (0)
+ *         - GEO_ERR_NULL_POINTER (1)
+ *         - GEO_ERR_TOO_SMALL (2)
  */
 enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
-                    int size, size_t * convex_hull_size);
+                    size_t size, size_t * convex_hull_size);
 
 #ifdef __cplusplus
 }
