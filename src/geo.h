@@ -252,8 +252,8 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
  *  - N indicating the number of points in the convex_hull array. Note that N
  * will be on the range 3 <= N <= size.
  */
-int geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
-                    int size);
+enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
+                    int size, size_t * convex_hull_size);
 
 #ifdef __cplusplus
 }

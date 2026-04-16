@@ -690,7 +690,7 @@ void geo_geometry_is_simple_returns_geo_success_and_is_simple_is_true_when_no_se
  * geo_point_in_geometry tests
  *----------------------------------
  */
-void geo_point_in_geometry_returns_negative_1_when_point_is_null(void) {
+void geo_point_in_geometry_returns_geo_err_null_pointer_when_point_is_null(void) {
   struct geo_geometry geometry;
   struct geo_segment * segments[3];
   bool strict = true;
@@ -701,7 +701,7 @@ void geo_point_in_geometry_returns_negative_1_when_point_is_null(void) {
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_point_in_geometry_returns_negative_1_when_geometry_is_null(void) {
+void geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_is_null(void) {
   struct geo_point point = { 0.0F, 0.0F };
   bool strict = true;
   bool inside = false;
@@ -709,7 +709,7 @@ void geo_point_in_geometry_returns_negative_1_when_geometry_is_null(void) {
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null(void) {
+void geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_segments_is_null(void) {
   struct geo_geometry geometry;
   struct geo_point point = { 0.0F, 0.0F };
   bool strict = true;
@@ -721,7 +721,7 @@ void geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null(voi
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_is_null(void) {
+void geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_segments_ith_start_is_null(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {1.5F, 1.5F};
@@ -758,7 +758,7 @@ void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_i
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_null(void) {
+void geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_segments_ith_end_is_null(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {1.5F, 1.5F};
@@ -795,7 +795,7 @@ void geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3(void) {
+void geo_point_in_geometry_returns_geo_err_too_small_when_geometry_segments_count_is_less_than_3(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {1.5F, 1.5F};
@@ -821,7 +821,7 @@ void geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3
 
 }
 
-void geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_is_1(void) {
+void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_on_geometry_segment_and_strict_is_true(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {3.0F, 1.5F};
@@ -859,7 +859,7 @@ void geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_i
   assert(inside == false);
 }
 
-void geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_is_0(void) {
+void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_point_on_geometry_segment_and_strict_is_false(void) {
   bool strict = false;
   bool inside = false;
   struct geo_point point = {3.0F, 1.5F};
@@ -897,7 +897,7 @@ void geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_i
   assert(inside == true);
 }
 
-void geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment(void) {
+void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {3.0F, -1.0F};
@@ -935,7 +935,7 @@ void geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_a
   assert(inside == false);
 }
 
-void geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment(void) {
+void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {4.0F, 0.0F};
@@ -973,7 +973,7 @@ void geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_
   assert(inside == false);
 }
 
-void geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment(void) {
+void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {0.0F, 4.0F};
@@ -1011,7 +1011,7 @@ void geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_col
   assert(inside == false);
 }
 
-void geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment(void) {
+void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment(void) {
   bool strict = true;
   bool inside = false;
   struct geo_point point = {0.0F, -1.0F};
@@ -1053,7 +1053,7 @@ void geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_col
  * geo_geometry_in_geometry tests
  *----------------------------------
  */
-void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1112,7 +1112,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_is_null(vo
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_segments_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_segments_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1171,7 +1171,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_segments_i
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1230,7 +1230,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segmen
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_start_point_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_start_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1289,7 +1289,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segmen
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_end_point_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_end_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1348,7 +1348,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segmen
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1407,7 +1407,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_is_null(voi
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_segments_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_segments_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1466,7 +1466,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_segments_is
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_ith_segment_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1525,7 +1525,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_start_point_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_ith_segment_start_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1584,7 +1584,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_end_point_is_null(void) {
+void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_ith_segment_end_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1643,7 +1643,7 @@ void geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_geometry_in_geometry_returns_0_when_parent_geometry_segments_count_less_than_3(void) {
+void geo_geometry_in_geometry_returns_geo_err_too_small_when_parent_geometry_segments_count_less_than_3(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1696,7 +1696,7 @@ void geo_geometry_in_geometry_returns_0_when_parent_geometry_segments_count_less
   assert(result == GEO_ERR_TOO_SMALL);
 }
 
-void geo_geometry_in_geometry_returns_0_when_child_geometry_segments_count_less_than_3(void) {
+void geo_geometry_in_geometry_returns_geo_err_too_small_when_child_geometry_segments_count_less_than_3(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1749,7 +1749,7 @@ void geo_geometry_in_geometry_returns_0_when_child_geometry_segments_count_less_
   assert(result == GEO_ERR_TOO_SMALL);
 }
 
-void geo_geometry_in_geometry_returns_1_when_all_points_in_child_geometry_are_inside_parent_geometry(void) {
+void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_all_points_in_child_geometry_are_inside_parent_geometry(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1809,7 +1809,7 @@ void geo_geometry_in_geometry_returns_1_when_all_points_in_child_geometry_are_in
   assert(is_inside == true);
 }
 
-void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_outside_parent_geometry(void) {
+void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_any_points_in_child_geometry_are_outside_parent_geometry(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1869,7 +1869,7 @@ void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_ou
   assert(is_inside == false);
 }
 
-void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_1(void) {
+void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_true(void) {
   bool is_inside = false;
   bool strict = true;
   enum geo_result result = GEO_SUCCESS;
@@ -1929,7 +1929,7 @@ void geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on
   assert(is_inside == false);
 }
 
-void geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_0(void) {
+void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_false(void) {
   bool is_inside = false;
   bool strict = false;
   enum geo_result result = GEO_SUCCESS;
@@ -1993,78 +1993,81 @@ void geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on
  * geo_convex_hull tests
 *----------------------------------
  */
-void geo_convex_hull_returns_negative_1_when_points_array_is_null(void) {
+void geo_convex_hull_returns_geo_err_null_pointer_when_points_array_is_null(void) {
   int count = 5;
   struct geo_point *hull[5];
-  int result = geo_convex_hull(NULL, hull, count);
-  assert(result == -1);
+  size_t hull_size = 0;
+  enum geo_result result = geo_convex_hull(NULL, hull, count, &hull_size);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_convex_hull_returns_negative_1_when_hull_array_is_null(void) {
+void geo_convex_hull_returns_geo_err_null_pointer_when_hull_array_is_null(void) {
   int count = 3;
+  size_t hull_size = 0;
   struct geo_point *points[3];
   struct geo_point point1 = { 0.0F, 0.0F };
   struct geo_point point2 = { 1.0F, 0.0F };
   struct geo_point point3 = { 0.5F, 0.5F };
-  int result = 0;
   points[0] = &point1;
   points[1] = &point2;
   points[2] = &point3;
 
-  result = geo_convex_hull(points, NULL, count);
-  assert(result == -1);
+  enum geo_result result = geo_convex_hull(points, NULL, count, &hull_size);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_convex_hull_returns_negative_1_when_size_is_less_than_3(void) {
+void geo_convex_hull_returns_geo_err_too_small_when_size_is_less_than_3(void) {
   int count = 2;
+  size_t hull_size = 0;
   struct geo_point *hull[2];
   struct geo_point *points[2];
   struct geo_point point1 = { 0.0F, 0.0F };
   struct geo_point point2 = { 1.0F, 0.0F };
-  int result = 0;
   points[0] = &point1;
   points[1] = &point2;
 
-  result = geo_convex_hull(points, hull, count);
-  assert(result == -1);
+  enum geo_result result = geo_convex_hull(points, hull, count, &hull_size);
+  assert(result == GEO_ERR_TOO_SMALL);
 }
 
-void geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null(void) {
+void geo_convex_hull_returns_geo_err_null_pointer_when_any_point_in_points_is_null(void) {
   int count = 3;
+  size_t hull_size = 0;
   struct geo_point *hull[3];
   struct geo_point *points[3];
   struct geo_point point1 = { 0.0F, 0.0F };
   struct geo_point point3 = { 0.5F, 0.5F };
-  int result = 0;
   points[0] = &point1;
   points[1] = NULL;
   points[2] = &point3;
 
-  result = geo_convex_hull(points, hull, count);
-  assert(result == -1);
+  enum geo_result result = geo_convex_hull(points, hull, count, &hull_size);
+  assert(result == GEO_ERR_NULL_POINTER);
 }
 
-void geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle(void) {
+void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_3_and_hull_has_points_in_order_when_given_points_for_triangle(void) {
   int count = 3;
+  size_t hull_size = 0;
   struct geo_point *hull[3];
   struct geo_point *points[3];
   struct geo_point point1 = { 0.0F, 0.0F };
   struct geo_point point2 = { 1.0F, 0.0F };
   struct geo_point point3 = { 0.5F, 0.5F };
-  int result = 0;
   points[0] = &point1;
   points[1] = &point3;
   points[2] = &point2;
 
-  result = geo_convex_hull(points, hull, count);
-  assert(result == 3);
+  enum geo_result result = geo_convex_hull(points, hull, count, &hull_size);
+  assert(result == GEO_SUCCESS);
+  assert(hull_size == 3);
   assert(hull[0] == &point1);
   assert(hull[1] == &point2);
   assert(hull[2] == &point3);
 }
 
-void geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point_cloud(void) {
+void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_5_and_hull_has_points_in_ccw_order_when_given_point_cloud(void) {
   int count = 7;
+  size_t hull_size = 0;
   struct geo_point *hull[7];
   struct geo_point *points[7];
   struct geo_point point1 = { 1.0F, 1.0F };
@@ -2074,7 +2077,6 @@ void geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point
   struct geo_point point5 = { 3.0F, 5.0F };
   struct geo_point point6 = { 5.0F, 6.0F };
   struct geo_point point7 = { 2.0F, 7.0F };
-  int result = 0;
 
   points[0] = &point1;
   points[1] = &point2;
@@ -2083,8 +2085,10 @@ void geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point
   points[4] = &point5;
   points[5] = &point6;
   points[6] = &point7;
-  result = geo_convex_hull(points, hull, count);
-  assert(result == 5);
+  enum geo_result result = geo_convex_hull(points, hull, count, &hull_size);
+
+  assert(result == GEO_SUCCESS);
+  assert(hull_size == 5);
   assert(hull[0] == &point2);
   assert(hull[1] == &point4);
   assert(hull[2] == &point6);
@@ -2092,8 +2096,9 @@ void geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point
   assert(hull[4] == &point1);
 }
 
-void geo_convex_hull_returns_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points(void) {
+void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points(void) {
   int count = 6;
+  size_t hull_size = 0;
   struct geo_point *hull[6];
   struct geo_point *points[6];
   struct geo_point point1 = { 0.0F, 0.0F };
@@ -2102,23 +2107,25 @@ void geo_convex_hull_returns_4_and_hull_has_points_in_ccw_order_using_furthest_c
   struct geo_point point4 = { 3.0F, 2.0F };
   struct geo_point point5 = { 3.0F, 3.0F };
   struct geo_point point6 = { 0.0F, 3.0F };
-  int result = 0;
   points[0] = &point1;
   points[1] = &point6;
   points[2] = &point3;
   points[3] = &point2;
   points[4] = &point5;
   points[5] = &point4;
-  result = geo_convex_hull(points, hull, count);
-  assert(result == 4);
+
+  enum geo_result result = geo_convex_hull(points, hull, count, &hull_size);
+  assert(result == GEO_SUCCESS);
+  assert(hull_size == 4);
   assert(hull[0] == &point1);
   assert(hull[1] == &point2);
   assert(hull[2] == &point5);
   assert(hull[3] == &point6);
 }
 
-void convex_hull_with_30_points_returns_12_in_ccw_order(void) {
+void geo_convex_hull_with_30_points_returns_geo_success_and_sets_hull_size_to_12_and_hull_has_points_in_ccw_order(void) {
   int count = 30;
+  size_t hull_size = 0;
   struct geo_point *hull[30];
   struct geo_point *points[30];
   struct geo_point point1 = { -100.0f, 100.0f };
@@ -2151,7 +2158,6 @@ void convex_hull_with_30_points_returns_12_in_ccw_order(void) {
   struct geo_point point28 = { 100.0f, -125.0f };
   struct geo_point point29 = { 150.0f, -125.0f };
   struct geo_point point30 = { 200.0f, -125.0f };
-  int result = 0;
   points[0] = &point1;
   points[1] = &point2;
   points[2] = &point3;
@@ -2182,8 +2188,10 @@ void convex_hull_with_30_points_returns_12_in_ccw_order(void) {
   points[27] = &point28;
   points[28] = &point29;
   points[29] = &point30;
-  result = geo_convex_hull(points, hull, count);
-  assert(result == 12);
+
+  enum geo_result result = geo_convex_hull(points, hull, count, &hull_size);
+  assert(result == GEO_SUCCESS);
+  assert(hull_size == 12);
 }
 
 int main(void) {
@@ -2229,46 +2237,47 @@ int main(void) {
   geo_geometry_is_simple_returns_geo_success_and_is_simple_is_true_when_no_segments_intersect();
 
   /* geo_point_in_geometry tests */
-  geo_point_in_geometry_returns_negative_1_when_point_is_null();
-  geo_point_in_geometry_returns_negative_1_when_geometry_is_null();
-  geo_point_in_geometry_returns_negative_1_when_geometry_segments_is_null();
-  geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_start_is_null();
-  geo_point_in_geometry_returns_negative_1_when_geometry_segments_ith_end_is_null();
-  geo_point_in_geometry_returns_0_when_geometry_segments_count_is_less_than_3();
-  geo_point_in_geometry_returns_0_when_point_on_geometry_segment_and_strict_is_1();
-  geo_point_in_geometry_returns_1_when_point_on_geometry_segment_and_strict_is_0();
-  geo_point_in_geometry_returns_0_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment();
-  geo_point_in_geometry_returns_0_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment();
-  geo_point_in_geometry_returns_0_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment();
-  geo_point_in_geometry_returns_0_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment();
+  geo_point_in_geometry_returns_geo_err_null_pointer_when_point_is_null();
+  geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_is_null();
+  geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_segments_is_null();
+  geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_segments_ith_start_is_null();
+  geo_point_in_geometry_returns_geo_err_null_pointer_when_geometry_segments_ith_end_is_null();
+  geo_point_in_geometry_returns_geo_err_too_small_when_geometry_segments_count_is_less_than_3();
+  geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_on_geometry_segment_and_strict_is_true();
+  geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_point_on_geometry_segment_and_strict_is_false();
+  geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment();
+  geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment();
+  geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment();
+  geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment();
 
 
   /* geo_geometry_in_geometry tests */
-  geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_segments_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_start_point_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_parent_geometry_ith_segment_end_point_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_child_geometry_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_child_geometry_segments_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_start_point_is_null();
-  geo_geometry_in_geometry_returns_negative_1_when_child_geometry_ith_segment_end_point_is_null();
-  geo_geometry_in_geometry_returns_0_when_parent_geometry_segments_count_less_than_3();
-  geo_geometry_in_geometry_returns_0_when_child_geometry_segments_count_less_than_3();
-  geo_geometry_in_geometry_returns_1_when_all_points_in_child_geometry_are_inside_parent_geometry();
-  geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_outside_parent_geometry();
-  geo_geometry_in_geometry_returns_0_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_1();
-  geo_geometry_in_geometry_returns_1_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_0();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_segments_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_start_point_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_end_point_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_segments_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_ith_segment_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_ith_segment_start_point_is_null();
+  geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_ith_segment_end_point_is_null();
+  geo_geometry_in_geometry_returns_geo_err_too_small_when_parent_geometry_segments_count_less_than_3();
+  geo_geometry_in_geometry_returns_geo_err_too_small_when_child_geometry_segments_count_less_than_3();
+  geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_all_points_in_child_geometry_are_inside_parent_geometry();
+  geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_any_points_in_child_geometry_are_outside_parent_geometry();
+  geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_true();
+  geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_false();
 
   /* geo_convex_hull tests */
-  geo_convex_hull_returns_negative_1_when_points_array_is_null();
-  geo_convex_hull_returns_negative_1_when_hull_array_is_null();
-  geo_convex_hull_returns_negative_1_when_size_is_less_than_3();
-  geo_convex_hull_returns_negative_1_when_any_point_in_points_is_null();
-  geo_convex_hull_returns_3_and_hull_has_points_in_order_when_given_points_for_triangle();
-  geo_convex_hull_returns_5_and_hull_has_points_in_ccw_order_when_given_point_cloud();
-  geo_convex_hull_returns_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points();
+  geo_convex_hull_returns_geo_err_null_pointer_when_points_array_is_null();
+  geo_convex_hull_returns_geo_err_null_pointer_when_hull_array_is_null();
+  geo_convex_hull_returns_geo_err_too_small_when_size_is_less_than_3();
+  geo_convex_hull_returns_geo_err_null_pointer_when_any_point_in_points_is_null();
+  geo_convex_hull_returns_geo_success_and_sets_hull_size_to_3_and_hull_has_points_in_order_when_given_points_for_triangle();
+  geo_convex_hull_returns_geo_success_and_sets_hull_size_to_5_and_hull_has_points_in_ccw_order_when_given_point_cloud();
+  geo_convex_hull_returns_geo_success_and_sets_hull_size_to_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points();
+  geo_convex_hull_with_30_points_returns_geo_success_and_sets_hull_size_to_12_and_hull_has_points_in_ccw_order();
   printf("All tests pass.\n");
   return 0;
 }

@@ -367,24 +367,25 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
   return GEO_SUCCESS;
 }
 
-int geo_convex_hull(struct geo_point** points, struct geo_point** hull,
-                    int size) {
-  int hull_idx = -1;
-
+enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
+                    int size, size_t * convex_hull_size) {
   /* used to find starting point */
   struct geo_point* temp = NULL;
   int min_idx = 0;
   float min_y = 0.0F;
 
 #ifndef GEO_UNSAFE
-  if (points == NULL || hull == NULL || size < 3) {
-    return hull_idx;
+  if (points == NULL || convex_hull == NULL) {
+    return GEO_ERR_NULL_POINTER;
+  }
+  if (size < 3) {
+    return GEO_ERR_TOO_SMALL;
   }
 #endif
   for (int iter = 0; iter < size; ++iter) {
 #ifndef GEO_UNSAFE
     if (points[iter] == NULL) {
-      return hull_idx;
+      return GEO_ERR_NULL_POINTER;
     }
 #endif
     if (iter == 0) {
@@ -430,18 +431,18 @@ int geo_convex_hull(struct geo_point** points, struct geo_point** hull,
    * stack and move back to 2a using p(x-2) and p(x-1) without popped point.
    *
    */
-  hull[0] = points[0];
-  hull[1] = points[1];
-  hull[2] = points[2];
-  hull_idx = 3;
+  convex_hull[0] = points[0];
+  convex_hull[1] = points[1];
+  convex_hull[2] = points[2];
+  size_t idx = 3;
   for (int iter = 3; iter < size; ++iter) {
-    while (orientation(hull[hull_idx - 2], points[hull_idx - 1],
+    while (orientation(convex_hull[idx - 2], convex_hull[idx - 1],
                        points[iter]) != LEFT) {
-      hull_idx--;
+      idx--;
     }
-    hull[hull_idx] = points[iter];
-    hull_idx++;
+    convex_hull[idx] = points[iter];
+    idx++;
   }
-
-  return hull_idx;
+  *convex_hull_size = idx;
+  return GEO_SUCCESS;
 }
