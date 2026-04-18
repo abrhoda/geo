@@ -133,7 +133,7 @@ enum geo_result geo_segments_intersect(struct geo_segment const* segment1,
  */
 struct geo_geometry {
   struct geo_segment** segments; /**< The list of segments that make up the geometry */
-  int segments_count; /**< The size of the segments array */
+  size_t segments_count; /**< The size of the segments array */
   /* TODO int is_negative_space; // tell if a geometry is a cut of of a parent.
    */
 };

@@ -818,7 +818,6 @@ void geo_point_in_geometry_returns_geo_err_too_small_when_geometry_segments_coun
 
   enum geo_result result = geo_point_in_geometry(&point, &geometry, strict, &inside);
   assert(result == GEO_ERR_TOO_SMALL);
-
 }
 
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_on_geometry_segment_and_strict_is_true(void) {
@@ -1077,8 +1076,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1136,8 +1135,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1195,8 +1194,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1254,8 +1253,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1313,8 +1312,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_parent_geometry_
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1372,8 +1371,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_i
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1431,8 +1430,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_s
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1490,8 +1489,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_i
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1549,8 +1548,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_i
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1608,8 +1607,8 @@ void geo_geometry_in_geometry_returns_geo_err_null_pointer_when_child_geometry_i
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1667,8 +1666,8 @@ void geo_geometry_in_geometry_returns_geo_err_too_small_when_parent_geometry_seg
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 2;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 2;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1720,8 +1719,8 @@ void geo_geometry_in_geometry_returns_geo_err_too_small_when_child_geometry_segm
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 2;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 2;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1773,8 +1772,8 @@ void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1833,8 +1832,8 @@ void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_false_whe
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1893,8 +1892,8 @@ void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_false_whe
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1953,8 +1952,8 @@ void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when
   struct geo_segment *child_segments[4];
   struct geo_geometry parent;
   struct geo_geometry child;
-  int parent_segments_count = 4;
-  int child_segments_count = 4;
+  size_t parent_segments_count = 4;
+  size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
   parent_segment1.end = &parent_vertex2;
   parent_segments[0] = &parent_segment1;
@@ -1994,7 +1993,7 @@ void geo_geometry_in_geometry_returns_geo_success_and_is_inside_set_to_true_when
 *----------------------------------
  */
 void geo_convex_hull_returns_geo_err_null_pointer_when_points_array_is_null(void) {
-  int count = 5;
+  size_t count = 5;
   struct geo_point *hull[5];
   size_t hull_size = 0;
   enum geo_result result = geo_convex_hull(NULL, hull, count, &hull_size);
@@ -2002,7 +2001,7 @@ void geo_convex_hull_returns_geo_err_null_pointer_when_points_array_is_null(void
 }
 
 void geo_convex_hull_returns_geo_err_null_pointer_when_hull_array_is_null(void) {
-  int count = 3;
+  size_t count = 3;
   size_t hull_size = 0;
   struct geo_point *points[3];
   struct geo_point point1 = { 0.0F, 0.0F };
@@ -2017,7 +2016,7 @@ void geo_convex_hull_returns_geo_err_null_pointer_when_hull_array_is_null(void) 
 }
 
 void geo_convex_hull_returns_geo_err_too_small_when_size_is_less_than_3(void) {
-  int count = 2;
+  size_t count = 2;
   size_t hull_size = 0;
   struct geo_point *hull[2];
   struct geo_point *points[2];
@@ -2031,7 +2030,7 @@ void geo_convex_hull_returns_geo_err_too_small_when_size_is_less_than_3(void) {
 }
 
 void geo_convex_hull_returns_geo_err_null_pointer_when_any_point_in_points_is_null(void) {
-  int count = 3;
+  size_t count = 3;
   size_t hull_size = 0;
   struct geo_point *hull[3];
   struct geo_point *points[3];
@@ -2046,7 +2045,7 @@ void geo_convex_hull_returns_geo_err_null_pointer_when_any_point_in_points_is_nu
 }
 
 void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_3_and_hull_has_points_in_order_when_given_points_for_triangle(void) {
-  int count = 3;
+  size_t count = 3;
   size_t hull_size = 0;
   struct geo_point *hull[3];
   struct geo_point *points[3];
@@ -2066,7 +2065,7 @@ void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_3_and_hull_has_po
 }
 
 void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_5_and_hull_has_points_in_ccw_order_when_given_point_cloud(void) {
-  int count = 7;
+  size_t count = 7;
   size_t hull_size = 0;
   struct geo_point *hull[7];
   struct geo_point *points[7];
@@ -2097,7 +2096,7 @@ void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_5_and_hull_has_po
 }
 
 void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points(void) {
-  int count = 6;
+  size_t count = 6;
   size_t hull_size = 0;
   struct geo_point *hull[6];
   struct geo_point *points[6];
@@ -2124,7 +2123,7 @@ void geo_convex_hull_returns_geo_success_and_sets_hull_size_to_4_and_hull_has_po
 }
 
 void geo_convex_hull_with_30_points_returns_geo_success_and_sets_hull_size_to_12_and_hull_has_points_in_ccw_order(void) {
-  int count = 30;
+  size_t count = 30;
   size_t hull_size = 0;
   struct geo_point *hull[30];
   struct geo_point *points[30];

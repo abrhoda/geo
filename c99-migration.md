@@ -1,8 +1,0 @@
-- [ ] desginated initialize structs where possible
-- [ ] loop vars to initialized in `for` statement
-- [ ] vars defined at the start of their scope
-- [ ] inline the 1 line functions
-- [ ] use a boolean type where applicable
-- [ ] non-block comments where it makes sense
-- [ ] `isnan` and `isinf` support for floating point ops
-- [ ] `size_t` instead of `int` in for statements, geometry segment count, etc

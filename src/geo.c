@@ -14,7 +14,7 @@ inline static float cross_product(struct geo_point const* vec_ab,
 static enum geo_orientation orientation(struct geo_point const* start,
                                         struct geo_point const* end,
                                         struct geo_point const* point);
-static int in_disk(struct geo_segment const* segment,
+static bool in_disk(struct geo_segment const* segment,
                    struct geo_point const* point);
 
 static float squared_distance(struct geo_point const* point1,
@@ -59,12 +59,13 @@ static enum geo_orientation orientation(struct geo_point const* const start,
   return cross < 0.0F ? RIGHT : LEFT;
 }
 
-static int in_disk(struct geo_segment const* const segment,
+static bool in_disk(struct geo_segment const* const segment,
                    struct geo_point const* const point) {
   struct geo_point vec_ap = {.x = segment->start->x - point->x,
                              .y = segment->start->y - point->y};
   struct geo_point vec_bp = {.x = segment->end->x - point->x,
                              .y = segment->end->y - point->y};
+  // TODO this should check if its within epsilon of 0.0 on the positive side
   return dot_product(&vec_ap, &vec_bp) <= 0.0F;
 }
 
@@ -171,7 +172,7 @@ enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
   }
 #endif
 
-  for (int iter = 0; iter < geometry->segments_count; ++iter) {
+  for (size_t iter = 0; iter < geometry->segments_count; ++iter) {
     mod = (iter + 1) % geometry->segments_count;
     result = geo_points_equal(geometry->segments[iter]->end,
                               geometry->segments[mod]->start, is_closed);
@@ -182,11 +183,9 @@ enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
     }
 #endif
     if (!(*is_closed)) {
-      *is_closed = false;
       return GEO_SUCCESS;
     }
   }
-  *is_closed = true;
   return GEO_SUCCESS;
 }
 
@@ -234,7 +233,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
   }
 
   // no other segments intersect with the first.
-  for (int i = 2; i < geometry->segments_count - 1; ++i) {
+  for (size_t i = 2; i < geometry->segments_count - 1; ++i) {
     result = geo_segments_intersect(geometry->segments[0],
                                     geometry->segments[i], &intersections);
 
@@ -249,7 +248,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
     }
   }
 
-  for (int i = 1; i < geometry->segments_count - 1; ++i) {
+  for (size_t i = 1; i < geometry->segments_count - 1; ++i) {
     result = geo_segments_intersect(geometry->segments[i],
                                     geometry->segments[i + 1], &intersections);
 
@@ -262,7 +261,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
       *is_simple = false;
       return GEO_SUCCESS;
     }
-    for (int j = (i + 2); j < geometry->segments_count; ++j) {
+    for (size_t j = (i + 2); j < geometry->segments_count; ++j) {
       result = geo_segments_intersect(geometry->segments[i],
                                       geometry->segments[j], &intersections);
 #ifndef GEO_UNSAFE
@@ -283,7 +282,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
 enum geo_result geo_point_in_geometry(struct geo_point const* point,
                                       struct geo_geometry const* geometry,
                                       bool strict, bool* is_inside) {
-  int intersections = 0;
+  size_t intersections = 0;
   enum geo_orientation orientation_p;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL || point == NULL) {
@@ -294,7 +293,7 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
     return GEO_ERR_TOO_SMALL;
   }
 #endif
-  for (int iter = 0; iter < geometry->segments_count; ++iter) {
+  for (size_t iter = 0; iter < geometry->segments_count; ++iter) {
 #ifndef GEO_UNSAFE
     if (geometry->segments[iter] == NULL ||
         geometry->segments[iter]->start == NULL ||
@@ -339,7 +338,7 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
     return GEO_ERR_TOO_SMALL;
   }
 #endif
-  for (int iter = 0; iter < child->segments_count; ++iter) {
+  for (size_t iter = 0; iter < child->segments_count; ++iter) {
 #ifndef GEO_UNSAFE
     if (child->segments[iter] == NULL) {
       return GEO_ERR_NULL_POINTER;
@@ -370,7 +369,6 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
 enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
                     size_t size, size_t * convex_hull_size) {
   /* used to find starting point */
-  struct geo_point* temp = NULL;
   size_t min_idx = 0;
   float min_y = 0.0F;
 
@@ -406,7 +404,7 @@ enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** co
   /* swap (if needed) so p0 is the actual starting point based on y and x coords
    */
   if (min_idx != 0) {
-    temp = points[0];
+    struct geo_point* temp = points[0];
     points[0] = points[min_idx];
     points[min_idx] = temp;
   }

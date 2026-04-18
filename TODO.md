@@ -1,6 +1,6 @@
 # TODO Items (not in order)
 - [ ] think about getting rid of need for `<math.h>`. The only function needed from there is `fabs`. Changing these to `value < EPSION && value > -EPSILON` would save needing this dependecy to be linked but possibly slower in general.
-- [ ] handle floats bounds checking. Currently, there's potential overflows in the cross and dot products. These should be handled correctly.
+- [ ] handle floats bounds checking. Currently, there's potential overflows in the cross and dot products. These should be handled correctly. c99 has `isnan` and `isinf` for this.
 - [ ] create a `TYPE` macro to allow for support of `float` and `double` depending on how it's compiled.
 - [ ] segments and points all all passed as `struct Type const * const name`. For trivial structs (such as point) that don't modify the point or segment, passing by value might be a better way to handle this. Need to think about whether this has a tangible benefit over just the `const *` being passed.
 - [ ] for `geo_point_in_geometry`, would there be a benefit in finding the geometry's bounding box and seeing if the point is inside that before checking? could this speed up the calculation?
