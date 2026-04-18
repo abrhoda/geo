@@ -73,8 +73,8 @@ enum geo_result geo_points_equal(struct geo_point const* lhs,
  * TODO implement
  */
 enum geo_result geo_point_nearby_point(struct geo_point const* root,
-                                     struct geo_point const* to_check,
-                                     float distance, bool* is_nearby);
+                                       struct geo_point const* to_check,
+                                       float distance, bool* is_nearby);
 
 /**
  * \struct geo_segment
@@ -83,7 +83,7 @@ enum geo_result geo_point_nearby_point(struct geo_point const* root,
  */
 struct geo_segment {
   struct geo_point* start; /**< the start point of the line segment */
-  struct geo_point* end; /**< the end point of the line segment */
+  struct geo_point* end;   /**< the end point of the line segment */
 };
 
 /**
@@ -132,7 +132,8 @@ enum geo_result geo_segments_intersect(struct geo_segment const* segment1,
  * segments that intersect (except for overlapping start point and end points)
  */
 struct geo_geometry {
-  struct geo_segment** segments; /**< The list of segments that make up the geometry */
+  struct geo_segment**
+      segments;          /**< The list of segments that make up the geometry */
   size_t segments_count; /**< The size of the segments array */
   /* TODO int is_negative_space; // tell if a geometry is a cut of of a parent.
    */
@@ -236,7 +237,8 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
  *         - GEO_ERR_TOO_SMALL (2)
  */
 enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
-                             struct geo_geometry* child, bool strict, bool * is_inside);
+                                         struct geo_geometry* child,
+                                         bool strict, bool* is_inside);
 
 /**
  * \brief creates a convex hull from the given points.
@@ -251,8 +253,9 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
  * hull.
  * \param[in] size The number of points in both the points and convex hull
  * arrays.
- * \param[out] convex_hull_size The number of points, N, in the convex_hull array that
- * form the convex hull of the point cloud. Note that N will be on the range 3 <= N <= size.
+ * \param[out] convex_hull_size The number of points, N, in the convex_hull
+ * array that form the convex hull of the point cloud. Note that N will be on
+ * the range 3 <= N <= size.
  *
  * \return enum geo_result indicating whether or not the operation was
  * successful. The `convex_hull` array and `convex_hull_size` values should only
@@ -262,8 +265,9 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
  *         - GEO_ERR_NULL_POINTER (1)
  *         - GEO_ERR_TOO_SMALL (2)
  */
-enum geo_result geo_convex_hull(struct geo_point** points, struct geo_point** convex_hull,
-                    size_t size, size_t * convex_hull_size);
+enum geo_result geo_convex_hull(struct geo_point** points,
+                                struct geo_point** convex_hull, size_t size,
+                                size_t* convex_hull_size);
 
 #ifdef __cplusplus
 }
