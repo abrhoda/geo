@@ -1,94 +1,129 @@
-#include "geo.h"
+#ifndef TMPL_TYPE
+#error "TMPL_TYPE undefined and required to be set in file " __FILE__
+#else
 
 #include <math.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdlib.h>
 
-enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
+#include "geo.h"
 
-/* Forward Declartions */
-inline static float dot_product(struct geo_point const* vec_ab,
-                                struct geo_point const* vec_ac);
-inline static float cross_product(struct geo_point const* vec_ab,
-                                  struct geo_point const* vec_ac);
+#define TMPL_CONCAT(a, b) TMPL_CONCAT2(a, b)
+#define TMPL_CONCAT2(a, b) a##_##b
 
-static enum geo_orientation orientation(struct geo_point const* start,
-                                        struct geo_point const* end,
-                                        struct geo_point const* point);
-static bool in_disk(struct geo_segment const* segment,
-                    struct geo_point const* point);
+#define TMPL_POINT TMPL_CONCAT(geo_point, TMPL_TYPE)
+#define TMPL_SEGMENT TMPL_CONCAT(geo_segment, TMPL_TYPE)
+#define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, TMPL_TYPE)
+#define TMPL_FUNC(name) TMPL_CONCAT(name, TMPL_TYPE)
 
-static float squared_distance(struct geo_point const* point1,
-                              struct geo_point const* point2);
+// #define STR2(x) #x
+// #define STR(x) STR2(x)
+
+struct TMPL_POINT {
+  TMPL_TYPE x;
+  TMPL_TYPE y;
+};
+
+struct TMPL_SEGMENT {
+  struct TMPL_POINT* start;
+  struct TMPL_POINT* end;
+};
+
+struct TMPL_GEOMETRY {
+  struct TMPL_SEGMENT** segments;
+  size_t segments_count;
+};
+
+/* private forward declaration
+inline static TMPL_TYPE dot_product(struct TMPL_POINT const* vec_ab,
+                                struct TMPL_POINT const* vec_ac);
+inline static TMPL_TYPE cross_product(struct TMPL_POINT const* vec_ab,
+                                  struct TMPL_POINT const* vec_ac);
+
+static enum geo_orientation orientation(struct TMPL_POINT const* start,
+                                        struct TMPL_POINT const* end,
+                                        struct TMPL_POINT const* point);
+static bool in_disk(struct TMPL_SEGMENT const* segment,
+                    struct TMPL_POINT const* point);
+
+static TMPL_TYPE squared_distance(struct TMPL_POINT const* point1,
+                              struct TMPL_POINT const* point2);
 
 static int compare(const void* first, const void* second);
+*/
+// public forward declaration
+enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
+                                            struct TMPL_POINT const* rhs,
+                                            bool* is_equal);
+enum geo_result TMPL_FUNC(geo_segments_intersect)(
+    struct TMPL_SEGMENT const* segment1, struct TMPL_SEGMENT const* segment2,
+    size_t* intersect_count);
 
-/* Function Defintions */
-inline static float dot_product(struct geo_point const* const vec_ab,
-                                struct geo_point const* const vec_ac) {
+enum geo_result TMPL_FUNC(geo_geometry_is_closed)(
+    struct TMPL_GEOMETRY const* geometry, bool* is_closed);
+enum geo_result TMPL_FUNC(geo_geometry_is_simple)(
+    struct TMPL_GEOMETRY const* geometry, bool* is_closed);
+enum geo_result TMPL_FUNC(geo_point_in_geometry)(
+    struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
+    bool strict, bool* is_inside);
+enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
+    struct TMPL_GEOMETRY* parent, struct TMPL_GEOMETRY* child, bool strict,
+    bool* is_inside);
+enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
+                                           struct TMPL_POINT** convex_hull,
+                                           size_t size,
+                                           size_t* convex_hull_size);
+
+#ifdef TMPL_IMPL
+// private definitions
+inline static TMPL_TYPE dot_product(struct TMPL_POINT const* const vec_ab,
+                                    struct TMPL_POINT const* const vec_ac) {
   /* TODO handle overflow */
   return ((vec_ab->x * vec_ac->x) + (vec_ab->y * vec_ac->y));
 }
 
-inline static float cross_product(struct geo_point const* const vec_ab,
-                                  struct geo_point const* const vec_ac) {
+inline static TMPL_TYPE cross_product(struct TMPL_POINT const* const vec_ab,
+                                      struct TMPL_POINT const* const vec_ac) {
   /* TODO handle overflow */
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
 
-/*
- * Creates vector AB and AC and finds the cross product. Returns the orientation
- * found from the cross product.
- *
- * returns: -1 if the point is a clockwise (right) turn from segment start ->
- *             end
- *          0 if the point is on segment (colinear) start -> end
- *          1 if the point is a counterclockwise (left) turn from the segment
- *            start -> end
- *
- */
-static enum geo_orientation orientation(struct geo_point const* const start,
-                                        struct geo_point const* const end,
-                                        struct geo_point const* const point) {
-  struct geo_point vec_ab = {.x = end->x - start->x, .y = end->y - start->y};
-  struct geo_point vec_ac = {.x = point->x - start->x,
-                             .y = point->y - start->y};
-  float cross = cross_product(&vec_ab, &vec_ac);
+static enum geo_orientation orientation(struct TMPL_POINT const* const start,
+                                        struct TMPL_POINT const* const end,
+                                        struct TMPL_POINT const* const point) {
+  struct TMPL_POINT vec_ab = {.x = end->x - start->x, .y = end->y - start->y};
+  struct TMPL_POINT vec_ac = {.x = point->x - start->x,
+                              .y = point->y - start->y};
+  TMPL_TYPE cross = cross_product(&vec_ab, &vec_ac);
   if (fabs((double)cross) < GEO_EPSILON) {
     return COLINEAR;
   }
   return cross < 0.0F ? RIGHT : LEFT;
 }
 
-static bool in_disk(struct geo_segment const* const segment,
-                    struct geo_point const* const point) {
-  struct geo_point vec_ap = {.x = segment->start->x - point->x,
-                             .y = segment->start->y - point->y};
-  struct geo_point vec_bp = {.x = segment->end->x - point->x,
-                             .y = segment->end->y - point->y};
+static bool in_disk(struct TMPL_SEGMENT const* const segment,
+                    struct TMPL_POINT const* const point) {
+  struct TMPL_POINT vec_ap = {.x = segment->start->x - point->x,
+                              .y = segment->start->y - point->y};
+  struct TMPL_POINT vec_bp = {.x = segment->end->x - point->x,
+                              .y = segment->end->y - point->y};
   // TODO this should check if its within epsilon of 0.0 on the positive side
   return dot_product(&vec_ap, &vec_bp) <= 0.0F;
 }
 
-static float squared_distance(struct geo_point const* const point1,
-                              struct geo_point const* const point2) {
-  float diff_x = point2->x - point1->x;
-  float diff_y = point2->y - point1->y;
+static TMPL_TYPE squared_distance(struct TMPL_POINT const* const point1,
+                                  struct TMPL_POINT const* const point2) {
+  TMPL_TYPE diff_x = point2->x - point1->x;
+  TMPL_TYPE diff_y = point2->y - point1->y;
   /* TODO handle overflow */
   return (diff_x * diff_x) + (diff_y * diff_y);
 }
 
-/*
- * This returns -1 when the point (second) is a CCW turn. 1 if
- * point (second) is a CW turn. 0 if point (second) is equal to vec->end (first)
- *
- * TODO; this uses start as a global variable because orientation requires 3
- * points and compare takes 2 args. I'd like to not use stdlib.h/qsort and then
- * i could get rid of the static `start` variable.
- */
-static struct geo_point* global_start_point;
+static struct TMPL_POINT* global_start_point;
 static int compare(const void* first, const void* second) {
-  const struct geo_point* vec_end = *(const struct geo_point* const*)first;
-  const struct geo_point* point = *(const struct geo_point* const*)second;
+  const struct TMPL_POINT* vec_end = *(const struct TMPL_POINT* const*)first;
+  const struct TMPL_POINT* point = *(const struct TMPL_POINT* const*)second;
   enum geo_orientation orientation_p =
       orientation(global_start_point, vec_end, point);
 
@@ -102,9 +137,10 @@ static int compare(const void* first, const void* second) {
   return -1 * orientation_p;
 }
 
-enum geo_result geo_points_equal(struct geo_point const* const lhs,
-                                 struct geo_point const* const rhs,
-                                 bool* is_equal) {
+// public definitions
+enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
+                                            struct TMPL_POINT const* rhs,
+                                            bool* is_equal) {
 #ifndef GEO_UNSAFE
   if (lhs == NULL || rhs == NULL) {
     return GEO_ERR_NULL_POINTER;
@@ -116,9 +152,9 @@ enum geo_result geo_points_equal(struct geo_point const* const lhs,
   return GEO_SUCCESS;
 }
 
-enum geo_result geo_segments_intersect(struct geo_segment const* const segment1,
-                                       struct geo_segment const* const segment2,
-                                       size_t* intersect_count) {
+enum geo_result TMPL_FUNC(geo_segments_intersect)(
+    struct TMPL_SEGMENT const* const segment1,
+    struct TMPL_SEGMENT const* const segment2, size_t* intersect_count) {
   enum geo_orientation orientation_a;
   enum geo_orientation orientation_b;
   enum geo_orientation orientation_c;
@@ -158,8 +194,8 @@ enum geo_result geo_segments_intersect(struct geo_segment const* const segment1,
   return GEO_SUCCESS;
 }
 
-enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
-                                       bool* is_closed) {
+enum geo_result TMPL_FUNC(geo_geometry_is_closed)(
+    struct TMPL_GEOMETRY const* geometry, bool* is_closed) {
   enum geo_result result = GEO_SUCCESS;
   size_t mod = 0;
 #ifndef GEO_UNSAFE
@@ -174,8 +210,9 @@ enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
 
   for (size_t iter = 0; iter < geometry->segments_count; ++iter) {
     mod = (iter + 1) % geometry->segments_count;
-    result = geo_points_equal(geometry->segments[iter]->end,
-                              geometry->segments[mod]->start, is_closed);
+    result =
+        TMPL_FUNC(geo_points_equal)(geometry->segments[iter]->end,
+                                    geometry->segments[mod]->start, is_closed);
 
 #ifndef GEO_UNSAFE
     if (result != GEO_SUCCESS) {
@@ -189,8 +226,8 @@ enum geo_result geo_geometry_is_closed(struct geo_geometry const* geometry,
   return GEO_SUCCESS;
 }
 
-enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
-                                       bool* is_simple) {
+enum geo_result TMPL_FUNC(geo_geometry_is_simple)(
+    struct TMPL_GEOMETRY const* geometry, bool* is_simple) {
   enum geo_result result = GEO_SUCCESS;
   size_t intersections = 0;
 #ifndef GEO_UNSAFE
@@ -203,9 +240,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
   }
 #endif
   // check that the first and second segments intersect
-
-  result = geo_segments_intersect(geometry->segments[0], geometry->segments[1],
-                                  &intersections);
+  result = TMPL_FUNC(geo_segments_intersect)(
+      geometry->segments[0], geometry->segments[1], &intersections);
 
 #ifndef GEO_UNSAFE
   if (result != GEO_SUCCESS) {
@@ -218,7 +254,7 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
   }
 
   // check that the first and last segments intersect
-  result = geo_segments_intersect(
+  result = TMPL_FUNC(geo_segments_intersect)(
       geometry->segments[0], geometry->segments[geometry->segments_count - 1],
       &intersections);
 
@@ -234,8 +270,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
 
   // no other segments intersect with the first.
   for (size_t i = 2; i < geometry->segments_count - 1; ++i) {
-    result = geo_segments_intersect(geometry->segments[0],
-                                    geometry->segments[i], &intersections);
+    result = TMPL_FUNC(geo_segments_intersect)(
+        geometry->segments[0], geometry->segments[i], &intersections);
 
 #ifndef GEO_UNSAFE
     if (result != GEO_SUCCESS) {
@@ -249,8 +285,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
   }
 
   for (size_t i = 1; i < geometry->segments_count - 1; ++i) {
-    result = geo_segments_intersect(geometry->segments[i],
-                                    geometry->segments[i + 1], &intersections);
+    result = TMPL_FUNC(geo_segments_intersect)(
+        geometry->segments[i], geometry->segments[i + 1], &intersections);
 
 #ifndef GEO_UNSAFE
     if (result != GEO_SUCCESS) {
@@ -262,8 +298,8 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
       return GEO_SUCCESS;
     }
     for (size_t j = (i + 2); j < geometry->segments_count; ++j) {
-      result = geo_segments_intersect(geometry->segments[i],
-                                      geometry->segments[j], &intersections);
+      result = TMPL_FUNC(geo_segments_intersect)(
+          geometry->segments[i], geometry->segments[j], &intersections);
 #ifndef GEO_UNSAFE
       if (result != GEO_SUCCESS) {
         return result;
@@ -279,9 +315,9 @@ enum geo_result geo_geometry_is_simple(struct geo_geometry const* geometry,
   return GEO_SUCCESS;
 }
 
-enum geo_result geo_point_in_geometry(struct geo_point const* point,
-                                      struct geo_geometry const* geometry,
-                                      bool strict, bool* is_inside) {
+enum geo_result TMPL_FUNC(geo_point_in_geometry)(
+    struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
+    bool strict, bool* is_inside) {
   size_t intersections = 0;
   enum geo_orientation orientation_p;
 #ifndef GEO_UNSAFE
@@ -325,9 +361,9 @@ enum geo_result geo_point_in_geometry(struct geo_point const* point,
   return GEO_SUCCESS;
 }
 
-enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
-                                         struct geo_geometry* child,
-                                         bool strict, bool* is_inside) {
+enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
+    struct TMPL_GEOMETRY* parent, struct TMPL_GEOMETRY* child, bool strict,
+    bool* is_inside) {
   enum geo_result result = GEO_SUCCESS;
 #ifndef GEO_UNSAFE
   if (parent == NULL || parent->segments == NULL || child == NULL ||
@@ -345,7 +381,7 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
       return GEO_ERR_NULL_POINTER;
     }
 #endif
-    result = geo_point_in_geometry(child->segments[iter]->start, parent, strict,
+    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->start, parent, strict,
                                    is_inside);
     if (result != GEO_SUCCESS) {
       return result;
@@ -354,7 +390,7 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
     if (!(*is_inside)) {
       return GEO_SUCCESS;
     }
-    result = geo_point_in_geometry(child->segments[iter]->end, parent, strict,
+    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->end, parent, strict,
                                    is_inside);
     if (result != GEO_SUCCESS) {
       return result;
@@ -367,12 +403,13 @@ enum geo_result geo_geometry_in_geometry(struct geo_geometry* parent,
   return GEO_SUCCESS;
 }
 
-enum geo_result geo_convex_hull(struct geo_point** points,
-                                struct geo_point** convex_hull, size_t size,
-                                size_t* convex_hull_size) {
+enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
+                                           struct TMPL_POINT** convex_hull,
+                                           size_t size,
+                                           size_t* convex_hull_size) {
   /* used to find starting point */
   size_t min_idx = 0;
-  float min_y = 0.0F;
+  TMPL_TYPE min_y = 0.0F;
 
 #ifndef GEO_UNSAFE
   if (points == NULL || convex_hull == NULL) {
@@ -406,7 +443,7 @@ enum geo_result geo_convex_hull(struct geo_point** points,
   /* swap (if needed) so p0 is the actual starting point based on y and x coords
    */
   if (min_idx != 0) {
-    struct geo_point* temp = points[0];
+    struct TMPL_POINT* temp = points[0];
     points[0] = points[min_idx];
     points[min_idx] = temp;
   }
@@ -421,14 +458,15 @@ enum geo_result geo_convex_hull(struct geo_point** points,
    *        tells you which side of v p[x+1] falls on. This tells you the
    * relative angle and not the exact polar angle.
    */
-  qsort((void*)&points[1], size - 1, sizeof(struct geo_point*), compare);
+  qsort((void*)&points[1], size - 1, sizeof(struct TMPL_POINT*), compare);
   /*
    * 1. add p0, p1, and p2 onto a stack from the sorted list. The first 2 are
    * guaranteed to be on the hull
    * 2. iterate over points in sorted list in order starting at p2
-   *    2a. calcuate orientation of pX compared to the vector formed by p(x-2)
-   * and p(x-1). 2b if CCW, push onto stack. if CW, pop last p(x-1) off the
-   * stack and move back to 2a using p(x-2) and p(x-1) without popped point.
+   * 2a. calcuate orientation of pX compared to the vector formed by p(x-2)
+   *    and p(x-1).
+   * 2b if CCW, push onto stack. if CW, pop last p(x-1) off the
+   *    stack and move back to 2a using p(x-2) and p(x-1) without popped point.
    *
    */
   convex_hull[0] = points[0];
@@ -446,3 +484,13 @@ enum geo_result geo_convex_hull(struct geo_point** points,
   }
   return GEO_SUCCESS;
 }
+#endif
+
+#undef TMPL_CONCAT
+#undef TMPL_CONCAT2
+#undef TMPL_POINT
+#undef TMPL_SEGMENT
+#undef TMPL_GEOMETRY
+#undef TMPL_FUNC
+
+#endif
