@@ -86,4 +86,4 @@ setup:
 
 .PHONY: clean
 clean:
-	rm -f $(BIN_DIR)/*
+

@@ -2,23 +2,31 @@
 #error "TMPL_TYPE undefined and required to be set in file " __FILE__
 #else
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <math.h>
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdlib.h>
 
 #include "geo.h"
 
-#define TMPL_CONCAT(a, b) TMPL_CONCAT2(a, b)
+/*
+ * macros to expand struct names and function names with a TMPL_TYPE suffix
+ */
 #define TMPL_CONCAT2(a, b) a##_##b
+#define TMPL_CONCAT(a, b) TMPL_CONCAT2(a, b)
 
 #define TMPL_POINT TMPL_CONCAT(geo_point, TMPL_TYPE)
 #define TMPL_SEGMENT TMPL_CONCAT(geo_segment, TMPL_TYPE)
 #define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, TMPL_TYPE)
 
-// #define STR2(x) #x
-// #define STR(x) STR2(x)
+
+/*****************************************************************************
+ * GEO_DECIMAL_TEMPLATE DEFINITIONS
+*****************************************************************************/
 
 struct TMPL_POINT {
   TMPL_TYPE x;
@@ -74,6 +82,13 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
                                            struct TMPL_POINT** convex_hull,
                                            size_t size,
                                            size_t* convex_hull_size);
+#ifdef __cplusplus
+}
+#endif
+
+/*****************************************************************************
+ * GEO_DECIMAL_TEMPLATE IMPLEMENTATION
+*****************************************************************************/
 
 #ifdef TMPL_IMPL
 // private definitions
