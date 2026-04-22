@@ -67,10 +67,18 @@ TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DTEST -I$(INCLUDE_DIR)
 #LDFLAGS += -L/$(LIBS)/libspecific
 LDLIBS += -lm
 
-.PHONY: test
-test:
-	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_double.c $(SRC_DIR)/geo_double.c $(LDLIBS) -o $(BIN_DIR)/test_geo
-	@$(BIN_DIR)/test_geo
+.PHONY: test-all
+test-all: test-double test-float
+
+.PHONY: test-double
+test-double:
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_double.c $(SRC_DIR)/geo_double.c $(LDLIBS) -o $(BIN_DIR)/test_geo_double
+	@$(BIN_DIR)/test_geo_double
+
+.PHONY: test-float
+test-float:
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_float.c $(SRC_DIR)/geo_float.c $(LDLIBS) -o $(BIN_DIR)/test_geo_float
+	@$(BIN_DIR)/test_geo_float
 
 .PHONY: format
 format:

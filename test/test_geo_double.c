@@ -2277,6 +2277,6 @@ int main(void) {
   geo_convex_hull_double_returns_geo_success_and_sets_hull_size_to_5_and_hull_has_points_in_ccw_order_when_given_point_cloud();
   geo_convex_hull_double_returns_geo_success_and_sets_hull_size_to_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points();
   geo_convex_hull_double_with_30_points_returns_geo_success_and_sets_hull_size_to_12_and_hull_has_points_in_ccw_order();
-  printf("All tests pass.\n");
+  printf("All double tests pass.\n");
   return 0;
 }
