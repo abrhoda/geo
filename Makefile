@@ -1,10 +1,10 @@
 DEBUG ?= 0
 NAME := geo
-#INCLUDE_DIR := include
-SRC_DIR := src
-TEST_DIR := test
+INCLUDE_DIR := ./include
+SRC_DIR := ./src
+TEST_DIR := ./test
 #BUILD_DIR := build
-BIN_DIR := bin
+BIN_DIR := ./bin
 FORMATTER := clang-format
 LINTER := clang-tidy
 
@@ -24,7 +24,7 @@ LINTER := clang-tidy
 CFLAGS += -std=c99
 
 #set headers dir
-#CFLAGS += -I./$(INCLUDE_DIR)
+CFLAGS += -I$(INCLUDE_DIR)
 
 # poor man's static analyzer
 CFLAGS += -Wpedantic -pedantic-errors -Werror -Wall -Wextra
@@ -61,24 +61,32 @@ endif
 
 # Test specific set of flags for maximum debug potential with TEST macro defined
 # for potential use in code.
-TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DTEST
+TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DTEST -I$(INCLUDE_DIR)
 
 # Linker opts. Remember to set LDFLAGS before objs and LDLIBS after objs to avoid undefined refs when linking.
 #LDFLAGS += -L/$(LIBS)/libspecific
 LDLIBS += -lm
 
-.PHONY: test
-test:
-	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo.c $(SRC_DIR)/geo.c $(LDLIBS) -o $(BIN_DIR)/test_geo
-	@$(BIN_DIR)/test_geo
+.PHONY: test-all
+test-all: test-double test-float
+
+.PHONY: test-double
+test-double:
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_double.c $(SRC_DIR)/geo_double.c $(LDLIBS) -o $(BIN_DIR)/test_geo_double
+	@$(BIN_DIR)/test_geo_double
+
+.PHONY: test-float
+test-float:
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_float.c $(SRC_DIR)/geo_float.c $(LDLIBS) -o $(BIN_DIR)/test_geo_float
+	@$(BIN_DIR)/test_geo_float
 
 .PHONY: format
 format:
-	$(FORMATTER) --style=file -i $(SRC_DIR)/geo.c $(SRC_DIR)/geo.h
+	$(FORMATTER) --style=file -i $(INCLUDE_DIR)/* $(SRC_DIR)/*
 
 .PHONY: lint
 lint:
-	$(LINTER) --config-file=.clang-tidy $(SRC_DIR)/geo.c $(SRC_DIR)/geo.h -- $(CFLAGS) -Wmost
+	$(LINTER) --config-file=.clang-tidy $(SRC_DIR)/* -- $(CFLAGS) -Wmost
 
 .PHONY: setup
 setup:
@@ -86,4 +94,4 @@ setup:
 
 .PHONY: clean
 clean:
-	rm -f $(BIN_DIR)/*
+
