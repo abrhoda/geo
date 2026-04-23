@@ -9,6 +9,8 @@ extern "C" {
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
 
 #include "geo.h"
 
@@ -23,6 +25,11 @@ extern "C" {
 #define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, TMPL_TYPE)
 
+#if TMPL_TYPE_FIXED_SIZE == 32
+#define TMPL_TPYE_FIXED_INT int32_t
+#else
+#define TMPL_TPYE_FIXED_INT int64_t
+#endif
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE DEFINITIONS
@@ -44,6 +51,7 @@ struct TMPL_GEOMETRY {
 };
 
 /* private forward declaration
+static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs);
 inline static TMPL_TYPE dot_product(struct TMPL_POINT const* vec_ab,
                                 struct TMPL_POINT const* vec_ac);
 inline static TMPL_TYPE cross_product(struct TMPL_POINT const* vec_ab,
@@ -92,6 +100,42 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 
 #ifdef TMPL_IMPL
 // private definitions
+
+// TODO use the result enum
+static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs) {
+  if (isnan(lhs) || isnan(rhs)) {
+    return false;
+  }
+
+  if (lhs == rhs) {
+    return true;
+  }
+
+  if (isinf(lhs) || isinf(rhs)) {
+    return false;
+  }
+
+  TMPL_TYPE diff = fabs(lhs-rhs);
+  if (diff <= ABS_EPSILON) {
+    return true;
+  }
+
+  TMPL_TYPE largest = fmax(fabs(lhs), fabs(rhs));
+  if (diff <= largest * REL_EPSILON) {
+    return true;
+  }
+
+  if (signbit(lhs) != signbit(rhs)) {
+    return false;
+  }
+
+  TMPL_TPYE_FIXED_INT lhs_int, rhs_int, ulp_diff;
+  memcpy(&lhs_int, &lhs, sizeof(lhs_int));
+  memcpy(&rhs_int, &rhs, sizeof(rhs_int));
+  ulp_diff = lhs_int > rhs_int ? lhs_int - rhs_int : rhs_int - lhs_int;
+  return ulp_diff <= MAX_ULPS;
+}
+
 inline static TMPL_TYPE dot_product(struct TMPL_POINT const* const vec_ab,
                                     struct TMPL_POINT const* const vec_ac) {
   /* TODO handle overflow */
@@ -161,9 +205,7 @@ enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
     return GEO_ERR_NULL_POINTER;
   }
 #endif
-  /* TODO handle overflow */
-  *is_equal = (fabs((double)lhs->x - rhs->x) < GEO_EPSILON &&
-               fabs((double)lhs->y - rhs->y) < GEO_EPSILON);
+  *is_equal = equal(lhs->x, rhs->x) && equal(lhs->y, rhs->y);
   return GEO_SUCCESS;
 }
 
