@@ -1,5 +1,5 @@
-#ifndef TMPL_TYPE
-#error "TMPL_TYPE undefined and required to be set in file " __FILE__
+#if !defined(TMPL_TYPE) || !defined(TMPL_TYPE_FIXED) || !defined(ABS_EPSILON) || !defined(REL_EPSILON) || !defined(MAX_ULPS)
+#error "TMPL_TYPE undefined and required to be set."
 #else
 
 #ifdef __cplusplus
@@ -24,12 +24,6 @@ extern "C" {
 #define TMPL_SEGMENT TMPL_CONCAT(geo_segment, TMPL_TYPE)
 #define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, TMPL_TYPE)
-
-#if TMPL_TYPE_FIXED_SIZE == 32
-#define TMPL_TPYE_FIXED_INT int32_t
-#else
-#define TMPL_TPYE_FIXED_INT int64_t
-#endif
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE DEFINITIONS
@@ -102,6 +96,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 // private definitions
 
 // TODO use the result enum
+// TODO this is only valid for ieee754 compliant types. should assert this
 static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs) {
   if (isnan(lhs) || isnan(rhs)) {
     return false;
@@ -129,9 +124,9 @@ static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs) {
     return false;
   }
 
-  TMPL_TPYE_FIXED_INT lhs_int, rhs_int, ulp_diff;
-  memcpy(&lhs_int, &lhs, sizeof(lhs_int));
-  memcpy(&rhs_int, &rhs, sizeof(rhs_int));
+  TMPL_TYPE_FIXED lhs_int = 0, rhs_int = 0, ulp_diff = 0;
+  memcpy(&lhs_int, &lhs, sizeof(TMPL_TYPE));
+  memcpy(&rhs_int, &rhs, sizeof(TMPL_TYPE));
   ulp_diff = lhs_int > rhs_int ? lhs_int - rhs_int : rhs_int - lhs_int;
   return ulp_diff <= MAX_ULPS;
 }

@@ -58,7 +58,6 @@ void geo_points_equal_double_returns_geo_success_and_is_equal_set_to_0_when_lhs_
 
 /*----------------------------------
  * geo_segments_intersect_double tests
- * TODO all these functions have old names from before the result enum return type.
  *----------------------------------
  */
 void geo_segments_intersect_double_returns_geo_err_null_pointer_result_code_when_segment_1_is_null(void) {
