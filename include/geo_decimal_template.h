@@ -1,5 +1,5 @@
 #if !defined(TMPL_TYPE) || !defined(TMPL_TYPE_FIXED) || !defined(ABS_EPSILON) || !defined(REL_EPSILON) || !defined(MAX_ULPS)
-#error "TMPL_TYPE undefined and required to be set."
+#error "TMPL_TYPE, TMPL_TYPE_FIXED, ABS_EPSILON, REL_EPSILON, or MAX_ULPS undefined and required to be set."
 #else
 
 #ifdef __cplusplus
@@ -150,7 +150,7 @@ static enum geo_orientation orientation(struct TMPL_POINT const* const start,
   struct TMPL_POINT vec_ac = {.x = point->x - start->x,
                               .y = point->y - start->y};
   TMPL_TYPE cross = cross_product(&vec_ab, &vec_ac);
-  if (fabs((double)cross) < GEO_EPSILON) {
+  if (equal(cross, 0.0)) {
     return COLINEAR;
   }
   return cross < 0.0F ? RIGHT : LEFT;
@@ -400,11 +400,6 @@ enum geo_result TMPL_FUNC(geo_point_in_geometry)(
      * checks that a ray from `point` bisects the segment and that the
      * orientation puts the `point` on the appropriate side of the `segment`.
      */
-    /*
-     * TODO is this accurate? what if `point->y - ...->end->y < GEO_EPSILON` ?
-     * this is to say that end->y is roughly equal to point->y but is less than
-     * by less than an epsilon value?
-     * */
     intersections += (((geometry->segments[iter]->end->y >= point->y) -
                        (geometry->segments[iter]->start->y >= point->y)) *
                       orientation_p) > 0;
@@ -484,8 +479,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
     }
 
     if ((points[iter]->y < min_y) ||
-        (fabs((double)(points[iter]->y - min_y)) < GEO_EPSILON &&
-         /* TODO this could have a false positive. */
+        (equal(points[iter]->y, min_y) &&
          points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
