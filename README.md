@@ -1,42 +1,8 @@
 # geo
-geofencing library in c99.
-
-## Usage
-```
-// in my geo_double.c source file
-
-#define TMPL_IMPL
-#define TMPL_TYPE double
-#define TMPL_TYPE_FIXED int64_t
-#define ABS_EPSILON 1e-12
-#define REL_EPSILON 1e-9
-#define MAX_ULPS 4
-#include "geo_decimal_template.h"
-#undef MAX_ULPS
-#undef REL_EPSILON
-#undef ABS_EPSILON
-#undef TMPL_TYPE_FIXED
-#undef TMPL_TYPE
-#undef TMPL_IMPL
-
-// somewhere else in the code
-
-struct geo_point_double point_a = {.x = 0.0, .y = 0.0};
-struct geo_point_double point_b = {.x = 1.0, .y = 1.0};
-bool is_equal = false;
-enum geo_result res = geo_points_equal_double(&point_a, &point_b, &is_equal);
-if (res != GEO_SUCCESS) {
-    // error state!
-}
-
-// do something with is_equal
-
-```
+2 dimensional geometry library in c99.
 
 ## Documentation
-In depth documentation lives in `docs/`.
-
-### Public API
+See [USAGE.md](docs/USAGE.md) for complete documentation.
 
 ### Code Design
 Most (if not all) functions in the public API return a `enum geo_result` return value and use out params. Out params should only be used when the returned `enum geo_result value == GEO_SUCCESS`.
@@ -64,7 +30,7 @@ These are in addition to the general macros. If you do not wish to deal with thi
 - `MAX_ULPS` - sets the maximum difference of `unit of least percision` when comparing `TMPL_TYPE`s. See references 4 and 5 if you are interested in knowing this deeper.
 
 ## TODOs
-See [TODO.md](TODO.md) file.
+See [TODO.md](docs/TODO.md) file.
 
 ## Code Layout, Contribution Guide, and Design Considerations
 1. Set up dirs with `make setup`

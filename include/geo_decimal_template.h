@@ -75,7 +75,7 @@ enum geo_result TMPL_FUNC(geo_segments_intersect)(
 enum geo_result TMPL_FUNC(geo_geometry_is_closed)(
     struct TMPL_GEOMETRY const* geometry, bool* is_closed);
 enum geo_result TMPL_FUNC(geo_geometry_is_simple)(
-    struct TMPL_GEOMETRY const* geometry, bool* is_closed);
+    struct TMPL_GEOMETRY const* geometry, bool* is_simple);
 enum geo_result TMPL_FUNC(geo_point_in_geometry)(
     struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
     bool strict, bool* is_inside);
