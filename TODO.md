@@ -16,3 +16,5 @@ These items aren't feature work. Just cleaning up my mess.
 - [ ] tests in both `test/test_geo_double.c` and `test/test_geo_float.c` having epsilon in the naming. That should be changed to "nearly" or "close"
 - [ ] test, in both `test/test_geo_double.c` and `test/test_geo_float.c`, for large values that are close to utilze the `MAX_ULPS` check.
 - [ ] tests say `...points_for_triangle`. `for` should be `form`.
+- [ ] function params that are pointers should be `restrict`ed where it makes sense.
+- [ ] get rid of `geo.h` and just put the enums directly into template headers.

@@ -24,7 +24,7 @@ extern "C" {
 #define TMPL_FUNC(name) TMPL_CONCAT(name, TMPL_TYPE)
 
 /*****************************************************************************
- * GEO_DECIMAL_TEMPLATE DEFINITIONS
+ * GEO_INTEGER_TEMPLATE DEFINITIONS
  *****************************************************************************/
 
 struct TMPL_POINT {
@@ -86,7 +86,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 #endif
 
 /*****************************************************************************
- * GEO_DECIMAL_TEMPLATE IMPLEMENTATION
+ * GEO_INTEGER_TEMPLATE IMPLEMENTATION
  *****************************************************************************/
 
 #ifdef TMPL_IMPL
