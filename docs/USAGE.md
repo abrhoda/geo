@@ -50,6 +50,7 @@ This is a complete, slim, example of copying and including the header, define th
 #undef TMPL_IMPL
 
 // 4. in main.c, use the library
+#include <stdbool.h>
 #include "geo_double.h"
 
 int main(void) {
@@ -117,4 +118,4 @@ struct geo_geometry_<type> {
 ```
 
 ## As a Shared or Static Library
-while library was written as a header only library, technically, it does provide `src/geo_<type>.c` files which include the header for the respective type. This nothing stops you from turning it into a dynamic (.so/.dll/.dylib) or static (.a/.lib) library but I have not done this myself.
+While library was written as a header only library, technically, it does provide `src/geo_<type>.c` files which include the header for the respective type. This means nothing stops you from turning it into a dynamic (.so/.dll/.dylib) or static (.a/.lib) library but I have not done this myself.
