@@ -1,7 +1,5 @@
-#if !defined(TMPL_TYPE) || !defined(TMPL_TYPE_FIXED) || \
-    !defined(ABS_EPSILON) || !defined(REL_EPSILON) || !defined(MAX_ULPS)
-#error \
-    "TMPL_TYPE, TMPL_TYPE_FIXED, ABS_EPSILON, REL_EPSILON, or MAX_ULPS undefined and required to be set."
+#if !defined(TMPL_TYPE)
+#error "TMPL_TYPE undefined and required to be set."
 #else
 
 #ifdef __cplusplus
@@ -10,9 +8,7 @@ extern "C" {
 
 #include <math.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "geo.h"
 
@@ -47,7 +43,6 @@ struct TMPL_GEOMETRY {
 };
 
 /* private forward declaration
-static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs);
 inline static TMPL_TYPE dot_product(struct TMPL_POINT const* vec_ab,
                                 struct TMPL_POINT const* vec_ac);
 inline static TMPL_TYPE cross_product(struct TMPL_POINT const* vec_ab,
@@ -97,42 +92,6 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 #ifdef TMPL_IMPL
 // private definitions
 
-// TODO use the result enum
-// TODO this is only valid for ieee754 compliant types. should assert this
-static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs) {
-  if (isnan(lhs) || isnan(rhs)) {
-    return false;
-  }
-
-  if (lhs == rhs) {
-    return true;
-  }
-
-  if (isinf(lhs) || isinf(rhs)) {
-    return false;
-  }
-
-  TMPL_TYPE diff = fabs(lhs - rhs);
-  if (diff <= ABS_EPSILON) {
-    return true;
-  }
-
-  TMPL_TYPE largest = fmax(fabs(lhs), fabs(rhs));
-  if (diff <= largest * REL_EPSILON) {
-    return true;
-  }
-
-  if (signbit(lhs) != signbit(rhs)) {
-    return false;
-  }
-
-  TMPL_TYPE_FIXED lhs_int = 0, rhs_int = 0, ulp_diff = 0;
-  memcpy(&lhs_int, &lhs, sizeof(TMPL_TYPE));
-  memcpy(&rhs_int, &rhs, sizeof(TMPL_TYPE));
-  ulp_diff = lhs_int > rhs_int ? lhs_int - rhs_int : rhs_int - lhs_int;
-  return ulp_diff <= MAX_ULPS;
-}
-
 inline static TMPL_TYPE dot_product(struct TMPL_POINT const* const vec_ab,
                                     struct TMPL_POINT const* const vec_ac) {
   /* TODO handle overflow */
@@ -152,10 +111,10 @@ static enum geo_orientation orientation(struct TMPL_POINT const* const start,
   struct TMPL_POINT vec_ac = {.x = point->x - start->x,
                               .y = point->y - start->y};
   TMPL_TYPE cross = cross_product(&vec_ab, &vec_ac);
-  if (equal(cross, 0.0)) {
+  if (cross == 0) {
     return COLINEAR;
   }
-  return cross < 0.0F ? RIGHT : LEFT;
+  return cross < 0 ? RIGHT : LEFT;
 }
 
 static bool in_disk(struct TMPL_SEGMENT const* const segment,
@@ -164,8 +123,7 @@ static bool in_disk(struct TMPL_SEGMENT const* const segment,
                               .y = segment->start->y - point->y};
   struct TMPL_POINT vec_bp = {.x = segment->end->x - point->x,
                               .y = segment->end->y - point->y};
-  // TODO this should check if its within epsilon of 0.0 on the positive side
-  return dot_product(&vec_ap, &vec_bp) <= 0.0F;
+  return dot_product(&vec_ap, &vec_bp) <= 0;
 }
 
 static TMPL_TYPE squared_distance(struct TMPL_POINT const* const point1,
@@ -202,7 +160,7 @@ enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
     return GEO_ERR_NULL_POINTER;
   }
 #endif
-  *is_equal = equal(lhs->x, rhs->x) && equal(lhs->y, rhs->y);
+  *is_equal = (lhs->x == rhs->x) && (lhs->y == rhs->y);
   return GEO_SUCCESS;
 }
 
@@ -480,8 +438,8 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
       continue;
     }
 
-    if ((points[iter]->y < min_y) || (equal(points[iter]->y, min_y) &&
-                                      points[iter]->x < points[min_idx]->x)) {
+    if ((points[iter]->y < min_y) ||
+        ((points[iter]->y == min_y) && points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
     }
