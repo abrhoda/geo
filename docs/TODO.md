@@ -8,6 +8,7 @@
 - [ ] Make a 3d variant. This requires a lot of work but would be intersting to do. I wonder if the easiest way to turn this into 3d is to introduce a `z` field on the struct and then use the 2d algorithms twice on the point. That means for point p1 = (x1, y1, z1), it is in volume1 if (x1, y1) are in the XY projection of volume1 and (y1, z1) are in the YZ projection of volume1. That would require research.
 - [ ] convex hull function requires an "out" array. could save the space and use the "array" array and make the first N elements the hull in place. N = "out" convex\_hull\_size
 - [ ] in the `geo_decimal_template.h`, the `GEO_TEST` macro could be used to switch from static linkage to extern that way the static functions can be easily tested.
+- [ ] adding in a `GEO_FLOATING_POINT` macro would allow condensing to 1 header and if/else choices for int vs floating point blocks.
 
 ## Cleanup Items
 These items aren't feature work. Just cleaning up my mess.
@@ -16,6 +17,4 @@ These items aren't feature work. Just cleaning up my mess.
 - [ ] test for `is_simple` where one segment is on another so 2 is still the intersect count.
 - [ ] tests say `...points_for_triangle`. `for` should be `form`.
 - [ ] function params that are pointers should be `restrict`ed where it makes sense.
-- [ ] get rid of `geo.h` and just put the enums directly into template headers.
 - [ ] all macros should be named with `GEO_` as a prefix to avoid namespace clashing.
-
