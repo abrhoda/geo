@@ -1,5 +1,7 @@
-#if !defined(TMPL_TYPE) || !defined(TMPL_TYPE_FIXED) || !defined(ABS_EPSILON) || !defined(REL_EPSILON) || !defined(MAX_ULPS)
-#error "TMPL_TYPE, TMPL_TYPE_FIXED, ABS_EPSILON, REL_EPSILON, or MAX_ULPS undefined and required to be set."
+#if !defined(TMPL_TYPE) || !defined(TMPL_TYPE_FIXED) || \
+    !defined(ABS_EPSILON) || !defined(REL_EPSILON) || !defined(MAX_ULPS)
+#error \
+    "TMPL_TYPE, TMPL_TYPE_FIXED, ABS_EPSILON, REL_EPSILON, or MAX_ULPS undefined and required to be set."
 #else
 
 #ifdef __cplusplus
@@ -8,8 +10,8 @@ extern "C" {
 
 #include <math.h>
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "geo.h"
@@ -27,7 +29,7 @@ extern "C" {
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE DEFINITIONS
-*****************************************************************************/
+ *****************************************************************************/
 
 struct TMPL_POINT {
   TMPL_TYPE x;
@@ -90,7 +92,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE IMPLEMENTATION
-*****************************************************************************/
+ *****************************************************************************/
 
 #ifdef TMPL_IMPL
 // private definitions
@@ -110,7 +112,7 @@ static bool equal(TMPL_TYPE lhs, TMPL_TYPE rhs) {
     return false;
   }
 
-  TMPL_TYPE diff = fabs(lhs-rhs);
+  TMPL_TYPE diff = fabs(lhs - rhs);
   if (diff <= ABS_EPSILON) {
     return true;
   }
@@ -428,8 +430,8 @@ enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
       return GEO_ERR_NULL_POINTER;
     }
 #endif
-    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->start, parent, strict,
-                                   is_inside);
+    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->start,
+                                              parent, strict, is_inside);
     if (result != GEO_SUCCESS) {
       return result;
     }
@@ -437,8 +439,8 @@ enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
     if (!(*is_inside)) {
       return GEO_SUCCESS;
     }
-    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->end, parent, strict,
-                                   is_inside);
+    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->end,
+                                              parent, strict, is_inside);
     if (result != GEO_SUCCESS) {
       return result;
     }
@@ -478,9 +480,8 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
       continue;
     }
 
-    if ((points[iter]->y < min_y) ||
-        (equal(points[iter]->y, min_y) &&
-         points[iter]->x < points[min_idx]->x)) {
+    if ((points[iter]->y < min_y) || (equal(points[iter]->y, min_y) &&
+                                      points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
     }

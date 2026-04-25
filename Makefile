@@ -68,7 +68,7 @@ TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DTEST -I$(INCLUDE_DIR)
 LDLIBS += -lm
 
 .PHONY: test-all
-test-all: test-double test-float
+test-all: test-double test-float test-int test-long
 
 .PHONY: test-double
 test-double:
@@ -79,6 +79,16 @@ test-double:
 test-float:
 	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_float.c $(SRC_DIR)/geo_float.c $(LDLIBS) -o $(BIN_DIR)/test_geo_float
 	@$(BIN_DIR)/test_geo_float
+
+.PHONY: test-int
+test-int:
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_int.c $(SRC_DIR)/geo_int.c $(LDLIBS) -o $(BIN_DIR)/test_geo_int
+	@$(BIN_DIR)/test_geo_int
+
+.PHONY: test-long
+test-long:
+	@$(CC) $(TEST_CFLAGS) $(TEST_DIR)/test_geo_long.c $(SRC_DIR)/geo_long.c $(LDLIBS) -o $(BIN_DIR)/test_geo_long
+	@$(BIN_DIR)/test_geo_long
 
 .PHONY: format
 format:
@@ -94,4 +104,4 @@ setup:
 
 .PHONY: clean
 clean:
-
+	rm -f ./bin/*

@@ -10,3 +10,9 @@
 - [ ] Make a 3d variant. This requires a lot of work but would be intersting to do. I wonder if the easiest way to turn this into 3d is to introduce a `z` field on the struct and then use the 2d algorithms twice on the point. That means for point p1 = (x1, y1, z1), it is in volume1 if (x1, y1) are in the XY projection of volume1 and (y1, z1) are in the YZ projection of volume1. That would require research.
 - [ ] convex hull function requires an "out" array. could save the space and use the "array" array and make the first N elements the hull in place. N = "out" convex\_hull\_size
 - [ ] in the `geo_decimal_template.h`, the `GEO_TEST` macro could be used to switch from static linkage to extern that way the static functions can be easily tested.
+
+## Cleanup Items
+These items aren't feature work. Just cleaning up my mess.
+- [ ] tests in both `test/test_geo_double.c` and `test/test_geo_float.c` having epsilon in the naming. That should be changed to "nearly" or "close"
+- [ ] test, in both `test/test_geo_double.c` and `test/test_geo_float.c`, for large values that are close to utilze the `MAX_ULPS` check.
+- [ ] tests say `...points_for_triangle`. `for` should be `form`.

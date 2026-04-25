@@ -25,7 +25,7 @@ extern "C" {
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE DEFINITIONS
-*****************************************************************************/
+ *****************************************************************************/
 
 struct TMPL_POINT {
   TMPL_TYPE x;
@@ -87,7 +87,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE IMPLEMENTATION
-*****************************************************************************/
+ *****************************************************************************/
 
 #ifdef TMPL_IMPL
 // private definitions
@@ -360,11 +360,6 @@ enum geo_result TMPL_FUNC(geo_point_in_geometry)(
      * checks that a ray from `point` bisects the segment and that the
      * orientation puts the `point` on the appropriate side of the `segment`.
      */
-    /*
-     * TODO is this accurate? what if `point->y - ...->end->y < GEO_EPSILON` ?
-     * this is to say that end->y is roughly equal to point->y but is less than
-     * by less than an epsilon value?
-     * */
     intersections += (((geometry->segments[iter]->end->y >= point->y) -
                        (geometry->segments[iter]->start->y >= point->y)) *
                       orientation_p) > 0;
@@ -393,8 +388,8 @@ enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
       return GEO_ERR_NULL_POINTER;
     }
 #endif
-    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->start, parent, strict,
-                                   is_inside);
+    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->start,
+                                              parent, strict, is_inside);
     if (result != GEO_SUCCESS) {
       return result;
     }
@@ -402,8 +397,8 @@ enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
     if (!(*is_inside)) {
       return GEO_SUCCESS;
     }
-    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->end, parent, strict,
-                                   is_inside);
+    result = TMPL_FUNC(geo_point_in_geometry)(child->segments[iter]->end,
+                                              parent, strict, is_inside);
     if (result != GEO_SUCCESS) {
       return result;
     }
@@ -444,9 +439,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
     }
 
     if ((points[iter]->y < min_y) ||
-        (fabs((double)(points[iter]->y - min_y)) < GEO_EPSILON &&
-         /* TODO this could have a false positive. */
-         points[iter]->x < points[min_idx]->x)) {
+        ((points[iter]->y == min_y) && points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
     }
