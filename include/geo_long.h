@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-#define TMPL_TYPE long
+#define GEO_TMPL_TYPE long
 #include "geo_integer_template.h"
-#undef TMPL_TYPE
+#undef GEO_TMPL_TYPE
 
 #ifdef __cplusplus
 }

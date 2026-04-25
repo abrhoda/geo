@@ -1,5 +1,5 @@
-#if !defined(TMPL_TYPE)
-#error "TMPL_TYPE undefined and required to be set."
+#if !defined(GEO_TMPL_TYPE)
+#error "GEO_TMPL_TYPE undefined and required to be set."
 #else
 
 #ifdef __cplusplus
@@ -11,23 +11,23 @@ extern "C" {
 #include <stdlib.h>
 
 /*
- * macros to expand struct names and function names with a TMPL_TYPE suffix
+ * macros to expand struct names and function names with a GEO_TMPL_TYPE suffix
  */
 #define TMPL_CONCAT2(a, b) a##_##b
 #define TMPL_CONCAT(a, b) TMPL_CONCAT2(a, b)
 
-#define TMPL_POINT TMPL_CONCAT(geo_point, TMPL_TYPE)
-#define TMPL_SEGMENT TMPL_CONCAT(geo_segment, TMPL_TYPE)
-#define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, TMPL_TYPE)
-#define TMPL_FUNC(name) TMPL_CONCAT(name, TMPL_TYPE)
+#define TMPL_POINT TMPL_CONCAT(geo_point, GEO_TMPL_TYPE)
+#define TMPL_SEGMENT TMPL_CONCAT(geo_segment, GEO_TMPL_TYPE)
+#define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, GEO_TMPL_TYPE)
+#define TMPL_FUNC(name) TMPL_CONCAT(name, GEO_TMPL_TYPE)
 
 /*****************************************************************************
  * GEO_INTEGER_TEMPLATE DEFINITIONS
  *****************************************************************************/
 
 struct TMPL_POINT {
-  TMPL_TYPE x;
-  TMPL_TYPE y;
+  GEO_TMPL_TYPE x;
+  GEO_TMPL_TYPE y;
 };
 
 struct TMPL_SEGMENT {
@@ -49,12 +49,10 @@ enum geo_result {
 
 enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
 
-
-
 /* private forward declaration
-inline static TMPL_TYPE dot_product(struct TMPL_POINT const* vec_ab,
+inline static GEO_TMPL_TYPE dot_product(struct TMPL_POINT const* vec_ab,
                                 struct TMPL_POINT const* vec_ac);
-inline static TMPL_TYPE cross_product(struct TMPL_POINT const* vec_ab,
+inline static GEO_TMPL_TYPE cross_product(struct TMPL_POINT const* vec_ab,
                                   struct TMPL_POINT const* vec_ac);
 
 static enum geo_orientation orientation(struct TMPL_POINT const* start,
@@ -63,7 +61,7 @@ static enum geo_orientation orientation(struct TMPL_POINT const* start,
 static bool in_disk(struct TMPL_SEGMENT const* segment,
                     struct TMPL_POINT const* point);
 
-static TMPL_TYPE squared_distance(struct TMPL_POINT const* point1,
+static GEO_TMPL_TYPE squared_distance(struct TMPL_POINT const* point1,
                               struct TMPL_POINT const* point2);
 
 static int compare(const void* first, const void* second);
@@ -101,14 +99,15 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 #ifdef TMPL_IMPL
 // private definitions
 
-inline static TMPL_TYPE dot_product(struct TMPL_POINT const* const vec_ab,
-                                    struct TMPL_POINT const* const vec_ac) {
+inline static GEO_TMPL_TYPE dot_product(struct TMPL_POINT const* const vec_ab,
+                                        struct TMPL_POINT const* const vec_ac) {
   /* TODO handle overflow */
   return ((vec_ab->x * vec_ac->x) + (vec_ab->y * vec_ac->y));
 }
 
-inline static TMPL_TYPE cross_product(struct TMPL_POINT const* const vec_ab,
-                                      struct TMPL_POINT const* const vec_ac) {
+inline static GEO_TMPL_TYPE cross_product(
+    struct TMPL_POINT const* const vec_ab,
+    struct TMPL_POINT const* const vec_ac) {
   /* TODO handle overflow */
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
@@ -119,7 +118,7 @@ static enum geo_orientation orientation(struct TMPL_POINT const* const start,
   struct TMPL_POINT vec_ab = {.x = end->x - start->x, .y = end->y - start->y};
   struct TMPL_POINT vec_ac = {.x = point->x - start->x,
                               .y = point->y - start->y};
-  TMPL_TYPE cross = cross_product(&vec_ab, &vec_ac);
+  GEO_TMPL_TYPE cross = cross_product(&vec_ab, &vec_ac);
   if (cross == 0) {
     return COLINEAR;
   }
@@ -135,10 +134,10 @@ static bool in_disk(struct TMPL_SEGMENT const* const segment,
   return dot_product(&vec_ap, &vec_bp) <= 0;
 }
 
-static TMPL_TYPE squared_distance(struct TMPL_POINT const* const point1,
-                                  struct TMPL_POINT const* const point2) {
-  TMPL_TYPE diff_x = point2->x - point1->x;
-  TMPL_TYPE diff_y = point2->y - point1->y;
+static GEO_TMPL_TYPE squared_distance(struct TMPL_POINT const* const point1,
+                                      struct TMPL_POINT const* const point2) {
+  GEO_TMPL_TYPE diff_x = point2->x - point1->x;
+  GEO_TMPL_TYPE diff_y = point2->y - point1->y;
   /* TODO handle overflow */
   return (diff_x * diff_x) + (diff_y * diff_y);
 }
@@ -425,7 +424,7 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
                                            size_t* convex_hull_size) {
   /* used to find starting point */
   size_t min_idx = 0;
-  TMPL_TYPE min_y = 0.0F;
+  GEO_TMPL_TYPE min_y = 0.0F;
 
 #ifndef GEO_UNSAFE
   if (points == NULL || convex_hull == NULL) {
