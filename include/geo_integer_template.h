@@ -21,7 +21,7 @@ extern "C" {
 #define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, GEO_TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, GEO_TMPL_TYPE)
 
-/*****************************************************************************
+/******************************************************************************
  * GEO_INTEGER_TEMPLATE DEFINITIONS
  *****************************************************************************/
 
@@ -366,7 +366,8 @@ enum geo_result TMPL_FUNC(geo_point_in_geometry)(
     }
     /*
      * checks that a ray from `point` bisects the segment and that the
-     * orientation puts the `point` on the appropriate side of the `segment`.
+     * orientation puts the `point` on the appropriate side of the
+     * `segment`.
      */
     intersections += (((geometry->segments[iter]->end->y >= point->y) -
                        (geometry->segments[iter]->start->y >= point->y)) *
@@ -453,23 +454,25 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
     }
   }
 
-  /* swap (if needed) so p0 is the actual starting point based on y and x coords
+  /* swap (if needed) so p0 is the actual starting point based on y and x
+   * coords
    */
   if (min_idx != 0) {
     struct TMPL_POINT* temp = points[0];
     points[0] = points[min_idx];
     points[min_idx] = temp;
   }
-  /* setting `start` which is a static global var to "pass a 3rd arg" to qsort.
+  /* setting `start` which is a static global var to "pass a 3rd arg" to
+   * qsort.
    * :( */
   global_start_point = points[0];
   /*
    * Sort points by polar angle from starting_point
    *
    *  NOTE: uses orientation instead of actual polar angle because if p[0] and
-   * p[x] for a vector, v, then finding orientation of p[x+1] with respect to v
-   *        tells you which side of v p[x+1] falls on. This tells you the
-   * relative angle and not the exact polar angle.
+   * p[x] for a vector, v, then finding orientation of p[x+1] with respect to
+   * v tells you which side of v p[x+1] falls on. This tells you the relative
+   * angle and not the exact polar angle.
    */
   qsort((void*)&points[1], size - 1, sizeof(struct TMPL_POINT*), compare);
   /*
@@ -479,7 +482,8 @@ enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
    * 2a. calcuate orientation of pX compared to the vector formed by p(x-2)
    *    and p(x-1).
    * 2b if CCW, push onto stack. if CW, pop last p(x-1) off the
-   *    stack and move back to 2a using p(x-2) and p(x-1) without popped point.
+   *    stack and move back to 2a using p(x-2) and p(x-1) without popped
+   * point.
    *
    */
   convex_hull[0] = points[0];
