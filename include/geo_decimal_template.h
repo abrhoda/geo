@@ -21,9 +21,9 @@ extern "C" {
 #define TMPL_CONCAT2(a, b) a##_##b
 #define TMPL_CONCAT(a, b) TMPL_CONCAT2(a, b)
 
-#define TMPL_POINT TMPL_CONCAT(geo_point, GEO_TMPL_TYPE)
-#define TMPL_SEGMENT TMPL_CONCAT(geo_segment, GEO_TMPL_TYPE)
-#define TMPL_GEOMETRY TMPL_CONCAT(geo_geometry, GEO_TMPL_TYPE)
+#define TMPL_POINT TMPL_CONCAT(GeoPoint, GEO_TMPL_TYPE)
+#define TMPL_SEGMENT TMPL_CONCAT(GeoSegment, GEO_TMPL_TYPE)
+#define TMPL_GEOMETRY TMPL_CONCAT(GeoGeometry, GEO_TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, GEO_TMPL_TYPE)
 
 /*****************************************************************************
@@ -45,7 +45,7 @@ struct TMPL_GEOMETRY {
   size_t segments_count;
 };
 
-enum geo_result {
+enum GeoResult {
   GEO_SUCCESS = 0,
   GEO_ERR_NULL_POINTER = 1,
   GEO_ERR_TOO_SMALL = 2,
@@ -55,24 +55,24 @@ enum geo_result {
 enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
 
 // public forward declaration
-enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
+enum GeoResult TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
                                             struct TMPL_POINT const* rhs,
                                             bool* is_equal);
-enum geo_result TMPL_FUNC(geo_segments_intersect)(
+enum GeoResult TMPL_FUNC(geo_segments_intersect)(
     struct TMPL_SEGMENT const* segment1, struct TMPL_SEGMENT const* segment2,
     size_t* intersect_count);
 
-enum geo_result TMPL_FUNC(geo_geometry_is_closed)(
+enum GeoResult TMPL_FUNC(geo_geometry_is_closed)(
     struct TMPL_GEOMETRY const* geometry, bool* is_closed);
-enum geo_result TMPL_FUNC(geo_geometry_is_simple)(
+enum GeoResult TMPL_FUNC(geo_geometry_is_simple)(
     struct TMPL_GEOMETRY const* geometry, bool* is_simple);
-enum geo_result TMPL_FUNC(geo_point_in_geometry)(
+enum GeoResult TMPL_FUNC(geo_point_in_geometry)(
     struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
     bool strict, bool* is_inside);
-enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
+enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(
     struct TMPL_GEOMETRY* parent, struct TMPL_GEOMETRY* child, bool strict,
     bool* is_inside);
-enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
+enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
                                            struct TMPL_POINT** convex_hull,
                                            size_t size,
                                            size_t* convex_hull_size);
@@ -185,7 +185,7 @@ static int compare(const void* first, const void* second) {
 }
 
 // public definitions
-enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
+enum GeoResult TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
                                             struct TMPL_POINT const* rhs,
                                             bool* is_equal) {
 #ifndef GEO_UNSAFE
@@ -197,7 +197,7 @@ enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
   return GEO_SUCCESS;
 }
 
-enum geo_result TMPL_FUNC(geo_segments_intersect)(
+enum GeoResult TMPL_FUNC(geo_segments_intersect)(
     struct TMPL_SEGMENT const* const segment1,
     struct TMPL_SEGMENT const* const segment2, size_t* intersect_count) {
   enum geo_orientation orientation_a;
@@ -239,9 +239,9 @@ enum geo_result TMPL_FUNC(geo_segments_intersect)(
   return GEO_SUCCESS;
 }
 
-enum geo_result TMPL_FUNC(geo_geometry_is_closed)(
+enum GeoResult TMPL_FUNC(geo_geometry_is_closed)(
     struct TMPL_GEOMETRY const* geometry, bool* is_closed) {
-  enum geo_result result = GEO_SUCCESS;
+  enum GeoResult result = GEO_SUCCESS;
   size_t mod = 0;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
@@ -271,9 +271,9 @@ enum geo_result TMPL_FUNC(geo_geometry_is_closed)(
   return GEO_SUCCESS;
 }
 
-enum geo_result TMPL_FUNC(geo_geometry_is_simple)(
+enum GeoResult TMPL_FUNC(geo_geometry_is_simple)(
     struct TMPL_GEOMETRY const* geometry, bool* is_simple) {
-  enum geo_result result = GEO_SUCCESS;
+  enum GeoResult result = GEO_SUCCESS;
   size_t intersections = 0;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL) {
@@ -360,7 +360,7 @@ enum geo_result TMPL_FUNC(geo_geometry_is_simple)(
   return GEO_SUCCESS;
 }
 
-enum geo_result TMPL_FUNC(geo_point_in_geometry)(
+enum GeoResult TMPL_FUNC(geo_point_in_geometry)(
     struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
     bool strict, bool* is_inside) {
   size_t intersections = 0;
@@ -402,10 +402,10 @@ enum geo_result TMPL_FUNC(geo_point_in_geometry)(
   return GEO_SUCCESS;
 }
 
-enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
+enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(
     struct TMPL_GEOMETRY* parent, struct TMPL_GEOMETRY* child, bool strict,
     bool* is_inside) {
-  enum geo_result result = GEO_SUCCESS;
+  enum GeoResult result = GEO_SUCCESS;
 #ifndef GEO_UNSAFE
   if (parent == NULL || parent->segments == NULL || child == NULL ||
       child->segments == NULL) {
@@ -444,7 +444,7 @@ enum geo_result TMPL_FUNC(geo_geometry_in_geometry)(
   return GEO_SUCCESS;
 }
 
-enum geo_result TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
+enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
                                            struct TMPL_POINT** convex_hull,
                                            size_t size,
                                            size_t* convex_hull_size) {
