@@ -54,24 +54,6 @@ enum geo_result {
 
 enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
 
-/* private forward declaration
-static bool equal(GEO_TMPL_TYPE lhs, GEO_TMPL_TYPE rhs);
-inline static GEO_TMPL_TYPE dot_product(struct TMPL_POINT const* vec_ab,
-                                struct TMPL_POINT const* vec_ac);
-inline static GEO_TMPL_TYPE cross_product(struct TMPL_POINT const* vec_ab,
-                                  struct TMPL_POINT const* vec_ac);
-
-static enum geo_orientation orientation(struct TMPL_POINT const* start,
-                                        struct TMPL_POINT const* end,
-                                        struct TMPL_POINT const* point);
-static bool in_disk(struct TMPL_SEGMENT const* segment,
-                    struct TMPL_POINT const* point);
-
-static GEO_TMPL_TYPE squared_distance(struct TMPL_POINT const* point1,
-                              struct TMPL_POINT const* point2);
-
-static int compare(const void* first, const void* second);
-*/
 // public forward declaration
 enum geo_result TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
                                             struct TMPL_POINT const* rhs,

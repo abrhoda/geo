@@ -7,33 +7,33 @@
  *----------------------------------
  */
 void geo_points_equal_long_returns_geo_err_null_pointer_result_code_when_lhs_is_null(void) {
-  struct geo_point_long point = {0, 0};
+  struct GeoPoint_long point = {0, 0};
   bool is_eq = false;
-  enum geo_result result = geo_points_equal_long(NULL, &point, &is_eq);
+  enum GeoResult result = geo_points_equal_long(NULL, &point, &is_eq);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_points_equal_long_returns_geo_err_null_pointer_result_code_when_rhs_is_null(void) {
-  struct geo_point_long point = {0.0, 0};
+  struct GeoPoint_long point = {0.0, 0};
   bool is_eq = false;
-  enum geo_result result = geo_points_equal_long(&point, NULL, &is_eq);
+  enum GeoResult result = geo_points_equal_long(&point, NULL, &is_eq);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_points_equal_long_returns_geo_success_and_is_equal_set_to_1_when_lhs_and_rhs_are_exactly_equal(void) {
-  struct geo_point_long point1 = {1, 2};
-  struct geo_point_long point2 = {1, 2};
+  struct GeoPoint_long point1 = {1, 2};
+  struct GeoPoint_long point2 = {1, 2};
   bool is_eq = false;
-  enum geo_result result = geo_points_equal_long(&point1, &point2, &is_eq);
+  enum GeoResult result = geo_points_equal_long(&point1, &point2, &is_eq);
   assert(result == GEO_SUCCESS);
   assert(is_eq == true);
 }
 
 void geo_points_equal_long_returns_geo_success_and_is_equal_set_to_0_when_lhs_neither_x_or_y_and_rhs_x_or_y_are_within_epsilon(void) {
-  struct geo_point_long point1 = {2, 3};
-  struct geo_point_long point2 = {10, 10};
+  struct GeoPoint_long point1 = {2, 3};
+  struct GeoPoint_long point2 = {10, 10};
   bool is_eq = false;
-  enum geo_result result = geo_points_equal_long(&point1, &point2, &is_eq);
+  enum GeoResult result = geo_points_equal_long(&point1, &point2, &is_eq);
   assert(result == GEO_SUCCESS);
   assert(is_eq == false);
 }
@@ -43,10 +43,10 @@ void geo_points_equal_long_returns_geo_success_and_is_equal_set_to_0_when_lhs_ne
  *----------------------------------
  */
 void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_segment_1_is_null(void) {
-  struct geo_point_long point1 = {2, 3};
-  struct geo_point_long point2 = {1, 2};
-  struct geo_segment_long segment;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {2, 3};
+  struct GeoPoint_long point2 = {1, 2};
+  struct GeoSegment_long segment;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment.start = &point1;
   segment.end = &point2;
@@ -54,10 +54,10 @@ void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_s
   assert(result == GEO_ERR_NULL_POINTER);
 }
 void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_segment_2_is_null(void) {
-  struct geo_point_long point1 = {2, 3};
-  struct geo_point_long point2 = {1, 2};
-  struct geo_segment_long segment;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {2, 3};
+  struct GeoPoint_long point2 = {1, 2};
+  struct GeoSegment_long segment;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment.start = &point1;
   segment.end = &point2;
@@ -65,13 +65,13 @@ void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_s
   assert(result == GEO_ERR_NULL_POINTER);
 }
 void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_segment_1_start_is_null(void) {
-  /*struct geo_point_long point1 = {2, 3};*/
-  struct geo_point_long point2 = {1, 2};
-  struct geo_point_long point3 = {7, 3};
-  struct geo_point_long point4 = {6, 2};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  /*struct GeoPoint_long point1 = {2, 3};*/
+  struct GeoPoint_long point2 = {1, 2};
+  struct GeoPoint_long point3 = {7, 3};
+  struct GeoPoint_long point4 = {6, 2};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = NULL;
   segment1.end = &point2;
@@ -82,13 +82,13 @@ void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_s
 }
 
 void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_segment_1_end_is_null(void) {
-  struct geo_point_long point1 = {2, 3};
-  /*struct geo_point_long point2 = {1.5F, 2};*/
-  struct geo_point_long point3 = {7, 3};
-  struct geo_point_long point4 = {6, 2};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {2, 3};
+  /*struct GeoPoint_long point2 = {1.5F, 2};*/
+  struct GeoPoint_long point3 = {7, 3};
+  struct GeoPoint_long point4 = {6, 2};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = NULL;
@@ -99,13 +99,13 @@ void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_s
 }
 
 void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_segment_2_start_is_null(void) {
-  struct geo_point_long point1 = {2, 3};
-  struct geo_point_long point2 = {1, 2};
-  /*struct geo_point_long point3 = {7, 3};*/
-  struct geo_point_long point4 = {6, 2};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {2, 3};
+  struct GeoPoint_long point2 = {1, 2};
+  /*struct GeoPoint_long point3 = {7, 3};*/
+  struct GeoPoint_long point4 = {6, 2};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -116,13 +116,13 @@ void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_s
 }
 
 void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_segment_2_end_is_null(void) {
-  struct geo_point_long point1 = {2, 3};
-  struct geo_point_long point2 = {1, 2};
-  struct geo_point_long point3 = {7, 3};
-  /*struct geo_point_long point4 = {6.5F, 2};*/
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {2, 3};
+  struct GeoPoint_long point2 = {1, 2};
+  struct GeoPoint_long point3 = {7, 3};
+  /*struct GeoPoint_long point4 = {6.5F, 2};*/
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -133,13 +133,13 @@ void geo_segments_intersect_long_returns_geo_err_null_pointer_result_code_when_s
 }
 
 void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_0_when_segments_are_parallel(void) {
-  struct geo_point_long point1 = {0, 3};
-  struct geo_point_long point2 = {3, 3};
-  struct geo_point_long point3 = {0, 4};
-  struct geo_point_long point4 = {3, 4};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 3};
+  struct GeoPoint_long point2 = {3, 3};
+  struct GeoPoint_long point3 = {0, 4};
+  struct GeoPoint_long point4 = {3, 4};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -151,13 +151,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_0_wh
 }
 
 void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_0_when_segments_are_colinear_but_dont_intersect(void) {
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {1, 0};
-  struct geo_point_long point3 = {2, 0};
-  struct geo_point_long point4 = {3, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {1, 0};
+  struct GeoPoint_long point3 = {2, 0};
+  struct GeoPoint_long point4 = {3, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -169,13 +169,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_0_wh
 }
 
 void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_0_when_segments_dont_intersect(void) {
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {1, 1};
-  struct geo_point_long point3 = {2, 3};
-  struct geo_point_long point4 = {3, 5};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {1, 1};
+  struct GeoPoint_long point3 = {2, 3};
+  struct GeoPoint_long point4 = {3, 5};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -201,13 +201,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_1_wh
    * p1    p4
    */
 
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {2, 2};
-  struct geo_point_long point3 = {0, 2};
-  struct geo_point_long point4 = {2, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {2, 2};
+  struct GeoPoint_long point3 = {0, 2};
+  struct GeoPoint_long point4 = {2, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -231,13 +231,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_2_wh
    * p1
    *
    */
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {1, 1};
-  struct geo_point_long point3 = {0, 1};
-  struct geo_point_long point4 = {1, 1};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {1, 1};
+  struct GeoPoint_long point3 = {0, 1};
+  struct GeoPoint_long point4 = {1, 1};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -255,13 +255,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_2_wh
    * p1   p3   p4   p2
    *
    */
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {3, 0};
-  struct geo_point_long point3 = {1, 0};
-  struct geo_point_long point4 = {2, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {3, 0};
+  struct GeoPoint_long point3 = {1, 0};
+  struct GeoPoint_long point4 = {2, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -278,13 +278,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_3_wh
    * |    |        |
    * p1   p3    p2 + p4
    * */
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {2, 0};
-  struct geo_point_long point3 = {1, 0};
-  struct geo_point_long point4 = {2, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {2, 0};
+  struct GeoPoint_long point3 = {1, 0};
+  struct GeoPoint_long point4 = {2, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -301,13 +301,13 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_4_wh
    * |              |
    * p1+p3          p2+p4
    */
-  struct geo_point_long point1 = {0, 0};
-  struct geo_point_long point2 = {2, 0};
-  struct geo_point_long point3 = {0, 0};
-  struct geo_point_long point4 = {2, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  enum geo_result result = 0;
+  struct GeoPoint_long point1 = {0, 0};
+  struct GeoPoint_long point2 = {2, 0};
+  struct GeoPoint_long point3 = {0, 0};
+  struct GeoPoint_long point4 = {2, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  enum GeoResult result = 0;
   size_t intersect_count = 0;
   segment1.start = &point1;
   segment1.end = &point2;
@@ -324,32 +324,32 @@ void geo_segments_intersect_long_returns_geo_success_and_intersect_count_is_4_wh
  *----------------------------------
  */
 void geo_geometry_is_closed_long_returns_geo_err_null_pointer_when_geometry_is_null(void) {
-  struct geo_geometry_long * geometry = NULL;
+  struct GeoGeometry_long * geometry = NULL;
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(geometry, &is_closed);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_closed_long_returns_geo_err_null_pointer_when_geometry_segments_is_null(void) {
-  struct geo_geometry_long geometry;
+  struct GeoGeometry_long geometry;
   geometry.segments_count = 0;
   geometry.segments = NULL;
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(&geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(&geometry, &is_closed);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_closed_long_returns_geo_err_null_pointer_when_geometry_segment_start_is_null(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long start3 = {1, 3};
-  struct geo_point_long end3 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long * segments[3];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long start3 = {1, 3};
+  struct GeoPoint_long end3 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long * segments[3];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -363,22 +363,22 @@ void geo_geometry_is_closed_long_returns_geo_err_null_pointer_when_geometry_segm
   geometry.segments = segments;
 
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(&geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(&geometry, &is_closed);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_closed_long_returns_geo_err_null_pointer_when_geometry_segment_end_is_null(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  /*struct geo_point_long start2 = {3, 0};*/
-  struct geo_point_long end2 = {1, 3};
-  struct geo_point_long start3 = {1, 3};
-  struct geo_point_long end3 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long * segments[3];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  /*struct GeoPoint_long start2 = {3, 0};*/
+  struct GeoPoint_long end2 = {1, 3};
+  struct GeoPoint_long start3 = {1, 3};
+  struct GeoPoint_long end3 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long * segments[3];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -392,19 +392,19 @@ void geo_geometry_is_closed_long_returns_geo_err_null_pointer_when_geometry_segm
   geometry.segments = segments;
 
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(&geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(&geometry, &is_closed);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_closed_long_returns_geo_err_too_small_when_geometry_segment_count_less_than_3(void) {
-  struct geo_point_long start1 = {2, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {6, 1};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long * segments[2];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {2, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {6, 1};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long * segments[2];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -415,24 +415,24 @@ void geo_geometry_is_closed_long_returns_geo_err_too_small_when_geometry_segment
   geometry.segments = segments;
 
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(&geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(&geometry, &is_closed);
   assert(result == GEO_ERR_TOO_SMALL);
 }
 
 void geo_geometry_is_closed_long_returns_geo_success_and_is_closed_is_false_when_nth_segments_end_doesnt_equal_n_plus_1_segment_start(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {1, 3};
-  struct geo_point_long start3 = {1, 3};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {1, 3};
+  struct GeoPoint_long start3 = {1, 3};
 
   /* GAP HERE */
-  struct geo_point_long end3 = {-1, -1};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long * segments[3];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long end3 = {-1, -1};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long * segments[3];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -446,23 +446,23 @@ void geo_geometry_is_closed_long_returns_geo_success_and_is_closed_is_false_when
   geometry.segments = segments;
 
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(&geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(&geometry, &is_closed);
   assert(result == GEO_SUCCESS);
   assert(is_closed == false);
 }
 
 void geo_geometry_is_closed_long_returns_geo_success_and_is_closed_is_true_when_nth_segments_end_equals_n_plus_1_segments_start(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {1, 3};
-  struct geo_point_long start3 = {1, 3};
-  struct geo_point_long end3 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long * segments[3];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {1, 3};
+  struct GeoPoint_long start3 = {1, 3};
+  struct GeoPoint_long end3 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long * segments[3];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -476,7 +476,7 @@ void geo_geometry_is_closed_long_returns_geo_success_and_is_closed_is_true_when_
   geometry.segments = segments;
 
   bool is_closed = false;
-  enum geo_result result = geo_geometry_is_closed_long(&geometry, &is_closed);
+  enum GeoResult result = geo_geometry_is_closed_long(&geometry, &is_closed);
   assert(result == GEO_SUCCESS);
   assert(is_closed == true);
 }
@@ -486,37 +486,37 @@ void geo_geometry_is_closed_long_returns_geo_success_and_is_closed_is_true_when_
  *----------------------------------
  */
 void geo_geometry_is_simple_long_returns_geo_err_null_pointer_when_geometry_is_null(void) {
-  struct geo_geometry_long * geometry = NULL;
+  struct GeoGeometry_long * geometry = NULL;
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(geometry, &is_simple);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_simple_long_returns_geo_err_null_pointer_when_geometry_segments_is_null(void) {
-  struct geo_geometry_long geometry;
+  struct GeoGeometry_long geometry;
   geometry.segments_count = 0;
   geometry.segments = NULL;
 
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(&geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(&geometry, &is_simple);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_simple_long_returns_geo_err_null_pointer_when_geometry_segments_ith_start_is_null(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -533,25 +533,25 @@ void geo_geometry_is_simple_long_returns_geo_err_null_pointer_when_geometry_segm
   geometry.segments = segments;
 
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(&geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(&geometry, &is_simple);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_simple_long_returns_geo_err_null_pointer_when_geometry_segments_ith_end_is_null(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -568,19 +568,19 @@ void geo_geometry_is_simple_long_returns_geo_err_null_pointer_when_geometry_segm
   geometry.segments = segments;
 
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(&geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(&geometry, &is_simple);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_geometry_is_simple_long_returns_geo_err_too_small_when_geometry_segments_count_less_than_3(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long * segments[2];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long * segments[2];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -591,25 +591,25 @@ void geo_geometry_is_simple_long_returns_geo_err_too_small_when_geometry_segment
   geometry.segments = segments;
 
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(&geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(&geometry, &is_simple);
   assert(result == GEO_ERR_TOO_SMALL);
 }
 
 void geo_geometry_is_simple_long_returns_geo_success_and_is_simple_is_false_when_any_segments_intersect(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 3};
-  struct geo_point_long start2 = {3, 3};
-  struct geo_point_long end2 = {3, 0};
-  struct geo_point_long start3 = {3, 0};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 3};
+  struct GeoPoint_long start2 = {3, 3};
+  struct GeoPoint_long end2 = {3, 0};
+  struct GeoPoint_long start3 = {3, 0};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -626,26 +626,26 @@ void geo_geometry_is_simple_long_returns_geo_success_and_is_simple_is_false_when
   geometry.segments = segments;
 
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(&geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(&geometry, &is_simple);
   assert(result == GEO_SUCCESS);
   assert(is_simple == false);
 }
 
 void geo_geometry_is_simple_long_returns_geo_success_and_is_simple_is_true_when_no_segments_intersect(void) {
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -662,7 +662,7 @@ void geo_geometry_is_simple_long_returns_geo_success_and_is_simple_is_true_when_
   geometry.segments = segments;
 
   bool is_simple = false;
-  enum geo_result result = geo_geometry_is_simple_long(&geometry, &is_simple);
+  enum GeoResult result = geo_geometry_is_simple_long(&geometry, &is_simple);
   assert(result == GEO_SUCCESS);
   assert(is_simple == true);
 }
@@ -672,54 +672,54 @@ void geo_geometry_is_simple_long_returns_geo_success_and_is_simple_is_true_when_
  *----------------------------------
  */
 void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_point_is_null(void) {
-  struct geo_geometry_long geometry;
-  struct geo_segment_long * segments[3];
+  struct GeoGeometry_long geometry;
+  struct GeoSegment_long * segments[3];
   bool strict = true;
   bool inside = false;
   geometry.segments = segments;
   geometry.segments_count = 3;
-  enum geo_result result = geo_point_in_geometry_long(NULL, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(NULL, &geometry, strict, &inside);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_geometry_is_null(void) {
-  struct geo_point_long point = { 0, 0 };
+  struct GeoPoint_long point = { 0, 0 };
   bool strict = true;
   bool inside = false;
-  enum geo_result result = geo_point_in_geometry_long(&point, NULL, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, NULL, strict, &inside);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_geometry_segments_is_null(void) {
-  struct geo_geometry_long geometry;
-  struct geo_point_long point = { 0, 0 };
+  struct GeoGeometry_long geometry;
+  struct GeoPoint_long point = { 0, 0 };
   bool strict = true;
   bool inside = false;
   geometry.segments = NULL;
   geometry.segments_count = 3;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_geometry_segments_ith_start_is_null(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {1, 1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {1, 1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -735,28 +735,28 @@ void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_geometry_segme
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_geometry_segments_ith_end_is_null(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {1, 1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {1, 1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -772,22 +772,22 @@ void geo_point_in_geometry_long_returns_geo_err_null_pointer_when_geometry_segme
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_point_in_geometry_long_returns_geo_err_too_small_when_geometry_segments_count_is_less_than_3(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {1, 1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long * segments[2];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {1, 1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long * segments[2];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -797,28 +797,28 @@ void geo_point_in_geometry_long_returns_geo_err_too_small_when_geometry_segments
   geometry.segments_count = 2;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_ERR_TOO_SMALL);
 }
 
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_on_geometry_segment_and_strict_is_true(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {3, 1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {3, 1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -834,7 +834,7 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_SUCCESS);
   assert(inside == false);
 }
@@ -842,21 +842,21 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_point_on_geometry_segment_and_strict_is_false(void) {
   bool strict = false;
   bool inside = false;
-  struct geo_point_long point = {3, 1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {3, 1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -872,7 +872,7 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_po
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_SUCCESS);
   assert(inside == true);
 }
@@ -880,21 +880,21 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_true_when_po
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_to_the_left_of_the_geometry_and_colinear_with_horizontal_segment(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {3, -1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {3, -1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -910,7 +910,7 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_SUCCESS);
   assert(inside == false);
 }
@@ -918,21 +918,21 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_to_the_right_of_the_geometry_and_colinear_with_horizontal_segment(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {4, 0};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {4, 0};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -948,7 +948,7 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_SUCCESS);
   assert(inside == false);
 }
@@ -956,21 +956,21 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_above_of_the_geometry_and_colinear_with_vertical_segment(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {0, 4};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {0, 4};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -986,7 +986,7 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_SUCCESS);
   assert(inside == false);
 }
@@ -994,21 +994,21 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
 void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_point_is_below_of_the_geometry_and_colinear_with_vertical_segment(void) {
   bool strict = true;
   bool inside = false;
-  struct geo_point_long point = {0, -1};
-  struct geo_point_long start1 = {0, 0};
-  struct geo_point_long end1 = {3, 0};
-  struct geo_point_long start2 = {3, 0};
-  struct geo_point_long end2 = {3, 3};
-  struct geo_point_long start3 = {3, 3};
-  struct geo_point_long end3 = {0, 3};
-  struct geo_point_long start4 = {0, 3};
-  struct geo_point_long end4 = {0, 0};
-  struct geo_segment_long segment1;
-  struct geo_segment_long segment2;
-  struct geo_segment_long segment3;
-  struct geo_segment_long segment4;
-  struct geo_segment_long * segments[4];
-  struct geo_geometry_long geometry;
+  struct GeoPoint_long point = {0, -1};
+  struct GeoPoint_long start1 = {0, 0};
+  struct GeoPoint_long end1 = {3, 0};
+  struct GeoPoint_long start2 = {3, 0};
+  struct GeoPoint_long end2 = {3, 3};
+  struct GeoPoint_long start3 = {3, 3};
+  struct GeoPoint_long end3 = {0, 3};
+  struct GeoPoint_long start4 = {0, 3};
+  struct GeoPoint_long end4 = {0, 0};
+  struct GeoSegment_long segment1;
+  struct GeoSegment_long segment2;
+  struct GeoSegment_long segment3;
+  struct GeoSegment_long segment4;
+  struct GeoSegment_long * segments[4];
+  struct GeoGeometry_long geometry;
   segment1.start = &start1;
   segment1.end = &end1;
   segments[0] = &segment1;
@@ -1024,7 +1024,7 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
   geometry.segments_count = 4;
   geometry.segments = segments;
 
-  enum geo_result result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
+  enum GeoResult result = geo_point_in_geometry_long(&point, &geometry, strict, &inside);
   assert(result == GEO_SUCCESS);
   assert(inside == false);
 }
@@ -1036,27 +1036,27 @@ void geo_poiny_in_geometry_returns_geo_success_and_is_inside_set_to_false_when_p
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geometry_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1095,27 +1095,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geom
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geometry_segments_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1154,27 +1154,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geom
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1213,27 +1213,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geom
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_start_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1272,27 +1272,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geom
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geometry_ith_segment_end_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1331,27 +1331,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_parent_geom
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geometry_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1390,27 +1390,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geome
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geometry_segments_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1449,27 +1449,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geome
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geometry_ith_segment_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1508,27 +1508,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geome
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geometry_ith_segment_start_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1567,27 +1567,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geome
 void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geometry_ith_segment_end_point_is_null(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1626,27 +1626,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_null_pointer_when_child_geome
 void geo_geometry_in_geometry_long_returns_geo_err_too_small_when_parent_geometry_segments_count_less_than_3(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 2;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1679,27 +1679,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_too_small_when_parent_geometr
 void geo_geometry_in_geometry_long_returns_geo_err_too_small_when_child_geometry_segments_count_less_than_3(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 2;
   parent_segment1.start = &parent_vertex1;
@@ -1732,27 +1732,27 @@ void geo_geometry_in_geometry_long_returns_geo_err_too_small_when_child_geometry
 void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_true_when_all_points_in_child_geometry_are_inside_parent_geometry(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 3, 3 };
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 3, 3 };
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1792,27 +1792,27 @@ void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_true
 void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_false_when_any_points_in_child_geometry_are_outside_parent_geometry(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 6, 3 }; /* outside parent */
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 6, 3 }; /* outside parent */
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1852,27 +1852,27 @@ void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_fals
 void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_false_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_true(void) {
   bool is_inside = false;
   bool strict = true;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 5, 3 }; /* on parent geometry segment */
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 5, 3 }; /* on parent geometry segment */
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1912,27 +1912,27 @@ void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_fals
 void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_true_when_any_points_in_child_geometry_are_on_segment_of_parent_geometry_and_strict_is_false(void) {
   bool is_inside = false;
   bool strict = false;
-  enum geo_result result = GEO_SUCCESS;
-  struct geo_point_long parent_vertex1 = { 0, 0 };
-  struct geo_point_long parent_vertex2 = { 5, 0 };
-  struct geo_point_long parent_vertex3 = { 5, 5 };
-  struct geo_point_long parent_vertex4 = { 0, 5 };
-  struct geo_point_long child_vertex1 = { 1, 1 };
-  struct geo_point_long child_vertex2 = { 3, 1 };
-  struct geo_point_long child_vertex3 = { 5, 3 }; /* on parent geometry segment */
-  struct geo_point_long child_vertex4 = { 1, 3 };
-  struct geo_segment_long parent_segment1;
-  struct geo_segment_long parent_segment2;
-  struct geo_segment_long parent_segment3;
-  struct geo_segment_long parent_segment4;
-  struct geo_segment_long child_segment1;
-  struct geo_segment_long child_segment2;
-  struct geo_segment_long child_segment3;
-  struct geo_segment_long child_segment4;
-  struct geo_segment_long *parent_segments[4];
-  struct geo_segment_long *child_segments[4];
-  struct geo_geometry_long parent;
-  struct geo_geometry_long child;
+  enum GeoResult result = GEO_SUCCESS;
+  struct GeoPoint_long parent_vertex1 = { 0, 0 };
+  struct GeoPoint_long parent_vertex2 = { 5, 0 };
+  struct GeoPoint_long parent_vertex3 = { 5, 5 };
+  struct GeoPoint_long parent_vertex4 = { 0, 5 };
+  struct GeoPoint_long child_vertex1 = { 1, 1 };
+  struct GeoPoint_long child_vertex2 = { 3, 1 };
+  struct GeoPoint_long child_vertex3 = { 5, 3 }; /* on parent geometry segment */
+  struct GeoPoint_long child_vertex4 = { 1, 3 };
+  struct GeoSegment_long parent_segment1;
+  struct GeoSegment_long parent_segment2;
+  struct GeoSegment_long parent_segment3;
+  struct GeoSegment_long parent_segment4;
+  struct GeoSegment_long child_segment1;
+  struct GeoSegment_long child_segment2;
+  struct GeoSegment_long child_segment3;
+  struct GeoSegment_long child_segment4;
+  struct GeoSegment_long *parent_segments[4];
+  struct GeoSegment_long *child_segments[4];
+  struct GeoGeometry_long parent;
+  struct GeoGeometry_long child;
   size_t parent_segments_count = 4;
   size_t child_segments_count = 4;
   parent_segment1.start = &parent_vertex1;
@@ -1975,69 +1975,69 @@ void geo_geometry_in_geometry_long_returns_geo_success_and_is_inside_set_to_true
  */
 void geo_convex_hull_long_returns_geo_err_null_pointer_when_points_array_is_null(void) {
   size_t count = 5;
-  struct geo_point_long *hull[5];
+  struct GeoPoint_long *hull[5];
   size_t hull_size = 0;
-  enum geo_result result = geo_convex_hull_long(NULL, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(NULL, hull, count, &hull_size);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_convex_hull_long_returns_geo_err_null_pointer_when_hull_array_is_null(void) {
   size_t count = 3;
   size_t hull_size = 0;
-  struct geo_point_long *points[3];
-  struct geo_point_long point1 = { 0, 0 };
-  struct geo_point_long point2 = { 2, 0 };
-  struct geo_point_long point3 = { 1, 1 };
+  struct GeoPoint_long *points[3];
+  struct GeoPoint_long point1 = { 0, 0 };
+  struct GeoPoint_long point2 = { 2, 0 };
+  struct GeoPoint_long point3 = { 1, 1 };
   points[0] = &point1;
   points[1] = &point2;
   points[2] = &point3;
 
-  enum geo_result result = geo_convex_hull_long(points, NULL, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, NULL, count, &hull_size);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_convex_hull_long_returns_geo_err_too_small_when_size_is_less_than_3(void) {
   size_t count = 2;
   size_t hull_size = 0;
-  struct geo_point_long *hull[2];
-  struct geo_point_long *points[2];
-  struct geo_point_long point1 = { 0, 0 };
-  struct geo_point_long point2 = { 1, 0 };
+  struct GeoPoint_long *hull[2];
+  struct GeoPoint_long *points[2];
+  struct GeoPoint_long point1 = { 0, 0 };
+  struct GeoPoint_long point2 = { 1, 0 };
   points[0] = &point1;
   points[1] = &point2;
 
-  enum geo_result result = geo_convex_hull_long(points, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, hull, count, &hull_size);
   assert(result == GEO_ERR_TOO_SMALL);
 }
 
 void geo_convex_hull_long_returns_geo_err_null_pointer_when_any_point_in_points_is_null(void) {
   size_t count = 3;
   size_t hull_size = 0;
-  struct geo_point_long *hull[3];
-  struct geo_point_long *points[3];
-  struct geo_point_long point1 = { 0, 0 };
-  struct geo_point_long point3 = { 1, 1 };
+  struct GeoPoint_long *hull[3];
+  struct GeoPoint_long *points[3];
+  struct GeoPoint_long point1 = { 0, 0 };
+  struct GeoPoint_long point3 = { 1, 1 };
   points[0] = &point1;
   points[1] = NULL;
   points[2] = &point3;
 
-  enum geo_result result = geo_convex_hull_long(points, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, hull, count, &hull_size);
   assert(result == GEO_ERR_NULL_POINTER);
 }
 
 void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_3_and_hull_has_points_in_order_when_given_points_form_triangle(void) {
   size_t count = 3;
   size_t hull_size = 0;
-  struct geo_point_long *hull[3];
-  struct geo_point_long *points[3];
-  struct geo_point_long point1 = { 0, 0 };
-  struct geo_point_long point2 = { 1, 0 };
-  struct geo_point_long point3 = { 1, 1 };
+  struct GeoPoint_long *hull[3];
+  struct GeoPoint_long *points[3];
+  struct GeoPoint_long point1 = { 0, 0 };
+  struct GeoPoint_long point2 = { 1, 0 };
+  struct GeoPoint_long point3 = { 1, 1 };
   points[0] = &point1;
   points[1] = &point3;
   points[2] = &point2;
 
-  enum geo_result result = geo_convex_hull_long(points, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, hull, count, &hull_size);
   assert(result == GEO_SUCCESS);
   assert(hull_size == 3);
   assert(hull[0] == &point1);
@@ -2048,15 +2048,15 @@ void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_3_and_hull_h
 void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_5_and_hull_has_points_in_ccw_order_when_given_point_cloud(void) {
   size_t count = 7;
   size_t hull_size = 0;
-  struct geo_point_long *hull[7];
-  struct geo_point_long *points[7];
-  struct geo_point_long point1 = { 1, 1 };
-  struct geo_point_long point2 = { 7, 0 };
-  struct geo_point_long point3 = { 4, 2 };
-  struct geo_point_long point4 = { 6, 4 };
-  struct geo_point_long point5 = { 3, 5 };
-  struct geo_point_long point6 = { 5, 6 };
-  struct geo_point_long point7 = { 2, 7 };
+  struct GeoPoint_long *hull[7];
+  struct GeoPoint_long *points[7];
+  struct GeoPoint_long point1 = { 1, 1 };
+  struct GeoPoint_long point2 = { 7, 0 };
+  struct GeoPoint_long point3 = { 4, 2 };
+  struct GeoPoint_long point4 = { 6, 4 };
+  struct GeoPoint_long point5 = { 3, 5 };
+  struct GeoPoint_long point6 = { 5, 6 };
+  struct GeoPoint_long point7 = { 2, 7 };
 
   points[0] = &point1;
   points[1] = &point2;
@@ -2065,7 +2065,7 @@ void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_5_and_hull_h
   points[4] = &point5;
   points[5] = &point6;
   points[6] = &point7;
-  enum geo_result result = geo_convex_hull_long(points, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, hull, count, &hull_size);
 
   assert(result == GEO_SUCCESS);
   assert(hull_size == 5);
@@ -2079,14 +2079,14 @@ void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_5_and_hull_h
 void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_4_and_hull_has_points_in_ccw_order_using_furthest_colinear_point_when_given_point_cloud_with_colinear_points(void) {
   size_t count = 6;
   size_t hull_size = 0;
-  struct geo_point_long *hull[6];
-  struct geo_point_long *points[6];
-  struct geo_point_long point1 = { 0, 0 };
-  struct geo_point_long point2 = { 3, 0 };
-  struct geo_point_long point3 = { 3, 1 };
-  struct geo_point_long point4 = { 3, 2 };
-  struct geo_point_long point5 = { 3, 3 };
-  struct geo_point_long point6 = { 0, 3 };
+  struct GeoPoint_long *hull[6];
+  struct GeoPoint_long *points[6];
+  struct GeoPoint_long point1 = { 0, 0 };
+  struct GeoPoint_long point2 = { 3, 0 };
+  struct GeoPoint_long point3 = { 3, 1 };
+  struct GeoPoint_long point4 = { 3, 2 };
+  struct GeoPoint_long point5 = { 3, 3 };
+  struct GeoPoint_long point6 = { 0, 3 };
   points[0] = &point1;
   points[1] = &point6;
   points[2] = &point3;
@@ -2094,7 +2094,7 @@ void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_4_and_hull_h
   points[4] = &point5;
   points[5] = &point4;
 
-  enum geo_result result = geo_convex_hull_long(points, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, hull, count, &hull_size);
   assert(result == GEO_SUCCESS);
   assert(hull_size == 4);
   assert(hull[0] == &point1);
@@ -2106,38 +2106,38 @@ void geo_convex_hull_long_returns_geo_success_and_sets_hull_size_to_4_and_hull_h
 void geo_convex_hull_long_with_30_points_returns_geo_success_and_sets_hull_size_to_12_and_hull_has_points_in_ccw_order(void) {
   size_t count = 30;
   size_t hull_size = 0;
-  struct geo_point_long *hull[30];
-  struct geo_point_long *points[30];
-  struct geo_point_long point1 = { -100, 100 };
-  struct geo_point_long point2 = { -125, 125 };
-  struct geo_point_long point3 = { -150, 125 };
-  struct geo_point_long point4 = { -175, 100 };
-  struct geo_point_long point5 = { -200, 50 };
-  struct geo_point_long point6 = { -200, -50 };
-  struct geo_point_long point7 = { -175, -100 };
-  struct geo_point_long point8 = { -150, -125 };
-  struct geo_point_long point9 = { -125, -125 };
-  struct geo_point_long point10 = { -100, -100 };
-  struct geo_point_long point11 = { 75, 150 };
-  struct geo_point_long point12 = { 25, 200 };
-  struct geo_point_long point13 = { -25, 200 };
-  struct geo_point_long point14 = { -75, 125 };
-  struct geo_point_long point15 = { -25, 50 };
-  struct geo_point_long point16 = { 25, -50 };
-  struct geo_point_long point17 = { 75, -125 };
-  struct geo_point_long point18 = { 25, -200 };
-  struct geo_point_long point19 = { -25, -200 };
-  struct geo_point_long point20 = { -75, -150 };
-  struct geo_point_long point21 = { 200, 125 };
-  struct geo_point_long point22 = { 150, 125 };
-  struct geo_point_long point23 = { 100, 125 };
-  struct geo_point_long point24 = { 100, 50 };
-  struct geo_point_long point25 = { 100, 0 };
-  struct geo_point_long point26 = { 150, 0 };
-  struct geo_point_long point27 = { 100, -50 };
-  struct geo_point_long point28 = { 100, -125 };
-  struct geo_point_long point29 = { 150, -125 };
-  struct geo_point_long point30 = { 200, -125 };
+  struct GeoPoint_long *hull[30];
+  struct GeoPoint_long *points[30];
+  struct GeoPoint_long point1 = { -100, 100 };
+  struct GeoPoint_long point2 = { -125, 125 };
+  struct GeoPoint_long point3 = { -150, 125 };
+  struct GeoPoint_long point4 = { -175, 100 };
+  struct GeoPoint_long point5 = { -200, 50 };
+  struct GeoPoint_long point6 = { -200, -50 };
+  struct GeoPoint_long point7 = { -175, -100 };
+  struct GeoPoint_long point8 = { -150, -125 };
+  struct GeoPoint_long point9 = { -125, -125 };
+  struct GeoPoint_long point10 = { -100, -100 };
+  struct GeoPoint_long point11 = { 75, 150 };
+  struct GeoPoint_long point12 = { 25, 200 };
+  struct GeoPoint_long point13 = { -25, 200 };
+  struct GeoPoint_long point14 = { -75, 125 };
+  struct GeoPoint_long point15 = { -25, 50 };
+  struct GeoPoint_long point16 = { 25, -50 };
+  struct GeoPoint_long point17 = { 75, -125 };
+  struct GeoPoint_long point18 = { 25, -200 };
+  struct GeoPoint_long point19 = { -25, -200 };
+  struct GeoPoint_long point20 = { -75, -150 };
+  struct GeoPoint_long point21 = { 200, 125 };
+  struct GeoPoint_long point22 = { 150, 125 };
+  struct GeoPoint_long point23 = { 100, 125 };
+  struct GeoPoint_long point24 = { 100, 50 };
+  struct GeoPoint_long point25 = { 100, 0 };
+  struct GeoPoint_long point26 = { 150, 0 };
+  struct GeoPoint_long point27 = { 100, -50 };
+  struct GeoPoint_long point28 = { 100, -125 };
+  struct GeoPoint_long point29 = { 150, -125 };
+  struct GeoPoint_long point30 = { 200, -125 };
   points[0] = &point1;
   points[1] = &point2;
   points[2] = &point3;
@@ -2169,7 +2169,7 @@ void geo_convex_hull_long_with_30_points_returns_geo_success_and_sets_hull_size_
   points[28] = &point29;
   points[29] = &point30;
 
-  enum geo_result result = geo_convex_hull_long(points, hull, count, &hull_size);
+  enum GeoResult result = geo_convex_hull_long(points, hull, count, &hull_size);
   assert(result == GEO_SUCCESS);
   assert(hull_size == 12);
 }

@@ -1,6 +1,6 @@
 ---
 BasedOnStyle: Google
 Language:        C
-InsertBraces: true
+UseTab: Never # have read that clang-format has issues without this
 ...
 
