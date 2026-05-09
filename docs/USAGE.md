@@ -54,10 +54,10 @@ This is a complete, slim, example of copying and including the header, define th
 #include "geo_double.h"
 
 int main(void) {
-    struct geo_point_double point1 = { .x = 1.0005, .y = 1.0101 };
-    struct geo_point_double point2 = { .x = 10.005, .y = 10.010 };
+    struct GeoPoint_double point1 = { .x = 1.0005, .y = 1.0101 };
+    struct GeoPoint_double point2 = { .x = 10.005, .y = 10.010 };
     bool is_equal = false;
-    enum geo_result res = geo_points_equal_double(&point1, &point2, &is_equal);
+    enum GeoResult res = geo_points_equal_double(&point1, &point2, &is_equal);
     if (res != GEO_SUCCESS) {
         return 1;
     }
@@ -74,7 +74,7 @@ This provides an overview of all usable enums, functions, and structs in the lib
 ### Enums
 `geo_result` - This is the return type of all publicaly accessible functions. It should be checked to verify the success of a function or, if not a success, why it failed.
 ```c
-enum geo_result {
+enum GeoResult {
     GEO_SUCCESS = 0,
     GEO_ERR_NULL_POINTER = 1,
     GEO_ERR_TOO_SMALL = 2,
@@ -84,35 +84,35 @@ enum geo_result {
 ### Functions
 Function Declaration | Description | Notes
 ---|---|---
-`enum geo_result geo_points_equal_<type>(struct geo_point_<type> const* lhs, struct geo_point_<type> const* lhs, bool* is_equal);` | Compares to see if two points are equal | `is_equal` is only set and usable when the function returns `GEO_SUCCESS`
-`enum geo_result geo_segments_intersect_<type>(struct geo_segment_<type> const* segment1, struct geo_segment_<type> const* segment2, size_t* intersect_count);` | Determines "count" of times two segments intersect. | `intersect_count` is only set and usable when the function returns `GEO_SUCCESS`. `intersect_count == 0` when the 2 segments never intersect, `1` when the segments properly intersect, `2` when the segments share an endpoint or when one segment is a section of the other, `3` when one segment is a section of the other AND they share an endpoint, `4` when the segments have identical start and end points.
-`enum geo_result geo_geometry_is_closed_<type>(struct geo_geometry_<type> const* geometry, bool* is_closed);` | Checks if a geometry is considered closed. This is commonly referred to as a "ring" | `is_closed` is only set and usable when the function returns `GEO_SUCCESS`
-`enum geo_result geo_geometry_is_simple_<type>(struct geo_geometry_<type> const* geometry, bool* is_simple);` | Checks if a geometry is considered simple. This means that no segments intersect. | `is_simple` is only set and usable when the function returns `GEO_SUCCESS`
-`enum geo_result geo_point_in_geometry_<type>(struct geo_point_<type> const* point, struct geo_geometry_<type> const* geometry, bool strict, bool* is_inside);` | Determines if a point is inside a geometry. | `is_inside` is only set and usable when the function returns `GEO_SUCCESS`. `strict` decides if points on a segment are considered outside or inside the geometry. This function is also only valid when the geometry is both closed and simple. Check those both BEFORE using this function.
-`enum geo_result geo_geometry_in_geometry_<type>(struct geo_geometry_<type>* parent, struct geo_geometry_<type>* child, bool strict, bool* is_inside);` | Determines if one geometry is inside another geometry. | `is_inside` is only set and usable when the function returns `GEO_SUCCESS`. `strict` decides if points on a segment are considered outside or inside the geometry. This function is also only valid when both geometries are both closed and simple. Check those both BEFORE using this function.
-`enum geo_result geo_convex_hull_<type>(struct geo_point_<type>** points, struct geo_point_<type>** convex_hull, size_t size, size_t* convex_hull_size);` | Generates the list of points, in order, that form a closed and simple geometry that contain all points in `points` | `convex_hull` and `convex_hull_size` are only set and usable when the function returns `GEO_SUCCESS`. The `convex_hull` buffer passed in should be the same size as the `points` buffer for the scenario when all points are needed to form the hull.
+`enum GeoResult geo_points_equal_<type>(struct GeoPoint_<type> const* lhs, struct GeoPoint_<type> const* lhs, bool* is_equal);` | Compares to see if two points are equal | `is_equal` is only set and usable when the function returns `GEO_SUCCESS`
+`enum GeoResult geo_segments_intersect_<type>(struct GeoSegment_<type> const* segment1, struct GeoSegment_<type> const* segment2, size_t* intersect_count);` | Determines "count" of times two segments intersect. | `intersect_count` is only set and usable when the function returns `GEO_SUCCESS`. `intersect_count == 0` when the 2 segments never intersect, `1` when the segments properly intersect, `2` when the segments share an endpoint or when one segment is a section of the other, `3` when one segment is a section of the other AND they share an endpoint, `4` when the segments have identical start and end points.
+`enum GeoResult geo_geometry_is_closed_<type>(struct GeoGeometry_<type> const* geometry, bool* is_closed);` | Checks if a geometry is considered closed. This is commonly referred to as a "ring" | `is_closed` is only set and usable when the function returns `GEO_SUCCESS`
+`enum GeoResult geo_geometry_is_simple_<type>(struct GeoGeometry_<type> const* geometry, bool* is_simple);` | Checks if a geometry is considered simple. This means that no segments intersect. | `is_simple` is only set and usable when the function returns `GEO_SUCCESS`
+`enum GeoResult geo_point_in_geometry_<type>(struct GeoPoint_<type> const* point, struct GeoGeometry_<type> const* geometry, bool strict, bool* is_inside);` | Determines if a point is inside a geometry. | `is_inside` is only set and usable when the function returns `GEO_SUCCESS`. `strict` decides if points on a segment are considered outside or inside the geometry. This function is also only valid when the geometry is both closed and simple. Check those both BEFORE using this function.
+`enum GeoResult geo_geometry_in_geometry_<type>(struct GeoGeometry_<type>* parent, struct GeoGeometry_<type>* child, bool strict, bool* is_inside);` | Determines if one geometry is inside another geometry. | `is_inside` is only set and usable when the function returns `GEO_SUCCESS`. `strict` decides if points on a segment are considered outside or inside the geometry. This function is also only valid when both geometries are both closed and simple. Check those both BEFORE using this function.
+`enum GeoResult geo_convex_hull_<type>(struct GeoPoint_<type>** points, struct GeoPoint_<type>** convex_hull, size_t size, size_t* convex_hull_size);` | Generates the list of points, in order, that form a closed and simple geometry that contain all points in `points` | `convex_hull` and `convex_hull_size` are only set and usable when the function returns `GEO_SUCCESS`. The `convex_hull` buffer passed in should be the same size as the `points` buffer for the scenario when all points are needed to form the hull.
 
 ### Structs
-`geo_point_<type>` - represents a 2d point
+`GeoPoint_<type>` - represents a 2d point
 ```c
-struct geo_point_<type> {
+struct GeoPoint_<type> {
     <type> x;
     <type> y;
 }
 ```
 
-`geo_segment_<type>` - a line segment between `start` and `end`
+`GeoSegment_<type>` - a line segment between `start` and `end`
 ```c
-struct geo_segment_<type> {
-    struct geo_point_<type> * start;
-    struct geo_point_<type> * end;
+struct GeoSegment_<type> {
+    struct GeoPoint_<type> * start;
+    struct GeoPoint_<type> * end;
 }
 ```
 
-`geo_geometry_<type>` - geometry formed by a series of line segments
+`GeoGeometry_<type>` - geometry formed by a series of line segments
 ```c
-struct geo_geometry_<type> {
-    struct geo_segments_<type> ** segments;
+struct GeoGeometry_<type> {
+    struct GeoSegments_<type> ** segments;
     size_t segments_count;
 }
 ```
