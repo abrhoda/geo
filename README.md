@@ -52,3 +52,6 @@ To run the unit tests, run `make setup && make test` from project root.
 3. [Graham's Scan](https://en.wikipedia.org/wiki/Graham_scan) - pseudocode wiki page should be enough to implement.
 4. [Comparing Floating Point Numbers, 2012 Edition](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/) - "fun" with floating point values. Needed in the project for making the dot and cross product implementations robust.
 5. [Comparing Floating-Points Numbers Is Tricky](https://bitbashing.io/comparing-floats.html) - more information on ways to compare floats
+
+## License
+[MIT License](docs/LICENSE)
