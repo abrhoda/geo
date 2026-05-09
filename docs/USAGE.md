@@ -16,14 +16,15 @@ Type | Header
 [Warning](../README.md#warning) to only use binary floating point types with `geo_decimal_template.h`.
 
 ### Define Required Macros
-Macro             | Description                                                            | Value                                                                     | Required
-------------------|------------------------------------------------------------------------|---------------------------------------------------------------------------|-----------------------------------
-`TMPL_IMPL`       | Defining this includes the implementation of the library               |                                                                           | X 
-`TMPL_TYPE`       | Defines which generic type for the implementation                      | This is the `type` that your geometries will be                           | X
-`TMPL_TYPE_FIXED` | Used in [unit of least percison](../README.md#references) calculation  | Must be an int type that satisfies `sizeof(TMPL_TYPE) == TMPL_TYPE_FIXED` | X (only for floating point types).
-`ABS_EPSILON`     | Used in floating point comparison                                      | Suggested values: `1e-12` for `double` and `1e-9` for `float`             | X (only for floating point types).
-`REL_EPSILON`     | Used in floating point comparison                                      | Suggested values: `1e-9` for `double` and `1e-6` for `float`              | X (only for floating point types).
-`MAX_ULPS`        | Used in floating point comparison                                      | Suggested value: `4` (this is what `Boost` libraries use)                 | X (only for floating point types).
+Macro Name   | Description   | Default Value  |  Valid For Types | Required?
+----------------------|----------------------------------------------------------------------------|---------------------------------------------------------------------------|-|-----------------------------------
+`GEO_TMPL_IMPL`       | Defining this includes the implementation of the library               |                                                                           | | X |
+`GEO_TMPL_TYPE`       | Defines which generic type for the implementation                      | No defualt. This is the `type` that your geometries will be               | | X |
+`GEO_TMPL_TYPE_SIZE`  | Defines the size (in bits) of the `GEO_TMPL_TYPE`                      | No default. This should be the output of `sizeof(GEO_TMPL_TYPE)*4` for the `GEO_TMPL_TYPE` being used  | Floating Point only | X |
+`GEO_TMPL_TYPE_FIXED` | Fixed size int type used in [unit of least percison](../README.md#references) calculation  | `int32_t` when `GEO_TMPL_TYPE_SIZE == 32` and `int64_t` when `GEO_TMPL_TYPE_SIZE == 64`| Floating Point only | |
+`GEO_ABS_EPSILON`     | Used in floating point comparison                                      | `1e-12` for `double` and `1e-9` for `float`             | Floating Point only | |
+`GEO_REL_EPSILON`     | Used in floating point comparison                                      | `1e-9` for `double` and `1e-6` for `float`              | Floating Point only | |
+`GEO_MAX_ULPS`        | Used in floating point comparison                                      | `4` (this is what `Boost` libraries use)                 | Floating Point only | |
 
 ### Use The Library
 This is a complete, slim, example of copying and including the header, define the required macros, and use the library.
@@ -31,23 +32,18 @@ This is a complete, slim, example of copying and including the header, define th
 // 1. copy `geo_decimal_template.h` into header dir
 
 // 2. in my geo_double.h source file, define needed macros
-#define TMPL_TYPE double
-#define TMPL_TYPE_FIXED int64_t
-#define ABS_EPSILON 1e-12
-#define REL_EPSILON 1e-9
-#define MAX_ULPS 4
+#define GEO_TMPL_TYPE double
+#define GEO_TMPL_TYPE_SIZE 64
+// I could define addition GEO_ABS_EPSILON if I don't like the default.
 #include "geo_decimal_template.h"
-#undef MAX_ULPS
-#undef REL_EPSILON
-#undef ABS_EPSILON
-#undef TMPL_TYPE_FIXED
-#undef TMPL_TYPE
+#undef GEO_TMPL_TYPE_SIZE
+#undef GEO_TMPL_TYPE
 
 // 3. in my geo_double.c source file, define implementation macro
 
-#define TMPL_IMPL
+#define GEO_TMPL_IMPL
 #include "geo_double.h"
-#undef TMPL_IMPL
+#undef GEO_TMPL_IMPL
 
 // 4. in main.c, use the library
 #include <stdbool.h>

@@ -5,24 +5,39 @@
 See [USAGE.md](docs/USAGE.md) for complete documentation.
 
 ### Code Design
-Most (if not all) functions in the public API return a `enum geo_result` return value and use out params. Out params should only be used when the returned `enum geo_result value == GEO_SUCCESS`.
+Most (if not all) functions in the public API return a `enum GeoResult` return value and use out params. Out params should only be used when the returned `enum GeoResult value == GEO_SUCCESS`.
 
 ### Flags/Macros
 There are some useful flags that can be set at compile time:
 
 #### General
 - `TMPL_IMPL` - set this in the `.c` or `.cpp` source file you plan to include the header in. This should be set in **exactly 1** source file. This follows the pattern of common header only libraries such as [nothings/stb](https://github.com/nothings/stb#how-do-i-use-these-libraries). Due to headers from this library potentially being multiple times (once for `double` and once for `int`), cleaning up the macro after including the header file. This ends up looking something like:
-```
+
+```c
 #define TMPL_IMPL
-#include "geo_double.h"
+#define GEO_TMPL_TYPE int
+#include "geo_integer_template.h"
+#undef GEO_TMPL_TYPE
 #undef TMPL_IMPL
 
 ```
 - `TMPL_TYPE` - sets the type for the template header. This should be the types your geometries and points use. Typically, this will be either `double` or `float` but a separate header simplified specifically for integer types is available (`int` or `long` are tested).
-- `GEO_UNSAFE` - setting this macro at compilation time removes all checks for null. These are not done through assertions and many of the public api will stop returning -1 on errors. *WARNING*: Setting this could lead to undefined behavior. This pushes all validation of NULL pointers and geometry's segment\_counts >= 3 onto the caller.
+- `GEO_UNSAFE` - setting this macro at compilation time removes all checks for null. These are not done through assertions and many of the public api will stop returning -1 on errors. *WARNING*: Setting this could lead to undefined behavior. This pushes all validation of NULL pointers and geometry's segment\_counts >= 3 onto the caller. If you do not check these before calling a library function, do not set this!!
 - `TEST` - currently unused but is set during the unit test compilation. This allows for any test specific behavior.
 
 #### Double/Float
+There is 1 addition macro that is required to be set along with the `TMPL_TYPE` macro for floating points usage. Due to how comparisons are done between floating points numbers, the `TMPL_TYPE_SIZE` macro is required to be set.
+
+```c
+#define GEO_TMPL_TYPE float
+#define GEO_TMPL_TYPE_SIZE 32
+#include "geo_decimal_template.h"
+#undef GEO_TMPL_TYPE_SIZE
+#undef GEO_TMPL_TYPE
+```
+
+These are addition macros that can optionally be set to fine tune how floating point comparison are done. Check the [USAGE.md](docs/USAGE.md) file to more about those.
+
 These are in addition to the general macros. If you do not wish to deal with this and just want sane defaults, include BOTH the `geo_<type>.h` and `geo_decimal_template.h` (or `geo_integer_template.h` for int or long). You can see this is done in the testing of this repository. Example: `src/geo_double.c` --> `include/geo_double.h` --> `include/geo_decimal_template.h`
 - `TMPL_TYPE_FIXED` - fixed size integer to use for ulp calculations. For `TMPL_TYPE == double`, set `TMPL_TYPE_FIXED == int64_t`. For `TMPL_TYPE == float`, set `TMPL_TYPE_FIXED == int32_t`. `sizeof(TMPL_TYPE) == sizeof(TMPL_TYPE_FIXED)` if you are looking to provide other types.
 - `ABS_EPSILON` - sets a absolute epsilon value for comparing `TMPL_TYPE`s

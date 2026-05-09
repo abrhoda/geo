@@ -1,8 +1,6 @@
-#if !defined(GEO_TMPL_TYPE) || !defined(GEO_TMPL_TYPE_FIXED) || \
-    !defined(GEO_ABS_EPSILON) || !defined(GEO_REL_EPSILON) ||   \
-    !defined(GEO_MAX_ULPS)
+#if !defined(GEO_TMPL_TYPE) || !defined(GEO_TMPL_TYPE_SIZE)
 #error \
-    "GEO_TMPL_TYPE, GEO_TMPL_TYPE_FIXED, GEO_ABS_EPSILON, GEO_REL_EPSILON, or GEO_MAX_ULPS undefined and required to be set."
+    "GEO_TMPL_TYPE or GEO_TMPL_TYPE_SIZE undefined and required to be set."
 #else
 
 #ifdef __cplusplus
@@ -25,6 +23,48 @@ extern "C" {
 #define TMPL_SEGMENT TMPL_CONCAT(GeoSegment, GEO_TMPL_TYPE)
 #define TMPL_GEOMETRY TMPL_CONCAT(GeoGeometry, GEO_TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, GEO_TMPL_TYPE)
+
+/*
+ * default with sensible values for these based on type size
+ */
+
+#if GEO_TMPL_TYPE_SIZE == 64
+// define the fixed size type
+#ifndef GEO_TMPL_TYPE_FIXED
+#define GEO_TMPL_TYPE_FIXED int64_t
+#endif
+// define the absolute epsilon to use in the comparison
+#ifndef GEO_ABS_EPSILON
+#define GEO_ABS_EPSILON 1e-12
+#endif
+// define the relative epsilon to use in the comparison
+#ifndef GEO_REL_EPSILON
+#define GEO_REL_EPSILON 1e-9
+#endif
+// define the max unit of least precision to use in the comparison
+#ifndef GEO_MAX_ULPS
+#define GEO_MAX_ULPS 4
+#endif
+#elif GEO_TMPL_TYPE_SIZE == 32
+// define the fixed size type
+#ifndef GEO_TMPL_TYPE_FIXED
+#define GEO_TMPL_TYPE_FIXED int32_t
+#endif
+// define the absolute epsilon to use in the comparison
+#ifndef GEO_ABS_EPSILON
+#define GEO_ABS_EPSILON 1e-9
+#endif
+// define the relative epsilon to use in the comparison
+#ifndef GEO_REL_EPSILON
+#define GEO_REL_EPSILON 1e-6
+#endif
+// define the max unit of least precision to use in the comparison
+#ifndef GEO_MAX_ULPS
+#define GEO_MAX_ULPS 4
+#endif
+#else
+#error "GEO_TMPL_TYPE_SIZE must be defined as 32 or 64 bits, depending on the size of GEO_TMPL_TYPE defined."
+#endif
 
 /*****************************************************************************
  * GEO_DECIMAL_TEMPLATE DEFINITIONS
@@ -534,5 +574,9 @@ enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 #undef TMPL_SEGMENT
 #undef TMPL_GEOMETRY
 #undef TMPL_FUNC
+#undef GEO_TMPL_TYPE_FIXED
+#undef GEO_ABS_EPSILON
+#undef GEO_REL_EPSILON
+#undef GEO_MAX_ULPS
 
 #endif
