@@ -7,7 +7,7 @@ extern "C" {
 
 #define GEO_TMPL_TYPE double
 #define GEO_TMPL_TYPE_SIZE 64
-#include "geo_decimal_template.h"
+#include "geometry.h"
 #undef GEO_TMPL_TYPE_SIZE
 #undef GEO_TMPL_TYPE
 

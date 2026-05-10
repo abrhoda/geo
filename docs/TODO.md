@@ -7,7 +7,6 @@
 - [ ] consider not using local variables for everything. Example in `geo_convex_hull`, `current_y` and `miny_y` variables aren't needed. It just saved me from typing and saved the need to dereference the pointer to find the `y` values. C89 also required variables upfront which means sometimes extra vars are initialized that aren't actually used.
 - [ ] Make a 3d variant. This requires a lot of work but would be intersting to do. I wonder if the easiest way to turn this into 3d is to introduce a `z` field on the struct and then use the 2d algorithms twice on the point. That means for point p1 = (x1, y1, z1), it is in volume1 if (x1, y1) are in the XY projection of volume1 and (y1, z1) are in the YZ projection of volume1. That would require research.
 - [ ] convex hull function requires an "out" array. could save the space and use the "array" array and make the first N elements the hull in place. N = "out" convex\_hull\_size
-- [ ] adding in a `GEO_FLOATING_POINT` macro would allow condensing to 1 header and if/else choices for int vs floating point blocks.
 - [ ] Find a way to leverage the `GEO_TEST` macro to set the linkage for static functions to extern so they can be tested.
 
 ## Cleanup Items

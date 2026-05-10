@@ -1,3 +1,3 @@
-#define TMPL_IMPL
+#define GEO_TMPL_IMPL
 #include "geo_float.h"
-#undef TMPL_IMPL
+#undef GEO_TMPL_IMPL
