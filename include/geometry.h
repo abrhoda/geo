@@ -1,6 +1,5 @@
 #ifndef GEO_TMPL_TYPE
-#error \
-    "GEO_TMPL_TYPE required to be set."
+#error "GEO_TMPL_TYPE required to be set."
 #else
 
 #ifdef __cplusplus
@@ -24,14 +23,14 @@ extern "C" {
 #define TMPL_GEOMETRY TMPL_CONCAT(GeoGeometry, GEO_TMPL_TYPE)
 #define TMPL_FUNC(name) TMPL_CONCAT(name, GEO_TMPL_TYPE)
 
- /*
-  * default with sensible values for these based on type size
-  */
-#ifdef GEO_TMPL_TYPE_SIZE 
+/*
+ * default with sensible values for these based on type size
+ */
+#ifdef GEO_TMPL_TYPE_SIZE
 
 // fp types
 #define GEO_FLOATING_POINT
-#if (GEO_TMPL_TYPE_SIZE == 64) // support for 64 bit fp numbers
+#if (GEO_TMPL_TYPE_SIZE == 64)  // support for 64 bit fp numbers
 #define GEO_ZERO 0.0
 // define the fixed size type
 #ifndef GEO_TMPL_TYPE_FIXED
@@ -50,7 +49,7 @@ extern "C" {
 #define GEO_MAX_ULPS 4
 #endif
 
-#elif (GEO_TMPL_TYPE_SIZE == 32) // support for 32 bit fp numbers
+#elif (GEO_TMPL_TYPE_SIZE == 32)  // support for 32 bit fp numbers
 #define GEO_ZERO 0.0F
 // define the fixed size type
 #ifndef GEO_TMPL_TYPE_FIXED
@@ -69,7 +68,8 @@ extern "C" {
 #define GEO_MAX_ULPS 4
 #endif
 #else  // dont support other fp types
-#error "GEO_TMPL_TYPE_SIZE must be defined as 32 or 64 bits, depending on the size of GEO_TMPL_TYPE defined."
+#error \
+    "GEO_TMPL_TYPE_SIZE must be defined as 32 or 64 bits, depending on the size of GEO_TMPL_TYPE defined."
 #endif
 #else
 // int types
@@ -106,8 +106,8 @@ enum GeoOrientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
 
 // public forward declaration
 enum GeoResult TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
-                                            struct TMPL_POINT const* rhs,
-                                            bool* is_equal);
+                                           struct TMPL_POINT const* rhs,
+                                           bool* is_equal);
 enum GeoResult TMPL_FUNC(geo_segments_intersect)(
     struct TMPL_SEGMENT const* segment1, struct TMPL_SEGMENT const* segment2,
     size_t* intersect_count);
@@ -119,13 +119,14 @@ enum GeoResult TMPL_FUNC(geo_geometry_is_simple)(
 enum GeoResult TMPL_FUNC(geo_point_in_geometry)(
     struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
     bool strict, bool* is_inside);
-enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(
-    struct TMPL_GEOMETRY* parent, struct TMPL_GEOMETRY* child, bool strict,
-    bool* is_inside);
+enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(struct TMPL_GEOMETRY* parent,
+                                                   struct TMPL_GEOMETRY* child,
+                                                   bool strict,
+                                                   bool* is_inside);
 enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
-                                           struct TMPL_POINT** convex_hull,
-                                           size_t size,
-                                           size_t* convex_hull_size);
+                                          struct TMPL_POINT** convex_hull,
+                                          size_t size,
+                                          size_t* convex_hull_size);
 #ifdef __cplusplus
 }
 #endif
@@ -189,8 +190,8 @@ inline static GEO_TMPL_TYPE cross_product(
 }
 
 static enum GeoOrientation orientation(struct TMPL_POINT const* const start,
-                                        struct TMPL_POINT const* const end,
-                                        struct TMPL_POINT const* const point) {
+                                       struct TMPL_POINT const* const end,
+                                       struct TMPL_POINT const* const point) {
   struct TMPL_POINT vec_ab = {.x = end->x - start->x, .y = end->y - start->y};
   struct TMPL_POINT vec_ac = {.x = point->x - start->x,
                               .y = point->y - start->y};
@@ -241,8 +242,8 @@ static int compare(const void* first, const void* second) {
 
 // public definitions
 enum GeoResult TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
-                                            struct TMPL_POINT const* rhs,
-                                            bool* is_equal) {
+                                           struct TMPL_POINT const* rhs,
+                                           bool* is_equal) {
 #ifndef GEO_UNSAFE
   if (lhs == NULL || rhs == NULL) {
     return GEO_ERR_NULL_POINTER;
@@ -453,7 +454,8 @@ enum GeoResult TMPL_FUNC(geo_point_in_geometry)(
      * orientation puts the `point` on the appropriate side of the
      * `segment`.
      *
-     * TODO should this be using `>` check and `equals` check instead of `>=` for FP numbers?
+     * TODO should this be using `>` check and `equals` check instead of `>=`
+     * for FP numbers?
      */
     intersections += (((geometry->segments[iter]->end->y >= point->y) -
                        (geometry->segments[iter]->start->y >= point->y)) *
@@ -463,9 +465,10 @@ enum GeoResult TMPL_FUNC(geo_point_in_geometry)(
   return GEO_SUCCESS;
 }
 
-enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(
-    struct TMPL_GEOMETRY* parent, struct TMPL_GEOMETRY* child, bool strict,
-    bool* is_inside) {
+enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(struct TMPL_GEOMETRY* parent,
+                                                   struct TMPL_GEOMETRY* child,
+                                                   bool strict,
+                                                   bool* is_inside) {
   enum GeoResult result = GEO_SUCCESS;
 #ifndef GEO_UNSAFE
   if (parent == NULL || parent->segments == NULL || child == NULL ||
@@ -506,9 +509,9 @@ enum GeoResult TMPL_FUNC(geo_geometry_in_geometry)(
 }
 
 enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
-                                           struct TMPL_POINT** convex_hull,
-                                           size_t size,
-                                           size_t* convex_hull_size) {
+                                          struct TMPL_POINT** convex_hull,
+                                          size_t size,
+                                          size_t* convex_hull_size) {
   /* used to find starting point */
   size_t min_idx = 0;
   GEO_TMPL_TYPE min_y = GEO_ZERO;
@@ -535,11 +538,11 @@ enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 
     if ((points[iter]->y < min_y) ||
 #ifdef GEO_FLOATING_POINT
-            (equal(points[iter]->y, min_y) &&
+        (equal(points[iter]->y, min_y) &&
 #else
-            ((points[iter]->y == min_y) &&
+        ((points[iter]->y == min_y) &&
 #endif
-    points[iter]->x < points[min_idx]->x)) {
+         points[iter]->x < points[min_idx]->x)) {
       min_idx = iter;
       min_y = points[iter]->y;
     }
