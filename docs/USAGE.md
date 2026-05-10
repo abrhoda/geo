@@ -15,9 +15,9 @@ Type | Header
 
 [Warning](../README.md#warning) to only use binary floating point types with `geo_decimal_template.h`.
 
-### Define Required Macros
+### Define Macros
 Macro Name   | Description   | Default Value  |  Valid For Types | Required?
-----------------------|----------------------------------------------------------------------------|---------------------------------------------------------------------------|-|-----------------------------------
+-------------|---------------|----------------|------------------|----------
 `GEO_TMPL_IMPL`       | Defining this includes the implementation of the library               |                                                                           | | X |
 `GEO_TMPL_TYPE`       | Defines which generic type for the implementation                      | No defualt. This is the `type` that your geometries will be               | | X |
 `GEO_TMPL_TYPE_SIZE`  | Defines the size (in bits) of the `GEO_TMPL_TYPE`                      | No default. This should be the output of `sizeof(GEO_TMPL_TYPE)*4` for the `GEO_TMPL_TYPE` being used  | Floating Point only | X |
@@ -25,6 +25,7 @@ Macro Name   | Description   | Default Value  |  Valid For Types | Required?
 `GEO_ABS_EPSILON`     | Used in floating point comparison                                      | `1e-12` for `double` and `1e-9` for `float`             | Floating Point only | |
 `GEO_REL_EPSILON`     | Used in floating point comparison                                      | `1e-9` for `double` and `1e-6` for `float`              | Floating Point only | |
 `GEO_MAX_ULPS`        | Used in floating point comparison                                      | `4` (this is what `Boost` libraries use)                 | Floating Point only | |
+`GEO_UNSAFE`       | Defining this strips out any and all null and length checks. Use only if you check null pointers and that all geometries have a segment count of 3 or more before calling any library function     |  | | |
 
 ### Use The Library
 This is a complete, slim, example of copying and including the header, define the required macros, and use the library.

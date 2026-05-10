@@ -27,7 +27,6 @@ extern "C" {
 /*
  * default with sensible values for these based on type size
  */
-
 #if GEO_TMPL_TYPE_SIZE == 64
 // define the fixed size type
 #ifndef GEO_TMPL_TYPE_FIXED

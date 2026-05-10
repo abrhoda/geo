@@ -38,12 +38,6 @@ There is 1 addition macro that is required to be set along with the `TMPL_TYPE` 
 
 These are addition macros that can optionally be set to fine tune how floating point comparison are done. Check the [USAGE.md](docs/USAGE.md) file to more about those.
 
-These are in addition to the general macros. If you do not wish to deal with this and just want sane defaults, include BOTH the `geo_<type>.h` and `geo_decimal_template.h` (or `geo_integer_template.h` for int or long). You can see this is done in the testing of this repository. Example: `src/geo_double.c` --> `include/geo_double.h` --> `include/geo_decimal_template.h`
-- `TMPL_TYPE_FIXED` - fixed size integer to use for ulp calculations. For `TMPL_TYPE == double`, set `TMPL_TYPE_FIXED == int64_t`. For `TMPL_TYPE == float`, set `TMPL_TYPE_FIXED == int32_t`. `sizeof(TMPL_TYPE) == sizeof(TMPL_TYPE_FIXED)` if you are looking to provide other types.
-- `ABS_EPSILON` - sets a absolute epsilon value for comparing `TMPL_TYPE`s
-- `REL_EPSILON` - sets a relative epsilon value for comparing `TMPL_TYPE`s
-- `MAX_ULPS` - sets the maximum difference of `unit of least percision` when comparing `TMPL_TYPE`s. See references 4 and 5 if you are interested in knowing this deeper.
-
 ## TODOs
 See [TODO.md](docs/TODO.md) file.
 
