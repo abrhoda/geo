@@ -53,7 +53,8 @@ To run the unit tests, run `make setup && make test` from project root.
 
 ## Warning
 1. This library was built to meet my needs. It may not meet yours. I am providing "as is" and "as I make changes I like". That said, pull requests are welcome.
-2. Using `include/geometry.h` as floating point (by setting `GEO_TMPL_TYPE` as `double` or `float`) expects floating points to be IEEE 754 (binary floating point) compliant. If you include the template header and set the `GEO_TMPL_TYPE` to something that is base 10 instead of base 2, this might not work. It's untested.
+2. Using `include/geometry.h` with a floating point type, the type should be IEEE 754 (binary floating point) compliant. If you use `float` or `double`, on _most_ modern hardware architectures (x86 and ARM, for example), this is the standard. But the C standard itself does _not_ enforce it. So it's worth double checking on your hardware before using this header library. Using some compiler flags (`-ffast-math` on gcc) might break IEEE 754 compliance. Using `long double` might also break IEEE 754 compliance.
+
 
 ## References
 1. [Handbook of Geometry for Competitive Programmers](https://victorlecomte.com/cp-geo.pdf) - used for learning about programmatic approaches to determining line segment intersections and other neat geometry things.

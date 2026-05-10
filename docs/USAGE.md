@@ -5,15 +5,9 @@ This document defines how to include the library in a project, all the macros th
 The basic steps are to copy the header file, define the macros that are needed, and then start using it.
 
 ### Include the Header
-Depending on what type your 2d geometries will use, copy over the correct header.
-Type | Header
----|---
-`double` | `geo_decimal_template.h`
-`float` | `geo_decimal_template.h`
-`long` | `geo_integer_template.h`
-`int` | `geo_integer_template.h`
+Copy `geometry.h` header into your project at the appropriate spot for header files.
 
-[Warning](../README.md#warning) to only use binary floating point types with `geo_decimal_template.h`.
+[Warning](../README.md#warning) to only use binary floating point types with `geometry.h`. If you use `float` or `double`, on _most_ modern hardware architectures (x86 and ARM, for example), this is the standard. But the C standard itself does _not_ enforce it. So it's worth double checking. Using some compiler flags (`-ffast-math` on gcc) might break IEEE 754 compliance. Using `long double` might also break IEEE 754 compliance.
 
 ### Define Macros
 Macro Name   | Description   | Default Value  |  Valid For Types | Required?
