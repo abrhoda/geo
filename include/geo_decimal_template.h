@@ -43,6 +43,10 @@ extern "C" {
 // define the max unit of least precision to use in the comparison
 #ifndef GEO_MAX_ULPS
 #define GEO_MAX_ULPS 4
+
+// define zero value
+#define GEO_ZERO 0.0
+
 #endif
 #elif GEO_TMPL_TYPE_SIZE == 32
 // define the fixed size type
@@ -60,7 +64,11 @@ extern "C" {
 // define the max unit of least precision to use in the comparison
 #ifndef GEO_MAX_ULPS
 #define GEO_MAX_ULPS 4
+
+// define zero value
+#define GEO_ZERO 0.0F
 #endif
+
 #else
 #error "GEO_TMPL_TYPE_SIZE must be defined as 32 or 64 bits, depending on the size of GEO_TMPL_TYPE defined."
 #endif
@@ -182,10 +190,10 @@ static enum GeoOrientation orientation(struct TMPL_POINT const* const start,
   struct TMPL_POINT vec_ac = {.x = point->x - start->x,
                               .y = point->y - start->y};
   GEO_TMPL_TYPE cross = cross_product(&vec_ab, &vec_ac);
-  if (equal(cross, 0.0)) {
+  if (equal(cross, GEO_ZERO)) {
     return COLINEAR;
   }
-  return cross < 0.0F ? RIGHT : LEFT;
+  return cross < GEO_ZERO ? RIGHT : LEFT;
 }
 
 static bool in_disk(struct TMPL_SEGMENT const* const segment,
@@ -195,7 +203,7 @@ static bool in_disk(struct TMPL_SEGMENT const* const segment,
   struct TMPL_POINT vec_bp = {.x = segment->end->x - point->x,
                               .y = segment->end->y - point->y};
   // TODO this should check if its within epsilon of 0.0 on the positive side
-  return dot_product(&vec_ap, &vec_bp) <= 0.0F;
+  return dot_product(&vec_ap, &vec_bp) <= GEO_ZERO;
 }
 
 static GEO_TMPL_TYPE squared_distance(struct TMPL_POINT const* const point1,
@@ -489,7 +497,7 @@ enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
                                            size_t* convex_hull_size) {
   /* used to find starting point */
   size_t min_idx = 0;
-  GEO_TMPL_TYPE min_y = 0.0F;
+  GEO_TMPL_TYPE min_y = GEO_ZERO;
 
 #ifndef GEO_UNSAFE
   if (points == NULL || convex_hull == NULL) {
@@ -577,5 +585,6 @@ enum GeoResult TMPL_FUNC(geo_convex_hull)(struct TMPL_POINT** points,
 #undef GEO_ABS_EPSILON
 #undef GEO_REL_EPSILON
 #undef GEO_MAX_ULPS
+#undef GEO_ZERO
 
 #endif
