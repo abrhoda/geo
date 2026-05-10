@@ -47,7 +47,7 @@ enum GeoResult {
   GEO_ERR_OVERFLOW = 3  // unused for now
 };
 
-enum geo_orientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
+enum GeoOrientation { RIGHT = -1, COLINEAR = 0, LEFT = 1 };
 
 // public forward declaration
 enum GeoResult TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
@@ -95,7 +95,7 @@ inline static GEO_TMPL_TYPE cross_product(
   return (vec_ab->x * vec_ac->y) - (vec_ab->y * vec_ac->x);
 }
 
-static enum geo_orientation orientation(struct TMPL_POINT const* const start,
+static enum GeoOrientation orientation(struct TMPL_POINT const* const start,
                                         struct TMPL_POINT const* const end,
                                         struct TMPL_POINT const* const point) {
   struct TMPL_POINT vec_ab = {.x = end->x - start->x, .y = end->y - start->y};
@@ -129,7 +129,7 @@ static struct TMPL_POINT* global_start_point;
 static int compare(const void* first, const void* second) {
   const struct TMPL_POINT* vec_end = *(const struct TMPL_POINT* const*)first;
   const struct TMPL_POINT* point = *(const struct TMPL_POINT* const*)second;
-  enum geo_orientation orientation_p =
+  enum GeoOrientation orientation_p =
       orientation(global_start_point, vec_end, point);
 
   if (orientation_p == COLINEAR) {
@@ -158,10 +158,10 @@ enum GeoResult TMPL_FUNC(geo_points_equal)(struct TMPL_POINT const* lhs,
 enum GeoResult TMPL_FUNC(geo_segments_intersect)(
     struct TMPL_SEGMENT const* const segment1,
     struct TMPL_SEGMENT const* const segment2, size_t* intersect_count) {
-  enum geo_orientation orientation_a;
-  enum geo_orientation orientation_b;
-  enum geo_orientation orientation_c;
-  enum geo_orientation orientation_d;
+  enum GeoOrientation orientation_a;
+  enum GeoOrientation orientation_b;
+  enum GeoOrientation orientation_c;
+  enum GeoOrientation orientation_d;
 #ifndef GEO_UNSAFE
   if (segment1 == NULL || segment2 == NULL || segment1->start == NULL ||
       segment1->end == NULL || segment2->start == NULL ||
@@ -322,7 +322,7 @@ enum GeoResult TMPL_FUNC(geo_point_in_geometry)(
     struct TMPL_POINT const* point, struct TMPL_GEOMETRY const* geometry,
     bool strict, bool* is_inside) {
   size_t intersections = 0;
-  enum geo_orientation orientation_p;
+  enum GeoOrientation orientation_p;
 #ifndef GEO_UNSAFE
   if (geometry == NULL || geometry->segments == NULL || point == NULL) {
     return GEO_ERR_NULL_POINTER;
