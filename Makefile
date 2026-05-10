@@ -59,7 +59,7 @@ else
 	CFLAGS := $(CFLAGS) -O3 -DNDEBUG
 endif
 
-# Test specific set of flags for maximum debug potential with TEST macro defined
+# Test specific set of flags for maximum debug potential with GEO_TEST macro defined
 # for potential use in code.
 TEST_CFLAGS += -std=c99 -g3 -O0 -fno-builtin -DGEO_TEST -I$(INCLUDE_DIR)
 

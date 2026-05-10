@@ -30,13 +30,13 @@ Macro Name   | Description   | Default Value  |  Valid For Types | Required?
 ### Use The Library
 This is a complete, slim, example of copying and including the header, define the required macros, and use the library.
 ```c
-// 1. copy `geo_decimal_template.h` into header dir
+// 1. copy `geometry.h` into header dir
 
 // 2. in my geo_double.h source file, define needed macros
 #define GEO_TMPL_TYPE double
 #define GEO_TMPL_TYPE_SIZE 64
 // I could define addition GEO_ABS_EPSILON if I don't like the default.
-#include "geo_decimal_template.h"
+#include "geometry.h"
 #undef GEO_TMPL_TYPE_SIZE
 #undef GEO_TMPL_TYPE
 

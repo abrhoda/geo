@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #define GEO_TMPL_TYPE int
-#include "geo_integer_template.h"
+#include "geometry.h"
 #undef GEO_TMPL_TYPE
 
 #ifdef __cplusplus
